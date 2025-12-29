@@ -18,6 +18,7 @@ import com.darcy.kmpdemo.ui.ShowKtorWebsocket
 import com.darcy.kmpdemo.ui.ShowLoadMokoResource
 import com.darcy.kmpdemo.ui.ShowLoadResource
 import com.darcy.kmpdemo.platform.ShowUploadImage
+import com.darcy.kmpdemo.ui.ShowNavigationRailPage
 import com.darcy.kmpdemo.ui.ShowKtorWebsocketSTOMP
 
 @Composable
@@ -30,6 +31,25 @@ fun AppNavigation(
     // current screen
     val currentScreen =
         Pages.valueOf(backStackEntry.value?.destination?.route ?: Pages.HomePage.name)
+
+    val onclick: (String) -> Unit = { name ->
+        when (name) {
+            Pages.HomePage.name,
+            Pages.EncryptTextPage.name,
+            Pages.EncryptFilePage.name,
+            Pages.LoadResourcePage.name,
+            Pages.LoadMokoResourcePage.name,
+            Pages.KtorHttpPage.name,
+            Pages.KtorWebsocketPage.name,
+            Pages.DownloadImagePage.name,
+            Pages.UploadImagePage.name,
+            Pages.KtorWebSocketSTMOPPage.name,
+                -> navController.navigate(name)
+
+            Pages.NavigationRailPage.name,
+                -> navController.navigate(name)
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -48,9 +68,10 @@ fun AppNavigation(
             startDestination = Pages.HomePage.name,
             modifier = Modifier.padding(innerPadding)
         ) {
+
             composable(route = Pages.HomePage.name) {
-                ShowHome(modifier = Modifier.padding(innerPadding)) {
-                    when (it) {
+                ShowHome(modifier = Modifier.padding(innerPadding)) { name ->
+                    when (name) {
                         Pages.HomePage.name,
                         Pages.EncryptTextPage.name,
                         Pages.EncryptFilePage.name,
@@ -61,7 +82,10 @@ fun AppNavigation(
                         Pages.DownloadImagePage.name,
                         Pages.UploadImagePage.name,
                         Pages.KtorWebSocketSTMOPPage.name,
-                            -> navController.navigate(it)
+                            -> navController.navigate(name)
+
+                        Pages.NavigationRailPage.name,
+                            -> navController.navigate(name)
                     }
                 }
             }
@@ -91,6 +115,9 @@ fun AppNavigation(
             }
             composable(route = Pages.KtorWebSocketSTMOPPage.name) {
                 ShowKtorWebsocketSTOMP()
+            }
+            composable(route = Pages.NavigationRailPage.name) {
+                ShowNavigationRailPage()
             }
         }
     }

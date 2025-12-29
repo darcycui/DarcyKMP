@@ -32,6 +32,11 @@ kotlin {
 
     jvm("desktop")
 //    moko resources 不支持wasm
+//    wasm("wasm") {}
+
+    compilerOptions {
+        freeCompilerArgs.add("-Xexpect-actual-classes")
+    }
 
     sourceSets {
         val desktopMain by getting

@@ -17,20 +17,14 @@ import dev.icerock.moko.resources.compose.stringResource as mokoStringResource
 @Composable
 fun ShowHome(
     modifier: Modifier = Modifier,
-    onNextButtonCLicked: (String) -> Unit = {}
+    onNextButtonClicked: (String) -> Unit = {}
 ) {
     // darcyRefactor: 可观察的状态列表
     val pagesStateList = remember { mutableStateListOf<Pages>() }
-    pagesStateList.apply {
-        add(Pages.EncryptTextPage)
-        add(Pages.EncryptFilePage)
-        add(Pages.LoadResourcePage)
-        add(Pages.LoadMokoResourcePage)
-        add(Pages.KtorHttpPage)
-        add(Pages.KtorWebsocketPage)
-        add(Pages.DownloadImagePage)
-        add(Pages.UploadImagePage)
-        add(Pages.KtorWebSocketSTMOPPage)
+    Pages.entries.forEachIndexed { index, it ->
+        if (index > 1) {
+            pagesStateList.add(it)
+        }
     }
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -38,17 +32,17 @@ fun ShowHome(
         verticalArrangement = Arrangement.spacedBy(1.dp)
     ) {
         items(pagesStateList.size) { index ->
-            HomeItem(onNextButtonCLicked = onNextButtonCLicked, page = pagesStateList[index])
+            HomeItem(onNextButtonClicked = onNextButtonClicked, page = pagesStateList[index])
         }
     }
 }
 
 @Composable
 fun HomeItem(
-    onNextButtonCLicked: (String) -> Unit = {}, page: Pages
+    onNextButtonClicked: (String) -> Unit = {}, page: Pages
 ) {
     Button(modifier = Modifier.fillMaxWidth(), onClick = {
-        onNextButtonCLicked(page.name)
+        onNextButtonClicked(page.name)
     }) {
         Text(text = mokoStringResource(page.title))
     }
