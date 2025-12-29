@@ -20,33 +20,84 @@ import androidx.compose.ui.unit.dp
 import com.darcy.kmpdemo.log.logD
 import com.darcy.kmpdemo.log.logE
 import kotlinx.coroutines.CoroutineScope
+import java.awt.EventQueue
 import java.awt.FileDialog
 import java.awt.Frame
 import java.io.File
+import java.io.FilenameFilter
+import javax.swing.JFileChooser
+import javax.swing.filechooser.FileNameExtensionFilter
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 actual class ImagePicker() {
     actual suspend fun pickImage(): File {
-        // 获取当前协程并挂起
-        return suspendCoroutine { cont ->
-            val dialog = FileDialog(null as? Frame, "选择文件").apply {
-                mode = FileDialog.LOAD // 读文件
-                isVisible = true // 可见
-                isMultipleMode = false // 单选
-            }
-            dialog.file?.let { fileName ->
-                val sourceFile = File(dialog.directory, fileName)
-                val documentDir = getDocumentsDir().resolve("image")
-                if (!documentDir.exists()) {
-                    createADirectory(documentDir.path)
-                }
-                val cacheFile = File(documentDir, "${System.currentTimeMillis()}_$fileName")
-                sourceFile.copyTo(cacheFile, true)
-                logD("选择文件成功：${cacheFile.absolutePath}")
-                cont.resume(cacheFile)
-            } ?: cont.resume(File("").also { logE("选择文件失败") })
+        val path = chooseFileWithNativeDialog() ?: ""
+        if (path.isEmpty()) {
+            logE("文件选择错误")
+            return File("")
         }
+        val sourceFile = File(path)
+        val documentDir = getDocumentsDir().resolve("image")
+        if (!documentDir.exists()) {
+            createADirectory(documentDir.path)
+        }
+        val fileName = path.substringAfterLast(".")
+        val cacheFile = File(documentDir, "${System.currentTimeMillis()}_.$fileName")
+        sourceFile.copyTo(cacheFile, true)
+        logD("选择文件成功：${cacheFile.absolutePath}")
+        return cacheFile
+    }
+
+
+//    actual suspend fun pickImage(): File {
+//        // 选择文件
+//        val dialog = FileDialog(null as? Frame, "选择文件").apply {
+//            mode = FileDialog.LOAD // 读文件
+//            isVisible = true // 可见
+//            isMultipleMode = false // 单选
+//            filenameFilter = object : FilenameFilter {
+//                override fun accept(dir: File, name: String): Boolean {
+//                    logD("name: $name")
+//                    return name.lowercase().endsWith(".png")
+//                }
+//            }
+//        }
+//        return dialog.file?.let { fileName ->
+//            val sourceFile = File(dialog.directory, fileName)
+//            val documentDir = getDocumentsDir().resolve("image")
+//            if (!documentDir.exists()) {
+//                createADirectory(documentDir.path)
+//            }
+//            val cacheFile = File(documentDir, "${System.currentTimeMillis()}_$fileName")
+//            sourceFile.copyTo(cacheFile, true)
+//            logD("选择文件成功：${cacheFile.absolutePath}")
+//            cacheFile
+//        } ?: run {
+//            logE("选择文件失败")
+//            File("")
+//        }
+//    }
+
+    fun chooseFileWithNativeDialog(): String? {
+        var selectedFilePath: String? = null
+
+        // 确保文件选择器的创建和显示在事件分发线程（EDT）上执行
+        EventQueue.invokeAndWait {
+            val fileChooser = JFileChooser().apply {
+                // 可选：设置文件过滤器，例如只显示文本文件
+                fileFilter = FileNameExtensionFilter("*.png", "png")
+                // 可选：设置对话框标题
+                dialogTitle = "选择一个文件"
+            }
+
+            val result = fileChooser.showOpenDialog(null) // 显示打开文件对话框
+
+            if (result == JFileChooser.APPROVE_OPTION) {
+                selectedFilePath = fileChooser.selectedFile.absolutePath
+            }
+        }
+        return selectedFilePath
     }
 }
 
@@ -65,7 +116,8 @@ actual fun ShowUploadImage() {
         verticalArrangement = Arrangement.spacedBy(5.dp)
     ) {
         Button(onClick = {
-            uploadFile(scope, imagePicker, filePath, imageBitmap, uploadResult) }) {
+            uploadFile(scope, imagePicker, filePath, imageBitmap, uploadResult)
+        }) {
             Text(text = "选择并上传图片")
         }
         Text(text = filePath.value)
