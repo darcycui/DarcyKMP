@@ -1,5 +1,6 @@
 package com.darcy.kmpdemo.network.websocket.heartbeat
 
+import com.darcy.kmpdemo.log.logE
 import com.darcy.kmpdemo.network.websocket.IWebSocketClient
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -36,7 +37,7 @@ class HeartbeatHelper(
     private val dispatcher: CoroutineDispatcher = newSingleThreadContext("heartbeat")
     private val exceptionHandler: CoroutineExceptionHandler =
         CoroutineExceptionHandler { _, throwable ->
-            println("$TAG exceptionHandler: ${throwable.message}")
+            logE("$TAG exceptionHandler: ${throwable.message}")
             throwable.printStackTrace()
         }
     private val scope: CoroutineScope =

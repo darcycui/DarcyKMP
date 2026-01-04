@@ -148,7 +148,7 @@ val ktorClient: HttpClient
     }.also {
         // intercept: modify request before sending
         it.plugin(HttpSend).intercept { request ->
-            println("ktorClient==> HttpSend interceptor run...")
+            logD("ktorClient==> HttpSend interceptor run...")
             val newRequest = HttpRequestBuilder().takeFrom(request)
             // add headers
             newRequest.header("User-Agent", "KMP Client by Ktor")

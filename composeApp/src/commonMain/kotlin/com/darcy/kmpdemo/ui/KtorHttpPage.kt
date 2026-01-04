@@ -18,6 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.darcy.kmpdemo.bean.http.IPEntity
 import com.darcy.kmpdemo.bean.http.UserEntity
+import com.darcy.kmpdemo.log.logE
+import com.darcy.kmpdemo.log.logI
 import com.darcy.kmpdemo.network.http.HttpManager
 import com.darcy.kmpdemo.network.ssl.SslSettings
 import dev.icerock.moko.resources.compose.stringResource
@@ -81,12 +83,12 @@ private fun doGetJuHe(scope: CoroutineScope, content: MutableState<String>) {
         needRetry = true,
         needCache = true,
         success = {
-            println("success: itClazz=${it?.result!!::class.java}")
+            logI("success: itClazz=${it?.result!!::class.java}")
             updateText(scope, content, it.toString())
         },
         successList = {},
         errors = {
-            println("error: it=$it")
+            logE("error: it=$it")
             updateText(scope, content, it)
         })
 }

@@ -1,6 +1,7 @@
 package com.darcy.kmpdemo.bean.http
 
 import com.darcy.kmpdemo.bean.IEntity
+import com.darcy.kmpdemo.log.logD
 import com.darcy.kmpdemo.type.LocalDateTimeSerializer
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.SerialName
@@ -24,7 +25,7 @@ data class IPEntity(
 
     @Serializable(with = LocalDateTimeSerializer::class)
     val time: LocalDateTime = LocalDateTime.now().also {
-        println("time: $it")
+        logD("time: $it")
     },
 ): IEntity {
     override fun toString(): String {

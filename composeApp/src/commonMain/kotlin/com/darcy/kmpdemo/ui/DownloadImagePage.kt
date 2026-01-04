@@ -17,6 +17,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
+import com.darcy.kmpdemo.log.logD
 import com.darcy.kmpdemo.platform.ktorClient
 import io.ktor.client.call.body
 import io.ktor.client.request.accept
@@ -93,7 +94,7 @@ private fun downloadFile(
                         val chunk = channel.readRemaining()
                         count += chunk.remaining
                         chunk.transferTo(stream)
-                        println("Received $count bytes from ${httpResponse.contentLength()}")
+                        logD("Received $count bytes from ${httpResponse.contentLength()}")
                     }
                 }
 

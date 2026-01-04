@@ -1,6 +1,9 @@
 package com.darcy.kmpdemo.network.websocket.impl
 
 import com.darcy.kmpdemo.bean.websocket.MessageEntity
+import com.darcy.kmpdemo.log.logD
+import com.darcy.kmpdemo.log.logV
+import com.darcy.kmpdemo.log.logW
 import com.darcy.kmpdemo.network.parser.impl.kotlinxJson
 import com.darcy.kmpdemo.network.websocket.IWebSocketClient
 import com.darcy.kmpdemo.network.websocket.heartbeat.HeartbeatHelper
@@ -41,18 +44,18 @@ class KtorWebSocketClientImpl : IWebSocketClient, IOuterListener {
             throw NullPointerException("outListener is null. please call setOutListener() first.")
         }
         if (session != null && session?.isActive == true) {
-            println("$TAG already connected!")
+            logW("$TAG already connected!")
         }
-        println("$TAG connect...")
+        logD("$TAG connect...")
         session = ktorClient.webSocketSession(url)
-        println("$TAG onOpen...")
+        logD("$TAG onOpen...")
         onOpen()
 
         session?.let {
             it.incoming.receiveAsFlow().filterIsInstance<Frame.Text>().filterNotNull()
                 .collect { frame ->
                     val message = frame.readText()
-                    println("$TAG onReceive message <-- $message")
+                    logV("$TAG onReceive message <-- $message")
                     onMessage(message)
                 }
         } ?: run {
