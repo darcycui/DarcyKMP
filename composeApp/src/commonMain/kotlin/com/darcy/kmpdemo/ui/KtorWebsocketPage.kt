@@ -19,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.darcy.kmpdemo.log.logD
 import com.darcy.kmpdemo.network.ssl.SslSettings
 import com.darcy.kmpdemo.network.websocket.WebSocketManager
 import com.darcy.kmpdemo.network.websocket.listener.IOuterListener
@@ -103,7 +104,7 @@ private fun connectWS(scope: CoroutineScope, content: MutableState<String>) {
 
 private fun updateText(scope: CoroutineScope, content: MutableState<String>, text: String) {
     scope.launch(Dispatchers.Main) {
-        println("text:$text")
+        logD("text:$text")
         content.value += "\n$text"
     }
 }

@@ -1,6 +1,7 @@
 package com.darcy.kmpdemo.network.websocket.impl
 
 import com.darcy.kmpdemo.bean.websocket.STOMPMessageEntity
+import com.darcy.kmpdemo.log.logE
 import com.darcy.kmpdemo.network.parser.impl.kotlinxJson
 import com.darcy.kmpdemo.network.websocket.IWebSocketClient
 import com.darcy.kmpdemo.network.websocket.heartbeat.PING
@@ -39,7 +40,7 @@ class KrossbowWebsocketClientImpl : IWebSocketClient, IOuterListener {
     private val dispatcher: CoroutineDispatcher = newSingleThreadContext("websocket-stomp")
     private val exceptionHandler: CoroutineExceptionHandler =
         CoroutineExceptionHandler { _, throwable ->
-            println("KrossbowWebsocketClientImpl exceptionHandler: ${throwable.message}")
+            logE("KrossbowWebsocketClientImpl exceptionHandler: ${throwable.message}")
             throwable.printStackTrace()
         }
     private val scope = CoroutineScope(dispatcher + SupervisorJob() + exceptionHandler)

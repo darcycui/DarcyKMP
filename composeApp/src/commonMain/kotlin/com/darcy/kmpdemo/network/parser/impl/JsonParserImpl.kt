@@ -1,6 +1,8 @@
 package com.darcy.kmpdemo.network.parser.impl
 
 import com.darcy.kmpdemo.bean.http.base.BaseResult
+import com.darcy.kmpdemo.log.logD
+import com.darcy.kmpdemo.log.logE
 import com.darcy.kmpdemo.network.parser.IJsonParser
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
@@ -41,7 +43,7 @@ class JsonParserImpl : IJsonParser {
                         kotlinxJson.decodeFromString<BaseResult<T>>(realSerializer, json)
                     )
                 } ?: run {
-                    println("json is JsonObject but kSerializer is null")
+                    logE("json is JsonObject but kSerializer is null")
                     error?.invoke("json is JsonObject but kSerializer is null")
                 }
             }
@@ -53,7 +55,7 @@ class JsonParserImpl : IJsonParser {
                         kotlinxJson.decodeFromString<BaseResult<List<T>>>(realSerializer, json)
                     )
                 } ?: run {
-                    println("json is JsonArray but kSerializer is null")
+                    logE("json is JsonArray but kSerializer is null")
                     error?.invoke("json is JsonArray but kSerializer is null")
                 }
             }

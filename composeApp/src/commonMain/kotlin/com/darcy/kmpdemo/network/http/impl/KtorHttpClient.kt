@@ -1,6 +1,7 @@
 package com.darcy.kmpdemo.network.http.impl
 
 import com.darcy.kmpdemo.bean.http.base.BaseResult
+import com.darcy.kmpdemo.log.logD
 import com.darcy.kmpdemo.network.http.IHttp
 import com.darcy.kmpdemo.network.parser.impl.JsonParserImpl
 import com.darcy.kmpdemo.platform.ktorClient
@@ -27,7 +28,7 @@ class KtorHttpClient : IHttp {
 
     private val exceptionHandler: CoroutineExceptionHandler =
         CoroutineExceptionHandler { _, throwable ->
-            println("$TAG exceptionHandler: ${throwable.message}")
+            logD("$TAG exceptionHandler: ${throwable.message}")
             throwable.printStackTrace()
         }
     private val scope: CoroutineScope =

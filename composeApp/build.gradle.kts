@@ -4,12 +4,13 @@ import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
+    alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
-    id("dev.icerock.mobile.multiplatform-resources")
+    alias(libs.plugins.composeHotReload)
     alias(libs.plugins.kotlinxSerialization)
+    id("dev.icerock.mobile.multiplatform-resources")
 }
 // config moko resources plugin
 multiplatformResources {
@@ -31,7 +32,18 @@ kotlin {
     }
 
     jvm("desktop")
-//    moko resources 不支持wasm
+
+//    js {
+//        browser()
+//        binaries.executable()
+//    }
+
+//    @OptIn(ExperimentalWasmDsl::class)
+//    wasmJs {
+//        browser()
+//        binaries.executable()
+//    }
+//    moko resources 0.25.2支持wasm
 //    wasm("wasm") {}
 
     compilerOptions {

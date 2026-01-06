@@ -3,6 +3,7 @@ package com.darcy.kmpdemo.platform
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.graphics.ImageBitmap
+import com.darcy.kmpdemo.log.logD
 import com.darcy.kmpdemo.log.logE
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.forms.submitFormWithBinaryData
@@ -62,7 +63,7 @@ fun uploadFile(
             withContext(Dispatchers.Main) {
                 uploadResult.value = "上传成功:$json"
             }
-            println(json)
+            logD(json)
         }.onFailure {
             logE(msg = "uploadFile error:${it.message}", throwable = it)
             withContext(Dispatchers.Main) {
