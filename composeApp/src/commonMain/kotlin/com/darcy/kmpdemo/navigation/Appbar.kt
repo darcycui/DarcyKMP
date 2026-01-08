@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import org.jetbrains.compose.resources.stringResource
 
 /**
  * Composable that displays the topBar and displays back button if back navigation is possible.

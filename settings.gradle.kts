@@ -16,15 +16,17 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
+        // 添加本地 Maven 仓库
+        mavenLocal()
     }
 }
 
 dependencyResolutionManagement {
     repositories {
-        maven("https://maven.aliyun.com/repository/public")
-        maven("https://maven.aliyun.com/repository/jcenter")
-        maven("https://maven.aliyun.com/repository/google")
-        maven("https://maven.aliyun.com/repository/gradle-plugin")
+//        maven("https://maven.aliyun.com/repository/public")
+//        maven("https://maven.aliyun.com/repository/jcenter")
+//        maven("https://maven.aliyun.com/repository/google")
+//        maven("https://maven.aliyun.com/repository/gradle-plugin")
         google {
             mavenContent {
                 includeGroupAndSubgroups("androidx")
@@ -33,6 +35,9 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
+
+        // 添加本地 Maven 仓库
+        mavenLocal()
     }
 }
 

@@ -13,7 +13,3 @@ class AndroidPlatform : Platform {
 }
 
 actual fun getPlatform(): Platform = AndroidPlatform()
-
-actual fun isAndroid(): Boolean = true
-
-actual fun isDesktop(): Boolean = false

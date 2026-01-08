@@ -6,13 +6,14 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.newSingleThreadContext
+import kotlin.concurrent.Volatile
 
 const val PING = "ping"
 const val PONG = "pong"
@@ -21,20 +22,26 @@ class HeartbeatHelper(
     private val iWebSocketClient: IWebSocketClient
 ) {
     companion object {
-        private val TAG = HeartbeatHelper::class.java.simpleName
+        private val TAG = HeartbeatHelper::class.simpleName
+        @Volatile
         private var instance: HeartbeatHelper? = null
+        private val lock: Any = Any()
 
-        @Synchronized
+
         fun getInstance(iWebSocketClient: IWebSocketClient): HeartbeatHelper {
             if (instance == null) {
                 instance = HeartbeatHelper(iWebSocketClient)
             }
-            return instance!!
+            return instance ?: run {
+                instance = HeartbeatHelper(iWebSocketClient)
+                instance!!
+            }
         }
     }
 
     @OptIn(DelicateCoroutinesApi::class, ExperimentalCoroutinesApi::class)
-    private val dispatcher: CoroutineDispatcher = newSingleThreadContext("heartbeat")
+//    private val dispatcher: CoroutineDispatcher = newSingleThreadContext("heartbeat")
+    private val dispatcher: CoroutineDispatcher = Dispatchers.Default
     private val exceptionHandler: CoroutineExceptionHandler =
         CoroutineExceptionHandler { _, throwable ->
             logE("$TAG exceptionHandler: ${throwable.message}")

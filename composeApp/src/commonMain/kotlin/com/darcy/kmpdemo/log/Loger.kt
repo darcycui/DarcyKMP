@@ -5,11 +5,14 @@ import io.github.aakira.napier.Napier
 import com.darcy.kmpdemo.platform.getPlatform
 
 const val DARCY_TAG = "DarcyLog"
-fun initLogger() {
-//    Napier.base(DebugAntilog())
-    Napier.base(ReleaseAntiLog())
-    val platform = getPlatform()
-    logD("initLogger $platform")
+
+object Loger {
+    fun initLogger() {
+        Napier.base(DebugAntilog())
+//    Napier.base(ReleaseAntiLog())
+        val platform = getPlatform()
+        logD("initLogger $platform")
+    }
 }
 
 fun logD(msg: String, tag: String = DARCY_TAG, throwable: Throwable? = null) {

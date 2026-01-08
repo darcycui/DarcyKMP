@@ -21,11 +21,10 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.isActive
-import java.time.LocalDateTime
 
 class KtorWebSocketClientImpl : IWebSocketClient, IOuterListener {
     companion object {
-        private val TAG = KtorWebSocketClientImpl::class.java.simpleName
+        private val TAG = KtorWebSocketClientImpl::class.simpleName
     }
 
     private var url: String = ""
@@ -87,7 +86,7 @@ class KtorWebSocketClientImpl : IWebSocketClient, IOuterListener {
             from = fromUser,
             to = toUser,
             message = message,
-            createTime = LocalDateTime.now().toString()
+            createTime = "LocalDateTime.now()"
         )
         val jsonMessage = kotlinxJson.encodeToString(messageBean)
         println("$TAG send message --> $jsonMessage")

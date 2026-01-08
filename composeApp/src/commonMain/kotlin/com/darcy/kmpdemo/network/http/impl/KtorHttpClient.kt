@@ -23,7 +23,7 @@ import kotlinx.serialization.KSerializer
 
 class KtorHttpClient : IHttp {
     companion object {
-        private val TAG = KtorHttpClient::class.java.simpleName
+        private val TAG = KtorHttpClient::class.simpleName
     }
 
     private val exceptionHandler: CoroutineExceptionHandler =
@@ -32,7 +32,7 @@ class KtorHttpClient : IHttp {
             throwable.printStackTrace()
         }
     private val scope: CoroutineScope =
-        CoroutineScope(Dispatchers.IO + SupervisorJob() + exceptionHandler)
+        CoroutineScope(Dispatchers.Default + SupervisorJob() + exceptionHandler)
     private val jsonParser by lazy {
         JsonParserImpl()
     }

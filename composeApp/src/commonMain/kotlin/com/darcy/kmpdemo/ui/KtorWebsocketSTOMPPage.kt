@@ -20,10 +20,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.darcy.kmpdemo.log.logD
-import com.darcy.kmpdemo.network.ssl.SslSettings
+//import com.darcy.kmpdemo.network.ssl.SslSettings
 import com.darcy.kmpdemo.network.websocket.WebSocketManager
 import com.darcy.kmpdemo.network.websocket.listener.IOuterListener
 import dev.icerock.moko.resources.compose.stringResource
+import io.ktor.utils.io.charsets.Charsets
 import kmpdarcydemo.composeapp.generated.resources.Res
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -67,7 +68,7 @@ fun ShowKtorWebsocketSTOMP() {
 
 private fun connectWS(scope: CoroutineScope, content: MutableState<String>) {
     updateText(scope, content, "connect")
-    scope.launch(Dispatchers.IO) {
+    scope.launch(Dispatchers.Default) {
         WebSocketManager.init(url = "ws://localhost:7443/stomp-ws", fromUser = "test2")
         WebSocketManager.setOuterListener(object : IOuterListener {
             override fun onOpen() {
@@ -87,7 +88,7 @@ private fun connectWS(scope: CoroutineScope, content: MutableState<String>) {
             }
 
             override fun onMessage(bytes: ByteArray) {
-                updateText(scope, content, "onMessage:${bytes.toString(Charsets.UTF_8)}")
+//                updateText(scope, content, "onMessage:${bytes.toString(Charsets.UTF_8)}")
             }
 
             override fun onFailure(errorMessage: String) {
@@ -114,7 +115,7 @@ private fun sendWS(
     scope: CoroutineScope,
     content: MutableState<String>
 ) {
-    scope.launch(Dispatchers.IO) {
+    scope.launch(Dispatchers.Default) {
         count++
         WebSocketManager.send("hello-$count", "test1")
     }
@@ -125,7 +126,7 @@ private fun disconnectWS(
     content: MutableState<String>
 ) {
     updateText(scope, content, "disconnect")
-    scope.launch(Dispatchers.IO) {
+    scope.launch(Dispatchers.Default) {
         WebSocketManager.disconnect()
     }
 }

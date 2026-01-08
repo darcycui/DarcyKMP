@@ -3,9 +3,10 @@ package com.darcy.kmpdemo.platform
 import android.content.Context
 import androidx.core.content.ContextCompat
 import com.darcy.kmpdemo.app.AppContextProvider
+import kotlinx.io.files.Path
 import java.io.File
 
-actual fun createADirectory(path: String): Boolean {
+actual fun createDirectory(path: String): Boolean {
     val dir = File(path)
     return if (!dir.exists()) {
         dir.mkdirs()
@@ -14,28 +15,33 @@ actual fun createADirectory(path: String): Boolean {
     }
 }
 
-actual fun getCacheDir(): File {
+actual fun getCacheDir(): Path {
     val context = getAndroidContext()
-    return ContextCompat.getExternalCacheDirs(context).firstOrNull()
+    val file = context.externalCacheDirs.firstOrNull()
         ?: context.externalCacheDir
-        ?: throw IllegalStateException("cacheDir is null")
+    return Path(file?.absolutePath ?: "")
 }
 
-actual fun getDocumentsDir(): File {
+actual fun getDocumentsDir(): Path {
     val context = getAndroidContext()
-    return ContextCompat.getExternalFilesDirs(context, DarcyFolder.DIR_DOCUMENT).firstOrNull()
+    val file = context.getExternalFilesDirs(DarcyFolder.DIR_DOCUMENT).firstOrNull()
         ?: context.getExternalFilesDir(DarcyFolder.DIR_DOCUMENT)
-        ?: throw IllegalStateException("documentsDir null")
+    return Path(file?.absolutePath ?: "")
+
 }
 
-actual fun getDownloadDir(): File {
+actual fun getDownloadDir(): Path {
     val context = getAndroidContext()
-    return ContextCompat.getExternalFilesDirs(context, DarcyFolder.DIR_DOWNLOAD).firstOrNull()
+    val file = context.getExternalFilesDirs(DarcyFolder.DIR_DOWNLOAD).firstOrNull()
         ?: context.getExternalFilesDir(DarcyFolder.DIR_DOCUMENT)
-        ?: throw IllegalStateException("cacheDir is null")
+    return Path(file?.absolutePath ?: "")
 }
 
 // 获取 Android 上下文
 private fun getAndroidContext(): Context {
     return AppContextProvider.getAppContext()
+}
+
+actual fun createFile(path: String): Boolean {
+    TODO("Not yet implemented")
 }

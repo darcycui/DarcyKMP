@@ -14,10 +14,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
+import kotlinx.io.files.Path
 
 expect class ImagePicker {
-    suspend fun pickImage(): File
+    suspend fun pickImage(): Path
 }
 
 @Composable
@@ -29,46 +29,46 @@ private const val uploadImageUrl = "https://10.0.0.241:7443/api/upload/image"
 /**
  * 上传图片
  */
-fun uploadFile(
-    scope: CoroutineScope,
-    imagePicker: ImagePicker?,
-    filePath: MutableState<String>,
-    imageBitmap: MutableState<ImageBitmap?>,
-    uploadResult: MutableState<String>
-) {
-    scope.launch(Dispatchers.IO) {
-        if (imagePicker == null) {
-            logE("imagePicker is null", "uploadFile")
-            return@launch
-        }
-        val pickedFile = imagePicker.pickImage()
-        withContext(Dispatchers.Main) {
-            filePath.value = pickedFile.absolutePath
-            imageBitmap.value = loadImageAsBitmap(filePath.value)
-        }
-        runCatching {
-            val response = ktorClient.submitFormWithBinaryData(
-                url = uploadImageUrl,
-                formData = formData {
-                    append("userId", 1)
-                    append(
-                        "file", pickedFile.readBytes(),
-                        Headers.build {
-                            append(HttpHeaders.ContentType, "image/*")
-                            append(HttpHeaders.ContentDisposition, "filename=${pickedFile.name}")
-                        })
-                }
-            )
-            val json = response.bodyAsText()
-            withContext(Dispatchers.Main) {
-                uploadResult.value = "上传成功:$json"
-            }
-            logD(json)
-        }.onFailure {
-            logE(msg = "uploadFile error:${it.message}", throwable = it)
-            withContext(Dispatchers.Main) {
-                uploadResult.value = "上传失败:${it.message}"
-            }
-        }
-    }
-}
+//fun uploadFile(
+//    scope: CoroutineScope,
+//    imagePicker: ImagePicker?,
+//    filePath: MutableState<String>,
+//    imageBitmap: MutableState<ImageBitmap?>,
+//    uploadResult: MutableState<String>
+//) {
+//    scope.launch(Dispatchers.Default) {
+//        if (imagePicker == null) {
+//            logE("imagePicker is null", "uploadFile")
+//            return@launch
+//        }
+//        val pickedFile = imagePicker.pickImage()
+//        withContext(Dispatchers.Main) {
+//            filePath.value = pickedFile.absolutePath
+//            imageBitmap.value = loadImageAsBitmap(filePath.value)
+//        }
+//        runCatching {
+//            val response = ktorClient.submitFormWithBinaryData(
+//                url = uploadImageUrl,
+//                formData = formData {
+//                    append("userId", 1)
+//                    append(
+//                        "file", pickedFile.readBytes(),
+//                        Headers.build {
+//                            append(HttpHeaders.ContentType, "image/*")
+//                            append(HttpHeaders.ContentDisposition, "filename=${pickedFile.name}")
+//                        })
+//                }
+//            )
+//            val json = response.bodyAsText()
+//            withContext(Dispatchers.Main) {
+//                uploadResult.value = "上传成功:$json"
+//            }
+//            logD(json)
+//        }.onFailure {
+//            logE(msg = "uploadFile error:${it.message}", throwable = it)
+//            withContext(Dispatchers.Main) {
+//                uploadResult.value = "上传失败:${it.message}"
+//            }
+//        }
+//    }
+//}

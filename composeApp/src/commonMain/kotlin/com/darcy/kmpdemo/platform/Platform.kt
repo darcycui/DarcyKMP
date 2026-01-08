@@ -7,7 +7,3 @@ interface Platform {
 
 expect fun getPlatform(): Platform
 
-expect fun isAndroid(): Boolean
-
-expect fun isDesktop(): Boolean
-

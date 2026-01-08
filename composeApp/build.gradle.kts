@@ -1,6 +1,7 @@
 import dev.icerock.gradle.MRVisibility
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -31,20 +32,30 @@ kotlin {
         }
     }
 
+    listOf(
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "DarcyKMP"
+            isStatic = true
+        }
+    }
+
     jvm("desktop")
 
-//    js {
-//        browser()
-//        binaries.executable()
-//    }
+    // moko resources 0.25.2支持wasm
+    // darcy.kmp.lib.storage
+    js {
+        browser()
+        binaries.executable()
+    }
 
-//    @OptIn(ExperimentalWasmDsl::class)
-//    wasmJs {
-//        browser()
-//        binaries.executable()
-//    }
-//    moko resources 0.25.2支持wasm
-//    wasm("wasm") {}
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        browser()
+        binaries.executable()
+    }
 
     compilerOptions {
         freeCompilerArgs.add("-Xexpect-actual-classes")
@@ -59,11 +70,14 @@ kotlin {
             // ktor network
             // kotlin coroutine
             implementation(libs.kotlinx.coroutines.android)
+            // krossbow STOMP client for KMP
+            api(libs.krossbow.stomp.core)
+            api(libs.krossbow.websocket.builtin)
+            api(libs.krossbow.websocket.ktor)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
-//            implementation(compose.material)
             implementation(compose.material3)
             implementation(compose.materialIconsExtended)
             implementation(compose.foundation)
@@ -77,7 +91,7 @@ kotlin {
             // moko resources for compose multiplatform
             api(libs.moko.resources.compose)
             // moko resources test
-//            api(libs.moko.resources.test)
+            // api(libs.moko.resources.test)
             // ktor network
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.cio) // CIO 引擎
@@ -96,15 +110,26 @@ kotlin {
             implementation(libs.org.androidx.navigation.compose)
             // log napier
             implementation(libs.napier)
+            // io/File kotlinx-io-core
+            implementation(libs.kotlinx.io.core)
+            // localMaven dependency
+            api(libs.darcy.kmp.storage)
+            // multiplatform-settings key-value storage
+            implementation(libs.com.russhwolf.multiplatform.settings)
+
+
+        }
+        desktopMain.dependencies {
+            implementation(compose.desktop.currentOs)
+            implementation(libs.kotlinx.coroutines.swing)
             // krossbow STOMP client for KMP
             api(libs.krossbow.stomp.core)
             api(libs.krossbow.websocket.builtin)
             api(libs.krossbow.websocket.ktor)
         }
-        desktopMain.dependencies {
-            implementation(compose.desktop.currentOs)
-            implementation(libs.kotlinx.coroutines.swing)
-            // ktor network
+        // 添加单元测试
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
         }
     }
 }

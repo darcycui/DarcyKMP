@@ -1,23 +1,35 @@
 package com.darcy.kmpdemo.navigation
 
-import dev.icerock.moko.resources.StringResource
+import kmpdarcydemo.composeapp.generated.resources.Res
+import kmpdarcydemo.composeapp.generated.resources.download_image
+import kmpdarcydemo.composeapp.generated.resources.encrypt_file
+import kmpdarcydemo.composeapp.generated.resources.encrypt_text
+import kmpdarcydemo.composeapp.generated.resources.home
+import kmpdarcydemo.composeapp.generated.resources.ktor_http
+import kmpdarcydemo.composeapp.generated.resources.ktor_websocket
+import kmpdarcydemo.composeapp.generated.resources.ktor_websocket_stomp
+import kmpdarcydemo.composeapp.generated.resources.load_moko_resource
+import kmpdarcydemo.composeapp.generated.resources.load_resource
+import kmpdarcydemo.composeapp.generated.resources.navigation_rail
+import kmpdarcydemo.composeapp.generated.resources.unknown
+import kmpdarcydemo.composeapp.generated.resources.upload_image
 import kotlinx.serialization.Serializable
-import org.example.library.SharedRes
+import org.jetbrains.compose.resources.StringResource
 
 @Serializable
 enum class Pages(val title: StringResource) {
-    Unknown(title = SharedRes.strings.unknown),
-    HomePage(title = SharedRes.strings.home),
-    EncryptTextPage(title = SharedRes.strings.encrypt_text),
-    EncryptFilePage(title = SharedRes.strings.encrypt_file),
-    LoadResourcePage(title = SharedRes.strings.load_resource),
-    LoadMokoResourcePage(title = SharedRes.strings.load_moko_resource),
-    KtorHttpPage(title = SharedRes.strings.ktor_http),
-    KtorWebsocketPage(title = SharedRes.strings.ktor_websocket),
-    DownloadImagePage(title = SharedRes.strings.download_image),
-    UploadImagePage(title = SharedRes.strings.upload_image),
-    KtorWebSocketSTMOPPage(title = SharedRes.strings.ktor_websocket_stomp),
-    NavigationRailPage(title = SharedRes.strings.navigation_rail),
+    Unknown(title = Res.string.unknown),
+    HomePage(title = Res.string.home),
+    EncryptTextPage(title = Res.string.encrypt_text),
+    EncryptFilePage(title = Res.string.encrypt_file),
+    LoadResourcePage(title = Res.string.load_resource),
+    LoadMokoResourcePage(title = Res.string.load_moko_resource),
+    KtorHttpPage(title = Res.string.ktor_http),
+    KtorWebsocketPage(title = Res.string.ktor_websocket),
+    DownloadImagePage(title = Res.string.download_image),
+    UploadImagePage(title = Res.string.upload_image),
+    KtorWebSocketSTMOPPage(title = Res.string.ktor_websocket_stomp),
+    NavigationRailPage(title = Res.string.navigation_rail),
 }
 
 sealed class PageParams {

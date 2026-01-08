@@ -1,6 +1,6 @@
 package com.darcy.kmpdemo.bean.websocket
 
-import com.darcy.kmpdemo.utils.TimeUtil
+import com.darcy.kmpdemo.platform.TimePlatform
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -10,7 +10,7 @@ data class STOMPMessageEntity(
     val from: String = "",
     val text: String = "",
     val recipient: String = "",
-    val time: String? = TimeUtil.getCurrentTimeStamp(),
+    val time: String? = TimePlatform.getCurrentTimeStamp(),
 ) {
     override fun toString(): String {
         return "MessageEntity(id=$id, from='$from', text='$text', recipient='$recipient', time=$time)"

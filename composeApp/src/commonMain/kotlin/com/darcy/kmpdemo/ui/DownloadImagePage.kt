@@ -31,14 +31,13 @@ import io.ktor.utils.io.readRemaining
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.io.asSink
-import java.io.File
+//import kotlinx.io.asSink
+//import java.io.File
 import com.darcy.kmpdemo.platform.loadImageAsBitmap
-import com.darcy.kmpdemo.platform.createADirectory
+import com.darcy.kmpdemo.platform.createDirectory
 import com.darcy.kmpdemo.platform.getDownloadDir
 import com.darcy.kmpdemo.utils.suffix
 import kotlinx.coroutines.withContext
-import sun.nio.ch.Net.accept
 
 @Composable
 fun ShowDownloadImage() {
@@ -74,35 +73,35 @@ private fun downloadFile(
     filePath: MutableState<String>,
     imageBitmap: MutableState<ImageBitmap?>
 ) {
-    scope.launch(Dispatchers.IO) {
-        // 创建下载目录
-        val downloadDir = getDownloadDir().resolve("image")
-        if (!downloadDir.exists()) {
-            createADirectory(downloadDir.path)
-        }
-        val file = File.createTempFile("image_", downloadImageUrl.suffix(), downloadDir)
-        val stream = file.outputStream().asSink()
-        // download file in stream
-        runCatching {
-            ktorClient.prepareGet(downloadImageUrl) {
-                accept(ContentType.Image.Any)
-            }.execute() { httpResponse ->
-                val channel: ByteReadChannel = httpResponse.body()
-                var count = 0L
-                stream.use {
-                    while (!channel.exhausted()) {
-                        val chunk = channel.readRemaining()
-                        count += chunk.remaining
-                        chunk.transferTo(stream)
-                        logD("Received $count bytes from ${httpResponse.contentLength()}")
-                    }
-                }
-
-            }
-            withContext(Dispatchers.Main) {
-                filePath.value = file.absolutePath
-                imageBitmap.value = loadImageAsBitmap(filePath.value)
-            }
-        }
-    }
+//    scope.launch(Dispatchers.Default) {
+//        // 创建下载目录
+//        val downloadDir = getDownloadDir().resolve("image")
+//        if (!downloadDir.exists()) {
+//            createDirectory(downloadDir.path)
+//        }
+//        val file = File.createTempFile("image_", downloadImageUrl.suffix(), downloadDir)
+//        val stream = file.outputStream().asSink()
+//        // download file in stream
+//        runCatching {
+//            ktorClient.prepareGet(downloadImageUrl) {
+//                accept(ContentType.Image.Any)
+//            }.execute() { httpResponse ->
+//                val channel: ByteReadChannel = httpResponse.body()
+//                var count = 0L
+//                stream.use {
+//                    while (!channel.exhausted()) {
+//                        val chunk = channel.readRemaining()
+//                        count += chunk.remaining
+//                        chunk.transferTo(stream)
+//                        logD("Received $count bytes from ${httpResponse.contentLength()}")
+//                    }
+//                }
+//
+//            }
+//            withContext(Dispatchers.Main) {
+//                filePath.value = file.absolutePath
+//                imageBitmap.value = loadImageAsBitmap(filePath.value)
+//            }
+//        }
+//    }
 }

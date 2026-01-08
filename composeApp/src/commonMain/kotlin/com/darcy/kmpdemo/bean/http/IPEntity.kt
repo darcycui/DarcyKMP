@@ -1,12 +1,9 @@
 package com.darcy.kmpdemo.bean.http
 
 import com.darcy.kmpdemo.bean.IEntity
-import com.darcy.kmpdemo.log.logD
-import com.darcy.kmpdemo.type.LocalDateTimeSerializer
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.time.LocalDateTime
 
 // @OptIn 提示当前非稳定API
 @OptIn(InternalSerializationApi::class)
@@ -23,10 +20,7 @@ data class IPEntity(
     @SerialName("Province")
     val province: String = "",
 
-    @Serializable(with = LocalDateTimeSerializer::class)
-    val time: LocalDateTime = LocalDateTime.now().also {
-        logD("time: $it")
-    },
+    val time: String = "LocalDateTime.now()",
 ): IEntity {
     override fun toString(): String {
         return "IPEntity(city='$city', country='$country', district='$district', isp='$isp', province='$province', time=$time)"

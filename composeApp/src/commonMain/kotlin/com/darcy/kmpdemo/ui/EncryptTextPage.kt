@@ -14,15 +14,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.darcy.kmpdemo.log.logE
+import com.darcy.kmpdemo.log.logI
 import com.darcy.kmpdemo.platform.decryptString
 import com.darcy.kmpdemo.platform.encryptString
 import com.darcy.kmpdemo.platform.getPlatform
+import io.github.kotlin.fibonacci.generateFibi
+import kotlinx.serialization.json.JsonNull.content
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun ShowEncryptText() {
-    var content by remember { mutableStateOf(getPlatform().name + " " + getPlatform().version) }
+    val x: Int by remember { mutableStateOf(generateFibi().take(3).last()) }
+    var content by remember { mutableStateOf("${getPlatform().name} ${getPlatform().version } $x") }
 
     Column(
         Modifier.fillMaxWidth(),

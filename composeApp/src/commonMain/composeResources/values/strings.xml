@@ -1,4 +1,29 @@
 <resources>
     <string name="common_app_name">解密工具</string>
-    <string name="load_resource">Load Resource</string>
+    <string name="my_string">简体中文字符串</string>
+    <string name="unknown">未知</string>
+    <string name="home">主页</string>
+    <string name="encrypt_text">加密文本</string>
+    <string name="encrypt_file">加密文件</string>
+    <string name="load_resource">加载KMP自带资源</string>
+    <string name="load_moko_resource">加载Moko资源</string>
+    <string name="ktor_http">Ktor Http</string>
+    <string name="ktor_websocket">Ktor Websocket</string>
+    <string name="load_string_resource">使用字符串资源</string>
+    <string name="load_color_resource">使用颜色资源</string>
+    <string name="load_drawable_resource">使用图片资源</string>
+    <string name="load_file_resource">使用文件资源</string>
+    <string name="http_get">Http Get</string>
+    <string name="http_post">Http Post</string>
+    <string name="websocket">Websocket</string>
+    <string name="websocket_connect">Websocket 连接</string>
+    <string name="websocket_disconnect">Websocket 断开连接</string>
+    <string name="websocket_send">Websocket 发送消息</string>
+    <string name="download_image">下载图片</string>
+    <string name="upload_image">上传图片</string>
+    <string name="ktor_websocket_stomp">Websocket STOMP</string>
+    <string name="websocket_connect_stomp">Websocket STOMP 连接</string>
+    <string name="websocket_disconnect_stomp">Websocket STOMP 断开连接</string>
+    <string name="websocket_send_stomp">Websocket STOMP 发送消息</string>
+    <string name="navigation_rail">侧边导航</string>
 </resources>

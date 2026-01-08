@@ -21,7 +21,7 @@ import com.darcy.kmpdemo.bean.http.UserEntity
 import com.darcy.kmpdemo.log.logE
 import com.darcy.kmpdemo.log.logI
 import com.darcy.kmpdemo.network.http.HttpManager
-import com.darcy.kmpdemo.network.ssl.SslSettings
+//import com.darcy.kmpdemo.network.ssl.SslSettings
 import dev.icerock.moko.resources.compose.stringResource
 import kmpdarcydemo.composeapp.generated.resources.Res
 import kotlinx.coroutines.CoroutineScope
@@ -83,7 +83,7 @@ private fun doGetJuHe(scope: CoroutineScope, content: MutableState<String>) {
         needRetry = true,
         needCache = true,
         success = {
-            logI("success: itClazz=${it?.result!!::class.java}")
+            logI("success: itClazz=${it?.result!!::class}")
             updateText(scope, content, it.toString())
         },
         successList = {},
@@ -102,7 +102,7 @@ private fun doGetDarcy(scope: CoroutineScope, content: MutableState<String>) {
         needCache = true,
         success = {},
         successList = {
-            println("success: itClazz=${it?.result!!::class.java}")
+            println("success: itClazz=${it?.result!!::class}")
             updateText(scope, content, it.toString())
         },
         errors = {
@@ -122,7 +122,7 @@ private fun doPost(scope: CoroutineScope, content: MutableState<String>) {
         needRetry = true,
         needCache = true,
         success = {
-            println("success: itClazz=${it?.result!!::class.java}")
+            println("success: itClazz=${it?.result!!::class}")
             updateText(scope, content, it.toString())
         },
         successList = {},

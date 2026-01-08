@@ -2,7 +2,8 @@ package com.darcy.kmpdemo.platform
 
 import com.darcy.kmpdemo.exception.http.HttpException
 import com.darcy.kmpdemo.log.logD
-import com.darcy.kmpdemo.network.ssl.SslSettings
+import com.darcy.kmpdemo.log.logE
+//import com.darcy.kmpdemo.network.ssl.SslSettings
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.network.sockets.ConnectTimeoutException
@@ -12,8 +13,6 @@ import io.ktor.client.plugins.HttpResponseValidator
 import io.ktor.client.plugins.HttpSend
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.plugins.logging.DEFAULT
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
@@ -22,14 +21,22 @@ import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.header
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.URLProtocol
 import io.ktor.http.isSuccess
-import io.ktor.http.path
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.serialization.json.Json
 
 const val KTOR_TAG = "KtorClient:"
 const val KTOR_FILE_TAG = KTOR_TAG + "File Download:"
+
+val ktorExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+    logE("$KTOR_TAG exceptionHandler: ${throwable.message}")
+    throwable.printStackTrace()
+}
+val ktorScope: CoroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob() + ktorExceptionHandler)
 
 val ktorClient: HttpClient
     // CIO 异步协程 支持 JVM Android Native(iOS) 支持 http1.x 和 websocket
@@ -104,9 +111,10 @@ val ktorClient: HttpClient
         }
         // config ssl
         engine {
-            https {
-                trustManager = SslSettings.getTrustManager()
-            }
+            dispatcher = Dispatchers.Default
+//            https {
+//                trustManager = SslSettings.getTrustManager()
+//            }
         }
         // install websocket
         install(WebSockets) {

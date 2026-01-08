@@ -20,33 +20,29 @@ import androidx.compose.ui.unit.dp
 import com.darcy.kmpdemo.log.logD
 import com.darcy.kmpdemo.log.logE
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.io.files.Path
 import java.awt.EventQueue
-import java.awt.FileDialog
-import java.awt.Frame
 import java.io.File
-import java.io.FilenameFilter
 import javax.swing.JFileChooser
 import javax.swing.filechooser.FileNameExtensionFilter
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 actual class ImagePicker() {
-    actual suspend fun pickImage(): File {
+    actual suspend fun pickImage(): Path {
         val path = chooseFileWithNativeDialog() ?: ""
         if (path.isEmpty()) {
             logE("文件选择错误")
-            return File("")
+            return Path("")
         }
         val sourceFile = File(path)
-        val documentDir = getDocumentsDir().resolve("image")
+        val documentDir = File(getDocumentsDir().toString() + "/image")
         if (!documentDir.exists()) {
-            createADirectory(documentDir.path)
+            createDirectory(documentDir.path)
         }
         val fileName = path.substringAfterLast(".")
         val cacheFile = File(documentDir, "${System.currentTimeMillis()}_.$fileName")
         sourceFile.copyTo(cacheFile, true)
         logD("选择文件成功：${cacheFile.absolutePath}")
-        return cacheFile
+        return Path(cacheFile.absolutePath)
     }
 
 
@@ -116,7 +112,7 @@ actual fun ShowUploadImage() {
         verticalArrangement = Arrangement.spacedBy(5.dp)
     ) {
         Button(onClick = {
-            uploadFile(scope, imagePicker, filePath, imageBitmap, uploadResult)
+//            uploadFile(scope, imagePicker, filePath, imageBitmap, uploadResult)
         }) {
             Text(text = "选择并上传图片")
         }

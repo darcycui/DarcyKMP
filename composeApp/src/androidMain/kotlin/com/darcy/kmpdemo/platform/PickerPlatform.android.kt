@@ -26,6 +26,7 @@ import com.darcy.kmpdemo.log.logE
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.io.files.Path
 import java.io.File
 
 actual class ImagePicker(
@@ -37,14 +38,14 @@ actual class ImagePicker(
         this.pickedFile = pickedFile
     }
 
-    actual suspend fun pickImage(): File {
-        return pickedFile ?: File("")
+    actual suspend fun pickImage(): Path {
+        return Path(pickedFile?.absolutePath ?: "")
     }
 }
 
 // 复制图片到缓存目录
 private fun copyImageToCache(context: Context, uri: Uri): File? {
-    val cacheDir = File(getDocumentsDir(), "image").apply { mkdirs() }
+    val cacheDir = File(getDocumentsDir().toString(), "image").apply { mkdirs() }
     val cacheFile = File(cacheDir, "${System.currentTimeMillis()}.jpg")
     return context.contentResolver.openInputStream(uri)?.use { input ->
         cacheFile.outputStream().use { output ->
@@ -69,10 +70,10 @@ actual fun ShowUploadImage() {
                 logE("uri or imagePicker is null")
                 return@rememberLauncherForActivityResult
             }
-            scope.launch(Dispatchers.IO) {
+            scope.launch(Dispatchers.Default) {
                 val cacheFile = copyImageToCache(context, uri)
                 imagePicker.setPickedImage(cacheFile)
-                uploadFile(scope, imagePicker, filePath, imageBitmap, uploadResult)
+//                uploadFile(scope, imagePicker, filePath, imageBitmap, uploadResult)
             }
         }
     Column(
