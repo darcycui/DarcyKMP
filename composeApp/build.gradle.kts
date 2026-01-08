@@ -126,6 +126,8 @@ kotlin {
             api(libs.krossbow.stomp.core)
             api(libs.krossbow.websocket.builtin)
             api(libs.krossbow.websocket.ktor)
+            // 引用本地发布的库
+            implementation("io.github.kotlin:library:1.0.0")
         }
         // 添加单元测试
         commonTest.dependencies {
