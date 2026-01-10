@@ -1,6 +1,6 @@
 package com.darcy.kmpdemo.utils
 
-object CommonEncryptUtil {
+object EncryptHelper {
     fun encryptString(str: String?): String {
         return str?.reversed() ?: ""
     }

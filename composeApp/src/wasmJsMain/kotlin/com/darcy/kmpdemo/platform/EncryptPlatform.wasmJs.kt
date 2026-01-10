@@ -1,11 +1,11 @@
 package com.darcy.kmpdemo.platform
 
-import com.darcy.kmpdemo.utils.CommonEncryptUtil
+import com.darcy.kmpdemo.utils.EncryptHelper
 
 actual fun encryptString(str: String?): String {
-    return CommonEncryptUtil.encryptString(str)
+    return EncryptHelper.encryptString(str)
 }
 
 actual fun decryptString(str: String?): String {
-    return CommonEncryptUtil.decryptString(str)
+    return EncryptHelper.decryptString(str)
 }
