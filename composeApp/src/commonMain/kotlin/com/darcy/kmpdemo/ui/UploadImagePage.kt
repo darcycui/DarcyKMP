@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
 import com.darcy.kmpdemo.platform.ImagePicker
-import com.darcy.kmpdemo.platform.loadImageAsBitmap
+//import com.darcy.kmpdemo.platform.loadImageAsBitmap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -8,7 +8,3 @@ actual object ImagePicker {
         TODO("Not yet implemented")
     }
 }
-
-@Composable
-actual fun ShowUploadImage() {
-}

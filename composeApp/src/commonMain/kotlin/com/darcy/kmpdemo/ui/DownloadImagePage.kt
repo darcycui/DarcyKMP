@@ -33,7 +33,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 //import kotlinx.io.asSink
 //import java.io.File
-import com.darcy.kmpdemo.platform.loadImageAsBitmap
+//import com.darcy.kmpdemo.platform.loadImageAsBitmap
 //import com.darcy.kmpdemo.platform.createDirectory
 //import com.darcy.kmpdemo.platform.getDownloadDir
 import com.darcy.kmpdemo.utils.suffix

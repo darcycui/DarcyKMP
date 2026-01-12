@@ -20,9 +20,6 @@ expect object ImagePicker {
     suspend fun pickImage(): Path
 }
 
-@Composable
-expect fun ShowUploadImage()
-
 
 private const val uploadImageUrl = "https://10.0.0.241:7443/api/upload/image"
 

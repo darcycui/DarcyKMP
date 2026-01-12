@@ -100,35 +100,3 @@ actual object ImagePicker {
         TODO("Not yet implemented")
     }
 }
-
-@Composable
-actual fun ShowUploadImage() {
-    val scope: CoroutineScope = rememberCoroutineScope()
-    val filePath: MutableState<String> = remember { mutableStateOf("unknown") }
-    val imageBitmap: MutableState<ImageBitmap?> = remember { mutableStateOf(null) }
-    val scrollState: ScrollState = rememberScrollState()
-    val imagePicker: ImagePicker = remember { ImagePicker }
-    val uploadResult: MutableState<String> = remember { mutableStateOf("") }
-
-    Column(
-        modifier = Modifier.verticalScroll(scrollState).fillMaxSize(),
-        // 垂直间距
-        verticalArrangement = Arrangement.spacedBy(5.dp)
-    ) {
-        Button(onClick = {
-//            uploadFile(scope, imagePicker, filePath, imageBitmap, uploadResult)
-        }) {
-            Text(text = "选择并上传图片")
-        }
-        Text(text = filePath.value)
-        Text(text = uploadResult.value)
-        imageBitmap.value?.let {
-            Image(
-                bitmap = it,
-                contentDescription = "本地图片",
-                modifier = Modifier.fillMaxSize()
-            )
-        } ?: Text("无法加载图片")
-
-    }
-}
