@@ -116,6 +116,11 @@ kotlin {
             api(libs.darcy.kmp.storage)
             // multiplatform-settings key-value storage
             implementation(libs.com.russhwolf.multiplatform.settings)
+            // fileKit file picker
+            implementation(libs.filekit.core)
+            implementation(libs.filekit.dialogs)
+            implementation(libs.filekit.dialogs.compose)
+            implementation(libs.filekit.coil)
 
 
         }
