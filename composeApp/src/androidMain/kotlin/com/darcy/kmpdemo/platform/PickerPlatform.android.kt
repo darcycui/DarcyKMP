@@ -23,15 +23,14 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.darcy.kmpdemo.log.logE
+import com.darcy.kmpdemo.platform.FilePlatform.getDocumentsDir
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.io.files.Path
 import java.io.File
 
-actual class ImagePicker(
-    private val context: Context,
-) {
+actual object ImagePicker {
     private var pickedFile: File? = null
 
     fun setPickedImage(pickedFile: File?) {
@@ -62,7 +61,7 @@ actual fun ShowUploadImage() {
     val imageBitmap: MutableState<ImageBitmap?> = remember { mutableStateOf(null) }
     val scrollState: ScrollState = rememberScrollState()
     val context = LocalContext.current
-    var imagePicker: ImagePicker? = remember { ImagePicker(context) }
+    var imagePicker: ImagePicker? = remember { ImagePicker }
     val uploadResult: MutableState<String> = remember { mutableStateOf("") }
     val pickImageLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->

@@ -12,7 +12,7 @@ import kotlinx.io.files.Path
 import kotlinx.io.files.SystemFileSystem
 
 object FileHelper {
-    fun createDirectory(path: Path): Boolean {
+    fun createDirectories(path: Path): Boolean {
         return runCatching {
             SystemFileSystem.createDirectories(path)
             true
@@ -76,7 +76,7 @@ object FileHelper {
         }
     }
 
-    private suspend fun writeFileByChannelBuffered(
+    suspend fun writeFileByChannelBuffered(
         path: Path,
         channel: ByteReadChannel
     ) {

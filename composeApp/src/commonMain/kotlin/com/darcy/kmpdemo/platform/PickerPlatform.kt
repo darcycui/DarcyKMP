@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.io.files.Path
 
-expect class ImagePicker {
+expect object ImagePicker {
     suspend fun pickImage(): Path
 }
 

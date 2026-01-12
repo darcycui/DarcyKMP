@@ -137,6 +137,7 @@ kotlin {
         // 添加单元测试
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+            implementation(libs.kotlinx.coroutines.test)
         }
     }
 }

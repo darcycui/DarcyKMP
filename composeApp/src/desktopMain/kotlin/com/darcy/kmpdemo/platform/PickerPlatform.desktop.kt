@@ -26,24 +26,24 @@ import java.io.File
 import javax.swing.JFileChooser
 import javax.swing.filechooser.FileNameExtensionFilter
 
-actual class ImagePicker() {
-    actual suspend fun pickImage(): Path {
-        val path = chooseFileWithNativeDialog() ?: ""
-        if (path.isEmpty()) {
-            logE("文件选择错误")
-            return Path("")
-        }
-        val sourceFile = File(path)
-        val documentDir = File(getDocumentsDir().toString() + "/image")
-        if (!documentDir.exists()) {
-            createDirectory(documentDir.path)
-        }
-        val fileName = path.substringAfterLast(".")
-        val cacheFile = File(documentDir, "${System.currentTimeMillis()}_.$fileName")
-        sourceFile.copyTo(cacheFile, true)
-        logD("选择文件成功：${cacheFile.absolutePath}")
-        return Path(cacheFile.absolutePath)
-    }
+actual object ImagePicker {
+//    actual suspend fun pickImage(): Path {
+//        val path = chooseFileWithNativeDialog() ?: ""
+//        if (path.isEmpty()) {
+//            logE("文件选择错误")
+//            return Path("")
+//        }
+//        val sourceFile = File(path)
+//        val documentDir = File(getDocumentsDir().toString() + "/image")
+////        if (!documentDir.exists()) {
+////            createDirectory(documentDir.path)
+////        }
+//        val fileName = path.substringAfterLast(".")
+//        val cacheFile = File(documentDir, "${System.currentTimeMillis()}_.$fileName")
+//        sourceFile.copyTo(cacheFile, true)
+//        logD("选择文件成功：${cacheFile.absolutePath}")
+//        return Path(cacheFile.absolutePath)
+//    }
 
 
 //    actual suspend fun pickImage(): File {
@@ -95,6 +95,10 @@ actual class ImagePicker() {
         }
         return selectedFilePath
     }
+
+    actual suspend fun pickImage(): Path {
+        TODO("Not yet implemented")
+    }
 }
 
 @Composable
@@ -103,7 +107,7 @@ actual fun ShowUploadImage() {
     val filePath: MutableState<String> = remember { mutableStateOf("unknown") }
     val imageBitmap: MutableState<ImageBitmap?> = remember { mutableStateOf(null) }
     val scrollState: ScrollState = rememberScrollState()
-    val imagePicker: ImagePicker = remember { ImagePicker() }
+    val imagePicker: ImagePicker = remember { ImagePicker }
     val uploadResult: MutableState<String> = remember { mutableStateOf("") }
 
     Column(

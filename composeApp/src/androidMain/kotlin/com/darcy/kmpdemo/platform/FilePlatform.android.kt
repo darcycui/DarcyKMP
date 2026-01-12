@@ -6,42 +6,32 @@ import com.darcy.kmpdemo.app.AppContextProvider
 import kotlinx.io.files.Path
 import java.io.File
 
-actual fun createDirectory(path: String): Boolean {
-    val dir = File(path)
-    return if (!dir.exists()) {
-        dir.mkdirs()
-    } else {
-        true
+actual object FilePlatform {
+
+    // 获取 Android 上下文
+    private fun getAndroidContext(): Context {
+        return AppContextProvider.getAppContext()
     }
-}
 
-actual fun getCacheDir(): Path {
-    val context = getAndroidContext()
-    val file = context.externalCacheDirs.firstOrNull()
-        ?: context.externalCacheDir
-    return Path(file?.absolutePath ?: "")
-}
+    actual fun getCacheDir(): Path {
+        val context = getAndroidContext()
+        val file = context.externalCacheDirs.firstOrNull()
+            ?: context.externalCacheDir
+        return Path(file?.absolutePath ?: "")
+    }
 
-actual fun getDocumentsDir(): Path {
-    val context = getAndroidContext()
-    val file = context.getExternalFilesDirs(DarcyFolder.DIR_DOCUMENT).firstOrNull()
-        ?: context.getExternalFilesDir(DarcyFolder.DIR_DOCUMENT)
-    return Path(file?.absolutePath ?: "")
+    actual fun getDocumentsDir(): Path {
+        val context = getAndroidContext()
+        val file = context.getExternalFilesDirs(DarcyFolder.DIR_DOCUMENT).firstOrNull()
+            ?: context.getExternalFilesDir(DarcyFolder.DIR_DOCUMENT)
+        return Path(file?.absolutePath ?: "")
 
-}
+    }
 
-actual fun getDownloadDir(): Path {
-    val context = getAndroidContext()
-    val file = context.getExternalFilesDirs(DarcyFolder.DIR_DOWNLOAD).firstOrNull()
-        ?: context.getExternalFilesDir(DarcyFolder.DIR_DOCUMENT)
-    return Path(file?.absolutePath ?: "")
-}
-
-// 获取 Android 上下文
-private fun getAndroidContext(): Context {
-    return AppContextProvider.getAppContext()
-}
-
-actual fun createFile(path: String): Boolean {
-    TODO("Not yet implemented")
+    actual fun getDownloadDir(): Path {
+        val context = getAndroidContext()
+        val file = context.getExternalFilesDirs(DarcyFolder.DIR_DOWNLOAD).firstOrNull()
+            ?: context.getExternalFilesDir(DarcyFolder.DIR_DOCUMENT)
+        return Path(file?.absolutePath ?: "")
+    }
 }
