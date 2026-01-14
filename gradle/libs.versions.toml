@@ -14,6 +14,8 @@ androidx-test-junit = "1.3.0"
 composeHotReload = "1.0.0"
 composeMultiplatform = "1.9.3"
 filekitCore = "0.12.0"
+filekitDialogs = "0.12.0"
+filekitDialogsCompose = "0.12.0"
 junit = "4.13.2"
 kotlin = "2.3.0"
 jetbrainsKotlinJvm = "2.3.0"
@@ -21,6 +23,7 @@ kotlinx-coroutines = "1.10.2"
 # KMP Websocket STOMP library (v9.3.0 use Kotlin-2.1.20 and ktor-3.1.2)
 kotlinxIoCore = "0.8.2"
 krossbowStompCore = "9.3.0"
+library = "1.0.0"
 mokoResourcesGenerator = "0.25.2"
 ktor = "3.3.3"
 kotlinxSerialization = "1.9.0"
@@ -37,6 +40,7 @@ filekit-core = { module = "io.github.vinceglb:filekit-core", version.ref = "file
 filekit-dialogs = { module = "io.github.vinceglb:filekit-dialogs", version.ref = "filekitCore" }
 filekit-dialogs-compose = { module = "io.github.vinceglb:filekit-dialogs-compose", version.ref = "filekitCore" }
 kotlinx-io-core = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version.ref = "kotlinxIoCore" }
+library = { module = "io.github.kotlin:library", version.ref = "library" }
 org-androidx-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test" }

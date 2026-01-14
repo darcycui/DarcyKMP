@@ -132,7 +132,12 @@ kotlin {
             api(libs.krossbow.websocket.builtin)
             api(libs.krossbow.websocket.ktor)
             // 引用本地发布的库
-            implementation("io.github.kotlin:library:1.0.0")
+            implementation(libs.library)
+            // pick file
+            implementation(libs.filekit.core)
+            implementation(libs.filekit.dialogs)
+            implementation(libs.filekit.dialogs.compose)
+            implementation(libs.filekit.coil)
         }
         // 添加单元测试
         commonTest.dependencies {
