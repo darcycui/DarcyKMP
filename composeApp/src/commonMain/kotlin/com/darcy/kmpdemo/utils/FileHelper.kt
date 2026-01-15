@@ -1,5 +1,6 @@
 package com.darcy.kmpdemo.utils
 
+import com.darcy.kmpdemo.log.logD
 import com.darcy.kmpdemo.log.logE
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
@@ -97,7 +98,7 @@ object FileHelper {
     suspend fun callReadFile(path: Path): Unit {
         readFileBuffered(path) { bufferedData ->
             val line = bufferedData.decodeToString()
-            logE("Read file line: $line")
+            logD("Read file line: $line")
         }
     }
 

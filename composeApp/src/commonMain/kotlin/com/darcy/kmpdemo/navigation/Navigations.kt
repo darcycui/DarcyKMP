@@ -70,24 +70,7 @@ fun AppNavigation(
         ) {
 
             composable(route = Pages.HomePage.name) {
-                ShowHome(modifier = Modifier.padding(innerPadding)) { name ->
-                    when (name) {
-                        Pages.HomePage.name,
-                        Pages.EncryptTextPage.name,
-                        Pages.EncryptFilePage.name,
-                        Pages.LoadResourcePage.name,
-                        Pages.LoadMokoResourcePage.name,
-                        Pages.KtorHttpPage.name,
-                        Pages.KtorWebsocketPage.name,
-                        Pages.DownloadImagePage.name,
-                        Pages.UploadImagePage.name,
-                        Pages.KtorWebSocketSTMOPPage.name,
-                            -> navController.navigate(name)
-
-                        Pages.NavigationRailPage.name,
-                            -> navController.navigate(name)
-                    }
-                }
+                ShowHome(modifier = Modifier.padding(innerPadding), onclick)
             }
             composable(route = Pages.EncryptTextPage.name) {
                 ShowEncryptText()
