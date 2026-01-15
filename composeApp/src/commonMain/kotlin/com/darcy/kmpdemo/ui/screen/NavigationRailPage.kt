@@ -1,7 +1,6 @@
-package com.darcy.kmpdemo.ui
+package com.darcy.kmpdemo.ui.screen
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -58,12 +57,10 @@ fun AppNavigationRail(modifier: Modifier = Modifier) {
                                 destination.icon,
                                 contentDescription = destination.contentDescription
                             )
-                            Spacer(modifier.width(16.dp))
-                            Text(destination.label)
                         }
                     },
                     label = {
-
+                        Text(destination.label)
                     },
                     alwaysShowLabel = true
                 )

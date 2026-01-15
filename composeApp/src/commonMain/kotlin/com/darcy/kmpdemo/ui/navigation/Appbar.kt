@@ -1,8 +1,7 @@
-package com.darcy.kmpdemo.navigation
+package com.darcy.kmpdemo.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import dev.icerock.moko.resources.compose.stringResource
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,7 +26,7 @@ fun AppBar(
 ) {
     TopAppBar(
         title = { Text(text = stringResource(currentScreen.title)) },
-        colors = TopAppBarDefaults.mediumTopAppBarColors(
+        colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer
         ),
         modifier = modifier,

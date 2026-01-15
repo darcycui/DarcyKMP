@@ -1,4 +1,4 @@
-package com.darcy.kmpdemo.ui
+package com.darcy.kmpdemo.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,18 +14,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.darcy.kmpdemo.log.logE
-import com.darcy.kmpdemo.log.logI
 import com.darcy.kmpdemo.platform.decryptString
 import com.darcy.kmpdemo.platform.encryptString
 import com.darcy.kmpdemo.platform.getPlatform
 import io.github.kotlin.fibonacci.generateFibi
-import kotlinx.serialization.json.JsonNull.content
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun ShowEncryptText() {
+fun ShowEncryptText(paramsText: String) {
     val x: Int by remember { mutableStateOf(generateFibi().take(3).last()) }
     var content by remember { mutableStateOf("${getPlatform().name} ${getPlatform().version } $x") }
 
@@ -35,6 +32,7 @@ fun ShowEncryptText() {
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Text(text = content)
+        Text(text = paramsText)
         Button(onClick = { content = encryptString(content) }) {
             Text("Encrypt")
         }

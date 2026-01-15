@@ -1,4 +1,4 @@
-package com.darcy.kmpdemo.ui
+package com.darcy.kmpdemo.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
@@ -17,27 +17,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
-import com.darcy.kmpdemo.log.logD
-import com.darcy.kmpdemo.platform.ktorClient
-import io.ktor.client.call.body
-import io.ktor.client.request.accept
-import io.ktor.client.request.prepareGet
-import io.ktor.http.ContentType
-import io.ktor.http.contentLength
-import io.ktor.utils.io.ByteReadChannel
-import io.ktor.utils.io.core.remaining
-import io.ktor.utils.io.exhausted
-import io.ktor.utils.io.readRemaining
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 //import kotlinx.io.asSink
 //import java.io.File
 //import com.darcy.kmpdemo.platform.loadImageAsBitmap
 //import com.darcy.kmpdemo.platform.createDirectory
 //import com.darcy.kmpdemo.platform.getDownloadDir
-import com.darcy.kmpdemo.utils.suffix
-import kotlinx.coroutines.withContext
 
 @Composable
 fun ShowDownloadImage() {

@@ -1,4 +1,4 @@
-package com.darcy.kmpdemo.ui
+package com.darcy.kmpdemo.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -6,13 +6,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -23,7 +20,6 @@ import com.darcy.kmpdemo.log.logI
 import com.darcy.kmpdemo.network.http.HttpManager
 //import com.darcy.kmpdemo.network.ssl.SslSettings
 import dev.icerock.moko.resources.compose.stringResource
-import kmpdarcydemo.composeapp.generated.resources.Res
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

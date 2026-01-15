@@ -1,4 +1,4 @@
-package com.darcy.kmpdemo.ui
+package com.darcy.kmpdemo.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

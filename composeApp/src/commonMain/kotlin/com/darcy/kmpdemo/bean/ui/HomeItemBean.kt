@@ -1,7 +1,7 @@
 package com.darcy.kmpdemo.bean.ui
 
 import com.darcy.kmpdemo.bean.IEntity
-import com.darcy.kmpdemo.navigation.Pages
+import com.darcy.kmpdemo.ui.navigation.Pages
 
 data class HomeItemBean(
     val id: Int = -1,
