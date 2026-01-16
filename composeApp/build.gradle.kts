@@ -75,14 +75,14 @@ kotlin {
             api(libs.krossbow.websocket.ktor)
         }
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.materialIconsExtended)
-            implementation(compose.foundation)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
+            implementation("org.jetbrains.compose.runtime:runtime:1.10.0")
+            implementation("org.jetbrains.compose.foundation:foundation:1.10.0")
+            implementation("org.jetbrains.compose.material3:material3:1.9.0-beta03")
+            implementation("org.jetbrains.compose.material:material-icons-extended:1.7.3")
+            implementation("org.jetbrains.compose.foundation:foundation:1.10.0")
+            implementation("org.jetbrains.compose.ui:ui:1.10.0")
+            implementation("org.jetbrains.compose.components:components-resources:1.10.0")
+            implementation("org.jetbrains.compose.ui:ui-tooling-preview:1.10.0")
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             // moko resources
@@ -112,8 +112,8 @@ kotlin {
             // io/File kotlinx-io-core
             implementation(libs.kotlinx.io.core)
             // localMaven dependency
-//            api(libs.darcy.kmp.storage)
-            implementation(libs.darcy.kmp.storage)
+//            implementation(libs.kmp.library)
+//            implementation(libs.darcy.kmp.storage)
             // multiplatform-settings key-value storage
             implementation(libs.com.russhwolf.multiplatform.settings)
             // fileKit file picker
@@ -121,6 +121,8 @@ kotlin {
             implementation(libs.filekit.dialogs)
             implementation(libs.filekit.dialogs.compose)
             implementation(libs.filekit.coil)
+            // coil
+
 
 
         }
@@ -175,7 +177,7 @@ android {
 }
 
 dependencies {
-    debugImplementation(compose.uiTooling)
+    debugImplementation("org.jetbrains.compose.ui:ui-tooling:1.10.0")
 }
 
 compose.desktop {

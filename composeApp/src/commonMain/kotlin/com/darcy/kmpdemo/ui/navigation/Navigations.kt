@@ -26,6 +26,7 @@ import com.darcy.kmpdemo.platform.ShowUploadImage
 import com.darcy.kmpdemo.ui.screen.ShowCustomDrawPage
 import com.darcy.kmpdemo.ui.screen.ShowNavigationRailPage
 import com.darcy.kmpdemo.ui.screen.ShowKtorWebsocketSTOMP
+import com.darcy.kmpdemo.ui.screen.ShowNumberCardPage
 
 // 保存全局路由 appNavController
 val appLocalNavController = staticCompositionLocalOf<NavController> {
@@ -80,6 +81,7 @@ fun AppNavigation(
                 composable<AppRoute.KtorWebSocketSTMOP> { ShowKtorWebsocketSTOMP() }
                 composable<AppRoute.NavigationRail> { ShowNavigationRailPage() }
                 composable<AppRoute.CustomDraw> { ShowCustomDrawPage() }
+                composable<AppRoute.NumberCard> { ShowNumberCardPage() }
             }
         }
     }

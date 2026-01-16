@@ -26,9 +26,10 @@ fun ShowHome(
 ) {
     val navHostController = appLocalNavController.current
     LaunchedEffect(Unit) {
-        // 首次打开默认跳转到 自定义绘制页面
+        // 首次打开默认跳转
         if (isFirstLaunchHome) {
-            navHostController.navigate(AppRoute.CustomDraw)
+//            navHostController.navigate(AppRoute.CustomDraw)
+            navHostController.navigate(AppRoute.NumberCard)
             isFirstLaunchHome = false
         }
     }
@@ -76,6 +77,7 @@ fun HomeItem(
                 Pages.NavigationRailPage -> onNextButtonClicked(AppRoute.NavigationRail)
                 Pages.UnknownPage -> onNextButtonClicked(AppRoute.Unknown)
                 Pages.CustomDrawPage -> onNextButtonClicked(AppRoute.CustomDraw)
+                Pages.NumberCardPage -> onNextButtonClicked(AppRoute.NumberCard)
             }
         }) {
         Text(

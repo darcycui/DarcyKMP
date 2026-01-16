@@ -6,7 +6,7 @@ import com.darcy.kmpdemo.log.Loger
 import com.darcy.kmpdemo.ui.navigation.AppNavigation
 import com.darcy.kmpdemo.ui.theme.AppTheme
 //import com.darcy.kmpdemo.network.ssl.SslSettings
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 @Preview

@@ -13,6 +13,7 @@ import kmpdarcydemo.composeapp.generated.resources.ktor_websocket_stomp
 import kmpdarcydemo.composeapp.generated.resources.load_moko_resource
 import kmpdarcydemo.composeapp.generated.resources.load_resource
 import kmpdarcydemo.composeapp.generated.resources.navigation_rail
+import kmpdarcydemo.composeapp.generated.resources.number_card
 import kmpdarcydemo.composeapp.generated.resources.unknown
 import kmpdarcydemo.composeapp.generated.resources.upload_image
 import kotlinx.serialization.Serializable
@@ -69,6 +70,10 @@ enum class Pages(
         title = Res.string.custom_draw,
         routeName = "CustomDraw"
     ),
+    NumberCardPage(
+        title = Res.string.number_card,
+        routeName = "NumberCard"
+    ),
     ;
 
     companion object {
@@ -122,5 +127,7 @@ sealed class AppRoute {
 
     @Serializable
     object CustomDraw : AppRoute()
+    @Serializable
+    object NumberCard : AppRoute()
 }
 

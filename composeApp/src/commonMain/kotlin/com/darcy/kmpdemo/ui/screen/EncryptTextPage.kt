@@ -17,14 +17,15 @@ import androidx.compose.ui.unit.dp
 import com.darcy.kmpdemo.platform.decryptString
 import com.darcy.kmpdemo.platform.encryptString
 import com.darcy.kmpdemo.platform.getPlatform
-import io.github.kotlin.fibonacci.generateFibi
+//import io.github.kotlin.fibonacci.generateFibi
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun ShowEncryptText(paramsText: String) {
-    val x: Int by remember { mutableStateOf(generateFibi().take(3).last()) }
-    var content by remember { mutableStateOf("${getPlatform().name} ${getPlatform().version } $x") }
+//    val x: Int by remember { mutableStateOf(generateFibi().take(3).last()) }
+    val x = 0
+    var content by remember { mutableStateOf("${getPlatform().name} ${getPlatform().version} $x") }
 
     Column(
         Modifier.fillMaxWidth(),
