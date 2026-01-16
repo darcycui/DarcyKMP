@@ -8,6 +8,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -16,11 +17,21 @@ import com.darcy.kmpdemo.ui.navigation.Pages
 import com.darcy.kmpdemo.ui.navigation.appLocalNavController
 import org.jetbrains.compose.resources.stringResource
 
+var isFirstLaunchHome = true
+
 @Composable
 fun ShowHome(
     modifier: Modifier = Modifier,
     onNextButtonClicked: (AppRoute) -> Unit = {}
 ) {
+    val navHostController = appLocalNavController.current
+    LaunchedEffect(Unit) {
+        // 首次打开默认跳转到 自定义绘制页面
+        if (isFirstLaunchHome) {
+            navHostController.navigate(AppRoute.CustomDraw)
+            isFirstLaunchHome = false
+        }
+    }
     // darcyRefactor: 可观察的状态列表
 //    val pagesStateList = remember { mutableStateListOf<Pages>() }
     val pagesStateList = mutableStateListOf<Pages>()
@@ -53,6 +64,7 @@ fun HomeItem(
                     onNextButtonClicked(AppRoute.EncryptText("this is params text1"))
                     // appLocalNavController.current.navigate(AppRoute.EncryptText("this is params text2"))
                 }
+
                 Pages.EncryptFilePage -> onNextButtonClicked(AppRoute.EncryptFile)
                 Pages.LoadResourcePage -> onNextButtonClicked(AppRoute.LoadResource)
                 Pages.LoadMokoResourcePage -> onNextButtonClicked(AppRoute.LoadMokoResource)
@@ -63,7 +75,8 @@ fun HomeItem(
                 Pages.KtorWebSocketSTMOPPage -> onNextButtonClicked(AppRoute.KtorWebSocketSTMOP)
                 Pages.NavigationRailPage -> onNextButtonClicked(AppRoute.NavigationRail)
                 Pages.UnknownPage -> onNextButtonClicked(AppRoute.Unknown)
-             }
+                Pages.CustomDrawPage -> onNextButtonClicked(AppRoute.CustomDraw)
+            }
         }) {
         Text(
             text = stringResource(page.title),

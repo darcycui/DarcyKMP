@@ -23,6 +23,7 @@ import com.darcy.kmpdemo.ui.screen.ShowKtorWebsocket
 import com.darcy.kmpdemo.ui.screen.ShowLoadMokoResource
 import com.darcy.kmpdemo.ui.screen.ShowLoadResource
 import com.darcy.kmpdemo.platform.ShowUploadImage
+import com.darcy.kmpdemo.ui.screen.ShowCustomDrawPage
 import com.darcy.kmpdemo.ui.screen.ShowNavigationRailPage
 import com.darcy.kmpdemo.ui.screen.ShowKtorWebsocketSTOMP
 
@@ -78,6 +79,7 @@ fun AppNavigation(
                 composable<AppRoute.UploadImage> { ShowUploadImage() }
                 composable<AppRoute.KtorWebSocketSTMOP> { ShowKtorWebsocketSTOMP() }
                 composable<AppRoute.NavigationRail> { ShowNavigationRailPage() }
+                composable<AppRoute.CustomDraw> { ShowCustomDrawPage() }
             }
         }
     }

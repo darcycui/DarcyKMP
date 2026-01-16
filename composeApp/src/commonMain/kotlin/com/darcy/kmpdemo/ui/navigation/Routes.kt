@@ -2,6 +2,7 @@ package com.darcy.kmpdemo.ui.navigation
 
 import com.darcy.kmpdemo.log.logD
 import kmpdarcydemo.composeapp.generated.resources.Res
+import kmpdarcydemo.composeapp.generated.resources.custom_draw
 import kmpdarcydemo.composeapp.generated.resources.download_image
 import kmpdarcydemo.composeapp.generated.resources.encrypt_file
 import kmpdarcydemo.composeapp.generated.resources.encrypt_text
@@ -64,6 +65,10 @@ enum class Pages(
         title = Res.string.navigation_rail,
         routeName = "NavigationRail"
     ),
+    CustomDrawPage(
+        title = Res.string.custom_draw,
+        routeName = "CustomDraw"
+    ),
     ;
 
     companion object {
@@ -114,5 +119,8 @@ sealed class AppRoute {
 
     @Serializable
     object NavigationRail : AppRoute()
+
+    @Serializable
+    object CustomDraw : AppRoute()
 }
 
