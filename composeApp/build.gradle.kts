@@ -9,7 +9,6 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
-    alias(libs.plugins.composeHotReload)
     alias(libs.plugins.kotlinxSerialization)
     id("dev.icerock.mobile.multiplatform-resources")
 }
@@ -132,7 +131,7 @@ kotlin {
             api(libs.krossbow.websocket.builtin)
             api(libs.krossbow.websocket.ktor)
             // 引用本地发布的库
-            implementation(libs.library)
+            implementation(libs.kmp.library)
             // pick file
             implementation(libs.filekit.core)
             implementation(libs.filekit.dialogs)
