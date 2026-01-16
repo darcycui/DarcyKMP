@@ -112,6 +112,7 @@ kotlin {
             // io/File kotlinx-io-core
             implementation(libs.kotlinx.io.core)
             // localMaven dependency
+//            api(libs.darcy.kmp.storage)
             implementation(libs.darcy.kmp.storage)
             // multiplatform-settings key-value storage
             implementation(libs.com.russhwolf.multiplatform.settings)
