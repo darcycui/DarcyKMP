@@ -1,10 +1,9 @@
-package com.darcy.kmpdemo.network.http.impl
+package com.darcy.kmpdemo.network.http.impl.ktor
 
 import com.darcy.kmpdemo.bean.http.base.BaseResult
 import com.darcy.kmpdemo.log.logD
 import com.darcy.kmpdemo.network.http.IHttp
 import com.darcy.kmpdemo.network.parser.impl.JsonParserImpl
-import com.darcy.kmpdemo.platform.ktorClient
 import com.darcy.kmpdemo.utils.toFormDataContent
 import com.darcy.kmpdemo.utils.toUrlEncodedString
 import io.ktor.client.request.get
@@ -52,7 +51,10 @@ class KtorHttpClient : IHttp {
             // dealCache(needCache)
             runCatching {
                 val realUrl = url + "?" + params.toUrlEncodedString()
-                val json = ktorClient.get(realUrl).bodyAsText()
+                val json = ktorClient.get(realUrl){
+                    this.header("User-Agent", "KMP Client by Ktor Get")
+                    contentType(ContentType.Application.Json)
+                }.bodyAsText()
                 jsonParser.toBean(json, serializer, success, successList, errors)
             }.onFailure {
                 it.printStackTrace()
@@ -77,7 +79,7 @@ class KtorHttpClient : IHttp {
             runCatching {
                 val formDataContent = params.toFormDataContent()
                 val json = ktorClient.post(url) {
-                    this.header("User-Agent", "KMP Client by Ktor")
+                    this.header("User-Agent", "KMP Client by Ktor Post")
                     contentType(ContentType.Application.FormUrlEncoded)
                     setBody(formDataContent)
                 }.bodyAsText()

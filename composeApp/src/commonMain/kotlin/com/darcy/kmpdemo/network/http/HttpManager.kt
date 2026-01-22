@@ -1,7 +1,7 @@
 package com.darcy.kmpdemo.network.http
 
 import com.darcy.kmpdemo.bean.http.base.BaseResult
-import com.darcy.kmpdemo.network.http.impl.KtorHttpClient
+import com.darcy.kmpdemo.network.http.impl.ktor.KtorHttpClient
 import kotlinx.serialization.KSerializer
 
 object HttpManager : IHttp {

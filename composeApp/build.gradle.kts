@@ -64,7 +64,6 @@ kotlin {
         val desktopMain by getting
 
         androidMain.dependencies {
-            implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             // ktor network
             // kotlin coroutine
@@ -75,14 +74,13 @@ kotlin {
             api(libs.krossbow.websocket.ktor)
         }
         commonMain.dependencies {
-            implementation("org.jetbrains.compose.runtime:runtime:1.10.0")
-            implementation("org.jetbrains.compose.foundation:foundation:1.10.0")
-            implementation("org.jetbrains.compose.material3:material3:1.9.0-beta03")
-            implementation("org.jetbrains.compose.material:material-icons-extended:1.7.3")
-            implementation("org.jetbrains.compose.foundation:foundation:1.10.0")
-            implementation("org.jetbrains.compose.ui:ui:1.10.0")
-            implementation("org.jetbrains.compose.components:components-resources:1.10.0")
-            implementation("org.jetbrains.compose.ui:ui-tooling-preview:1.10.0")
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.material3)
+            implementation(libs.compose.material.icons.extended)
+            implementation(libs.compose.ui)
+            implementation(libs.compose.components.resources)
+            implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             // moko resources
@@ -177,7 +175,7 @@ android {
 }
 
 dependencies {
-    debugImplementation("org.jetbrains.compose.ui:ui-tooling:1.10.0")
+    debugImplementation(libs.compose.ui.tooling)
 }
 
 compose.desktop {

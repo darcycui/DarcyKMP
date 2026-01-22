@@ -1,4 +1,4 @@
-package com.darcy.kmpdemo.platform
+package com.darcy.kmpdemo.network.http.impl.ktor
 
 import com.darcy.kmpdemo.exception.http.HttpException
 import com.darcy.kmpdemo.log.logD
@@ -36,7 +36,8 @@ val ktorExceptionHandler = CoroutineExceptionHandler { _, throwable ->
     logE("$KTOR_TAG exceptionHandler: ${throwable.message}")
     throwable.printStackTrace()
 }
-val ktorScope: CoroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob() + ktorExceptionHandler)
+val ktorScope: CoroutineScope =
+    CoroutineScope(Dispatchers.Default + SupervisorJob() + ktorExceptionHandler)
 
 val ktorClient: HttpClient
     // CIO 异步协程 支持 JVM Android Native(iOS) 支持 http1.x 和 websocket
@@ -109,6 +110,8 @@ val ktorClient: HttpClient
                 explicitNulls = false
             })
         }
+        // custom header plugin
+        install(CustomHeaderPlugin)
         // config ssl
         engine {
             dispatcher = Dispatchers.Default
@@ -154,13 +157,13 @@ val ktorClient: HttpClient
         }
 
     }.also {
-        // intercept: modify request before sending
-        it.plugin(HttpSend).intercept { request ->
-            logD("ktorClient==> HttpSend interceptor run...")
-            val newRequest = HttpRequestBuilder().takeFrom(request)
-            // add headers
-            newRequest.header("User-Agent", "KMP Client by Ktor")
-            newRequest.header("token", "KMP Client token")
-            execute(newRequest)
-        }
+//        // intercept: modify request before sending
+//        it.plugin(HttpSend).intercept { request ->
+//            logD("ktorClient==> HttpSend interceptor run...")
+//            val newRequest = HttpRequestBuilder().takeFrom(request)
+//            // add headers
+//            newRequest.header("User-Agent", "KMP Client by Ktor")
+//            newRequest.header("token", "KMP Client token")
+//            execute(newRequest)
+//        }
     }

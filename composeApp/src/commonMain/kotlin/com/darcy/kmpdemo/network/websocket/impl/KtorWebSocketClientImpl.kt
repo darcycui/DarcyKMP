@@ -10,7 +10,7 @@ import com.darcy.kmpdemo.network.websocket.heartbeat.HeartbeatHelper
 import com.darcy.kmpdemo.network.websocket.heartbeat.PING
 import com.darcy.kmpdemo.network.websocket.heartbeat.PONG
 import com.darcy.kmpdemo.network.websocket.listener.IOuterListener
-import com.darcy.kmpdemo.platform.ktorClient
+import com.darcy.kmpdemo.network.http.impl.ktor.ktorClient
 import io.ktor.client.plugins.websocket.webSocketSession
 import io.ktor.websocket.Frame
 import io.ktor.websocket.WebSocketSession

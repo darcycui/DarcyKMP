@@ -5,6 +5,7 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,67 +29,39 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.darcy.kmpdemo.bean.ui.ArcRegionBean
-import com.darcy.kmpdemo.bean.ui.AxisBean
 import com.darcy.kmpdemo.bean.ui.HistogramBean
-import com.darcy.kmpdemo.bean.ui.HistogramItemBean
-import androidx.compose.ui.tooling.preview.Preview
+import com.darcy.kmpdemo.bean.ui.PieChartBean
+import com.darcy.kmpdemo.repository.ChartsRepository
 
-@Preview
+@Preview (
+    showBackground = true,
+    showSystemUi = true
+)
 @Composable
-fun ShowCustomDrawPage() {
+fun ShowCustomDrawPage(
+    histogramBean: HistogramBean = ChartsRepository().getHistogramBean(),
+    pieChartBean: PieChartBean = ChartsRepository().getPieChartBean(),
+) {
+    Column {
 //    DrawFront()
 //    DrawBehind()
 //    DrawWithCache()
-//    DrawHistogram()
-    DrawArcAndCircle()
+        DrawHistogram(histogramBean, Modifier.weight(2f))
+        DrawPieChart(pieChartBean, Modifier.weight(1f))
+    }
 }
 
 @Composable
-fun DrawArcAndCircle() {
-    val arcRegionBeans: List<ArcRegionBean> = listOf(
-        ArcRegionBean(
-            startAngle = 0f,
-            sweepAngle = 90f,
-            color = Color(0xFF9E82F0),
-            topLeft = Offset(x = 0f, y = 0f),
-            width = 254.dp,
-            height = 254.dp,
-            text = "1"
-        ),
-        ArcRegionBean(
-            startAngle = 90f,
-            sweepAngle = 90f,
-            color = Color(0xFF42A5F5),
-            topLeft = Offset(x = 0f, y = 0f),
-            width = 254.dp,
-            height = 254.dp,
-            text = "2"
-        ),
-        ArcRegionBean(
-            startAngle = 180f,
-            sweepAngle = 90f,
-            color = Color(0xFF9E82F0),
-            topLeft = Offset(x = 0f, y = 0f),
-            width = 254.dp,
-            height = 254.dp,
-            text = "3"
-        ),
-        ArcRegionBean(
-            startAngle = 270f,
-            sweepAngle = 90f,
-            color = Color(0xFF42A5F5),
-            topLeft = Offset(x = 0f, y = 0f),
-            width = 254.dp,
-            height = 254.dp,
-            text = "4"
-        )
-    )
-    Column(Modifier.fillMaxSize().padding(8.dp)) {
+fun DrawPieChart(
+    pieChartBean: PieChartBean,
+    modifier: Modifier
+) {
+    Column(modifier.padding(8.dp)) {
         Canvas(modifier = Modifier.fillMaxSize()) {
-            arcRegionBeans.forEach { item ->
+            pieChartBean.items.forEach { item ->
                 drawArc(
                     color = item.color,
                     topLeft = item.topLeft,
@@ -108,47 +81,15 @@ fun DrawArcAndCircle() {
 }
 
 @Composable
-fun DrawHistogram() {
+fun DrawHistogram(
+    histogramBean: HistogramBean,
+    modifier: Modifier
+) {
     val nameMeasurer = rememberTextMeasurer()
     val numberMeasurer = rememberTextMeasurer()
     val xTextMeasurer = rememberTextMeasurer()
-    val histogramBean = HistogramBean(
-        items = listOf(
-            HistogramItemBean(
-                name = "应用市场访问量",
-                number = 82f,
-                colors = listOf(
-                    Color(0xFF9E82F0),
-                    Color(0xFF42A5F5)
-                ),
-                yPercent = 0.3f
-            ),
-            HistogramItemBean(
-                name = "下载数量",
-                number = 34f,
-                colors = listOf(
-                    Color(0xFF9E82F0),
-                    Color(0xFF42A5F5)
-                ),
-                yPercent = 0.7f
-            )
-        ),
-        xAxisBean = AxisBean(
-            divisionCount = 12,
-            divisionPeriod = 10f,
-            showDivisionLine = true,
-            showDivisionText = true,
-        ),
 
-        yAxisBean = AxisBean(
-            divisionCount = 5,
-            divisionPeriod = 10f,
-            showDivisionLine = false,
-            showDivisionText = false,
-        )
-    )
-
-    Column(Modifier.fillMaxSize().padding(8.dp)) {
+    Column(modifier.padding(8.dp)) {
 
         Canvas(modifier = Modifier.fillMaxSize()) {
             val width = size.width
@@ -174,8 +115,9 @@ fun DrawHistogram() {
             // 横坐标轴刻值
             val xDivisionCount = histogramBean.xAxisBean.divisionCount
             val xDivisionPeriod = histogramBean.xAxisBean.divisionPeriod
-            repeat(xDivisionCount) { index ->
-                val x = width / xDivisionCount * index - 4.dp.toPx()
+            val innerWidth = width - 30
+            repeat(xDivisionCount + 1) { index ->
+                val x = innerWidth / xDivisionCount * index - 4.dp.toPx()
                 val y = height + 4.dp.toPx()
                 val text = index * xDivisionPeriod
                 // 画文本
@@ -193,7 +135,7 @@ fun DrawHistogram() {
             }
             // 横坐标轴刻度 虚线
             repeat(xDivisionCount) {
-                val x = width / xDivisionCount * (it + 1)
+                val x = innerWidth / xDivisionCount * (it + 1)
                 val y = height
 
                 drawLine(
@@ -207,19 +149,19 @@ fun DrawHistogram() {
 
             val yDivisionCount = histogramBean.yAxisBean.divisionCount
             histogramBean.items.forEachIndexed { index, item ->
-                val itemWidth = width * item.number / xDivisionPeriod / xDivisionCount
+                val itemWidth = innerWidth * item.count / xDivisionPeriod / xDivisionCount
                 // 画矩形
                 drawRect(
                     brush = Brush.linearGradient(item.colors),
                     topLeft = Offset(x = 0f, y = height * item.yPercent),
-                    size = Size(width = itemWidth, height = 50.dp.toPx())
+                    size = Size(width = itemWidth - 25.dp.toPx(), height = 50.dp.toPx())
                 )
                 // 画半圆
-                val arcLeft = itemWidth - 25.dp.toPx()
+                val arcLeft = itemWidth - 50.dp.toPx()
                 drawArc(
                     brush = Brush.linearGradient(item.colors),
                     // 计算横坐标 x = 400 - 50/2
-                    topLeft = Offset(x = arcLeft, y = height * item.yPercent),
+                    topLeft = Offset(x = arcLeft - 1, y = height * item.yPercent),
                     size = Size(width = 50.dp.toPx(), height = 50.dp.toPx()),
                     useCenter = false,
                     startAngle = -90f,
@@ -229,7 +171,7 @@ fun DrawHistogram() {
                 // 画名称
                 drawText(
                     textMeasurer = nameMeasurer,
-                    text = item.name,
+                    text = item.text,
                     style = TextStyle(
                         color = Color(0xFF333333),
                         fontSize = 14.sp,
@@ -239,10 +181,10 @@ fun DrawHistogram() {
                 )
 
                 // 画数字
-                val numberLeft = itemWidth + 30.dp.toPx()
+                val numberLeft = itemWidth + 8.dp.toPx()
                 drawText(
                     textMeasurer = numberMeasurer,
-                    text = if (item.showNumberFloatDot) item.number.toString() else item.number.toInt()
+                    text = if (item.showNumberFloatDot) item.count.toString() else item.count.toInt()
                         .toString(),
                     style = TextStyle(
                         color = Color(0xFF333333),
