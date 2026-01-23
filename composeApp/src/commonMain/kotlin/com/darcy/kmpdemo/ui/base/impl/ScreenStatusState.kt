@@ -6,8 +6,8 @@ import com.darcy.kmpdemo.ui.base.ScreenStatus
 open class ScreenStatusState(
     var screenState: ScreenStatus = ScreenStatus.Initial,
 ) : IState {
-    fun copys(screenState: ScreenStatus): ScreenStatusState {
-        this.screenState = screenState
-        return this
+    open fun copys(screenState: ScreenStatus):ScreenStatusState {
+        return ScreenStatusState(screenState)
     }
+
 }

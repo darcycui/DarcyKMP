@@ -6,7 +6,11 @@ import com.darcy.kmpdemo.ui.base.impl.ScreenStatusState
 data class LoadDataState(
     val content: String = "default"
 ) : ScreenStatusState() {
-    fun copy() {
-        screenState = ScreenStatus.Loading
+    override fun copys(screenState: ScreenStatus):LoadDataState {
+        return LoadDataState(
+            content = content,
+        ).apply {
+            this.screenState = screenState
+        }
     }
 }

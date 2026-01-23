@@ -74,6 +74,6 @@ class LoadDataReducer2 : BaseScreenStatusReducer<LoadDataState>() {
         state: LoadDataState,
         newScreenState: ScreenStatus
     ): LoadDataState {
-        return state.copys(screenState = newScreenState) as LoadDataState
+        return state.copys(newScreenState)
     }
 }
