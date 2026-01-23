@@ -10,6 +10,7 @@ import kmpdarcydemo.composeapp.generated.resources.home
 import kmpdarcydemo.composeapp.generated.resources.ktor_http
 import kmpdarcydemo.composeapp.generated.resources.ktor_websocket
 import kmpdarcydemo.composeapp.generated.resources.ktor_websocket_stomp
+import kmpdarcydemo.composeapp.generated.resources.load_data
 import kmpdarcydemo.composeapp.generated.resources.load_moko_resource
 import kmpdarcydemo.composeapp.generated.resources.load_resource
 import kmpdarcydemo.composeapp.generated.resources.navigation_rail
@@ -74,6 +75,10 @@ enum class Pages(
         title = Res.string.number_card,
         routeName = "NumberCard"
     ),
+    LoadDataPage(
+        title = Res.string.load_data,
+        routeName = "LoadData"
+    ),
     ;
 
     companion object {
@@ -127,7 +132,11 @@ sealed class AppRoute {
 
     @Serializable
     object CustomDraw : AppRoute()
+
     @Serializable
     object NumberCard : AppRoute()
+
+    @Serializable
+    object LoadData : AppRoute()
 }
 

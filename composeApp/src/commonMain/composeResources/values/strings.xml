@@ -28,4 +28,5 @@
     <string name="navigation_rail">侧边导航</string>
     <string name="custom_draw">自定义绘制</string>
     <string name="number_card">数字卡片</string>
+    <string name="load_data">加载数据</string>
 </resources>

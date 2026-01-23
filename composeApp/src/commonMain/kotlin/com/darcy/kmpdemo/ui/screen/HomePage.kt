@@ -28,8 +28,7 @@ fun ShowHome(
     LaunchedEffect(Unit) {
         // 首次打开默认跳转
         if (isFirstLaunchHome) {
-//            navHostController.navigate(AppRoute.CustomDraw)
-            navHostController.navigate(AppRoute.NumberCard)
+            navHostController.navigate(AppRoute.LoadData)
             isFirstLaunchHome = false
         }
     }
@@ -78,6 +77,7 @@ fun HomeItem(
                 Pages.UnknownPage -> onNextButtonClicked(AppRoute.Unknown)
                 Pages.CustomDrawPage -> onNextButtonClicked(AppRoute.CustomDraw)
                 Pages.NumberCardPage -> onNextButtonClicked(AppRoute.NumberCard)
+                Pages.LoadDataPage -> onNextButtonClicked(AppRoute.LoadData)
             }
         }) {
         Text(
