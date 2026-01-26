@@ -29,4 +29,14 @@
     <string name="custom_draw">自定义绘制</string>
     <string name="number_card">数字卡片</string>
     <string name="load_data">加载数据</string>
+    <string name="total_count">共 %1$d项数据</string>
+    <string name="page_size">%1$d条/页</string>
+    <string name="page_size_5">5条/页</string>
+    <string name="page_size_10">10条/页</string>
+    <string name="page_size_20">20条/页</string>
+    <string name="page_size_30">30条/页</string>
+    <string name="page_size_40">40条/页</string>
+    <string name="page_size_50">50条/页</string>
+    <string name="page_jump">跳至</string>
+    <string name="page">页</string>
 </resources>

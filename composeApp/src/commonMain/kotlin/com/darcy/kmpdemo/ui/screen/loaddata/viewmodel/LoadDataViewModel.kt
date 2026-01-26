@@ -3,11 +3,15 @@ package com.darcy.kmpdemo.ui.screen.loaddata.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.darcy.kmpdemo.bean.http.LoadDataResponse
+import com.darcy.kmpdemo.log.logD
 import com.darcy.kmpdemo.ui.base.BaseViewModel
 import com.darcy.kmpdemo.ui.base.IIntent
 import com.darcy.kmpdemo.ui.base.IReducer
-import com.darcy.kmpdemo.ui.base.ScreenStatus
-import com.darcy.kmpdemo.ui.base.impl.ScreenStatusIntent
+import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
+import com.darcy.kmpdemo.ui.base.impl.paging.PageSize
+import com.darcy.kmpdemo.ui.base.impl.paging.PagingIntent
+import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenStateIntent
 import com.darcy.kmpdemo.ui.screen.loaddata.intent.LoadDataIntent
 import com.darcy.kmpdemo.ui.screen.loaddata.reducer.LoadDataReducer
 import com.darcy.kmpdemo.ui.screen.loaddata.state.LoadDataState
@@ -38,20 +42,44 @@ class LoadDataViewModel : BaseViewModel<LoadDataState>() {
     }
 
     override fun dispatch(intent: IIntent) {
+        logD("dispatch: $intent")
         when (intent) {
             is LoadDataIntent.ActionLoadData -> {
-                io {
-                    dispatch(ScreenStatusIntent.ScreenStateChange(ScreenStatus.Loading))
-                    delay(2_000)
-                    val result = "加载数据成功"
-                    dispatch(LoadDataIntent.RefreshByLoadData(result))
-                    dispatch(ScreenStatusIntent.ScreenStateChange(ScreenStatus.Success))
-                }
+                actionLoadData()
+            }
+
+            is PagingIntent.ActionLoadNewPage -> {
+                actionLoadNewPage(intent.pageNumber)
             }
 
             else -> {
                 super.dispatch(intent)
             }
+        }
+    }
+
+    private fun actionLoadNewPage(pageNumber: Int) {
+        io {
+            dispatch(ScreenStateIntent.ScreenStateChange(ScreenState.Loading))
+            val pageSize: PageSize = _uiState.value.pagingState.currentPageSize
+            delay(1_000)
+            dispatch(
+                PagingIntent.RefreshByLoadNewPage(
+                    pageNumber,
+                    LoadDataResponse(age = pageNumber, name = "darcy")
+                )
+            )
+            dispatch(ScreenStateIntent.ScreenStateChange(ScreenState.Success))
+        }
+    }
+
+    private fun actionLoadData() {
+        io {
+            dispatch(ScreenStateIntent.ScreenStateChange(ScreenState.Loading))
+            delay(2_000)
+            val result = "加载数据成功"
+            dispatch(LoadDataIntent.RefreshByLoadData(result))
+            dispatch(ScreenStateIntent.ScreenStateChange(ScreenState.Success))
         }
     }
 }

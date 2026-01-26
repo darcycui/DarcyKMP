@@ -1,21 +1,30 @@
 package com.darcy.kmpdemo.ui.screen.loaddata
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.darcy.kmpdemo.ui.base.ScreenStatus
+import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
+import com.darcy.kmpdemo.ui.base.impl.paging.PagingIntent
 import com.darcy.kmpdemo.ui.screen.loaddata.intent.LoadDataIntent
+import com.darcy.kmpdemo.ui.screen.loaddata.state.LoadDataState
 import com.darcy.kmpdemo.ui.screen.loaddata.viewmodel.LoadDataViewModel
 
 @Composable
 fun ShowLoadDataPage() {
     val viewmodel: LoadDataViewModel = viewModel(factory = LoadDataViewModel.Factory)
+    LaunchedEffect(Unit) {
+        viewmodel.dispatch(LoadDataIntent.ActionLoadData)
+    }
     InnerLoadDataPage(viewmodel, Modifier)
 }
 
@@ -27,21 +36,20 @@ fun InnerLoadDataPage(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     Box(modifier.fillMaxSize()) {
         when (uiState.screenState) {
-            is ScreenStatus.Initial -> {
-                ShowLoading()
-                viewModel.dispatch(LoadDataIntent.ActionLoadData)
-            }
-
-            is ScreenStatus.Loading -> {
+            is ScreenState.Initial -> {
                 ShowLoading()
             }
 
-            is ScreenStatus.Success -> {
-                ShowSuccess(uiState.content)
+            is ScreenState.Loading -> {
+                ShowLoading()
             }
 
-            is ScreenStatus.Error -> {
-                ShowError(uiState.screenState as ScreenStatus.Error)
+            is ScreenState.Success -> {
+                ShowSuccess(uiState, viewModel)
+            }
+
+            is ScreenState.Error -> {
+                ShowError(uiState.screenState as ScreenState.Error)
             }
 
             else -> {
@@ -62,7 +70,7 @@ fun ShowOther() {
 }
 
 @Composable
-fun ShowError(screenState: ScreenStatus.Error) {
+fun ShowError(screenState: ScreenState.Error) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -72,12 +80,32 @@ fun ShowError(screenState: ScreenStatus.Error) {
 }
 
 @Composable
-fun ShowSuccess(content: String) {
+fun ShowSuccess(uiState: LoadDataState, viewModel: LoadDataViewModel) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = content)
+        Text(text = uiState.content, modifier = Modifier.align(Alignment.Center))
+        Row(modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter)) {
+            Button(modifier = Modifier.weight(1f), onClick = {
+                val pageNumber =
+                    if (uiState.pagingState.currentPageNumber >= 1) (uiState.pagingState.currentPageNumber - 1) else 1
+                viewModel.dispatch(PagingIntent.ActionLoadNewPage(pageNumber))
+            }) {
+                Text(text = "上一页")
+            }
+            Button(modifier = Modifier.weight(1f), onClick = {
+                viewModel.dispatch(LoadDataIntent.ActionLoadData)
+            }) {
+                Text(text = "刷新")
+            }
+            Button(modifier = Modifier.weight(1f), onClick = {
+                val pageNumber = uiState.pagingState.currentPageNumber + 1
+                viewModel.dispatch(PagingIntent.ActionLoadNewPage(pageNumber))
+            }) {
+                Text(text = "下一页")
+            }
+        }
     }
 }
 
