@@ -15,9 +15,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
 import com.darcy.kmpdemo.ui.base.impl.paging.PagingIntent
+import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenStateIntent
+import com.darcy.kmpdemo.ui.base.impl.tips.TipsIntent
+import com.darcy.kmpdemo.ui.components.structure.TipsDialog
 import com.darcy.kmpdemo.ui.screen.loaddata.intent.LoadDataIntent
 import com.darcy.kmpdemo.ui.screen.loaddata.state.LoadDataState
 import com.darcy.kmpdemo.ui.screen.loaddata.viewmodel.LoadDataViewModel
+import kmpdarcydemo.composeapp.generated.resources.Res
+import kmpdarcydemo.composeapp.generated.resources.confirm
+import kmpdarcydemo.composeapp.generated.resources.error
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ShowLoadDataPage() {
@@ -54,6 +61,22 @@ fun InnerLoadDataPage(
 
             else -> {
                 ShowOther()
+            }
+        }
+        if (uiState.tipsState.showTips) {
+            uiState.tipsState.apply {
+                TipsDialog(
+                    titleStr = title,
+                    contentStr = tips,
+                    code = code,
+                    confirmStr = middleButtonText,
+                    onDismissRequest = {
+                        viewModel.dispatch(TipsIntent.DismissTips)
+                    },
+                    onConfirm = {
+                        viewModel.dispatch(TipsIntent.DismissTips)
+                    }
+                )
             }
         }
     }

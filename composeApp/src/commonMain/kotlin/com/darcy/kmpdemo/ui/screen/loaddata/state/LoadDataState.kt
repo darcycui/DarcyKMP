@@ -3,10 +3,13 @@ package com.darcy.kmpdemo.ui.screen.loaddata.state
 import com.darcy.kmpdemo.ui.base.IState
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
 import com.darcy.kmpdemo.ui.base.impl.paging.PagingState
+import com.darcy.kmpdemo.ui.base.impl.tips.TipsState
 
 data class LoadDataState(
     val content: String = "default",
-    var screenState: ScreenState = ScreenState.Initial,
+    val screenState: ScreenState = ScreenState.Initial,
     val pagingState: PagingState = PagingState(),
+    val tipsState: TipsState = TipsState(),
+
 ) : IState {
 }

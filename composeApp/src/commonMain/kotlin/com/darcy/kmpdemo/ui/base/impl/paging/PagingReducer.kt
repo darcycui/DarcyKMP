@@ -1,9 +1,10 @@
 package com.darcy.kmpdemo.ui.base.impl.paging
 
 import com.darcy.kmpdemo.ui.base.IIntent
+import com.darcy.kmpdemo.ui.base.IReducer
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenStateReducer
 
-abstract class PagingReducer<S, R> : ScreenStateReducer<S>() {
+abstract class PagingReducer<S, R> : IReducer<S> {
     override fun reduce(intent: IIntent, state: S): S {
         return when (intent) {
             is PagingIntent.RefreshByLoadNewPage<*> -> {
@@ -12,11 +13,13 @@ abstract class PagingReducer<S, R> : ScreenStateReducer<S>() {
             }
 
             else -> {
-                super.reduce(intent, state)
+                onReduce(intent, state)
             }
         }
     }
 
-    // 子类需实现此方法来更新分页数据
+    // 更新分页数据
     protected abstract fun onPaging(state: S, pageNumber: Int, response: R): S
+
+    abstract fun onReduce(intent: IIntent, state: S): S
 }

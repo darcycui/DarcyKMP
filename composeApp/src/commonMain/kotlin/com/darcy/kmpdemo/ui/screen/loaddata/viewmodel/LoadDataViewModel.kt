@@ -12,10 +12,16 @@ import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
 import com.darcy.kmpdemo.ui.base.impl.paging.PageSize
 import com.darcy.kmpdemo.ui.base.impl.paging.PagingIntent
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenStateIntent
+import com.darcy.kmpdemo.ui.base.impl.tips.TipsIntent
 import com.darcy.kmpdemo.ui.screen.loaddata.intent.LoadDataIntent
 import com.darcy.kmpdemo.ui.screen.loaddata.reducer.LoadDataReducer
 import com.darcy.kmpdemo.ui.screen.loaddata.state.LoadDataState
+import kmpdarcydemo.composeapp.generated.resources.Res
+import kmpdarcydemo.composeapp.generated.resources.confirm
+import kmpdarcydemo.composeapp.generated.resources.tips_success
 import kotlinx.coroutines.delay
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 import kotlin.reflect.KClass
 
 class LoadDataViewModel : BaseViewModel<LoadDataState>() {
@@ -80,6 +86,12 @@ class LoadDataViewModel : BaseViewModel<LoadDataState>() {
             val result = "加载数据成功"
             dispatch(LoadDataIntent.RefreshByLoadData(result))
             dispatch(ScreenStateIntent.ScreenStateChange(ScreenState.Success))
+            dispatch(TipsIntent.ShowTips(
+                title = getString(Res.string.tips_success),
+                tips = "页面加载成功",
+                code = 200,
+                middleButtonText = getString(Res.string.confirm),
+            ))
         }
     }
 }
