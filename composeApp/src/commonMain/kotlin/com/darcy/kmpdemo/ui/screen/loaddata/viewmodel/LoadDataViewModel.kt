@@ -6,11 +6,8 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.darcy.kmpdemo.ui.base.BaseViewModel
 import com.darcy.kmpdemo.ui.base.IIntent
 import com.darcy.kmpdemo.ui.base.IReducer
-import com.darcy.kmpdemo.ui.base.IState
 import com.darcy.kmpdemo.ui.base.ScreenStatus
-import com.darcy.kmpdemo.ui.base.impl.LoadDataReducer2
 import com.darcy.kmpdemo.ui.base.impl.ScreenStatusIntent
-import com.darcy.kmpdemo.ui.base.impl.ScreenStatusReducer
 import com.darcy.kmpdemo.ui.screen.loaddata.intent.LoadDataIntent
 import com.darcy.kmpdemo.ui.screen.loaddata.reducer.LoadDataReducer
 import com.darcy.kmpdemo.ui.screen.loaddata.state.LoadDataState
@@ -36,8 +33,7 @@ class LoadDataViewModel : BaseViewModel<LoadDataState>() {
 
     override fun initReducers(): List<IReducer<LoadDataState>> {
         return listOf(
-            LoadDataReducer2(),
-//            ScreenStatusReducer(),
+            LoadDataReducer(),
         )
     }
 
