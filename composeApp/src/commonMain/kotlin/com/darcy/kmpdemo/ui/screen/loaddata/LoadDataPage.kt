@@ -13,24 +13,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
+import com.darcy.kmpdemo.ui.base.impl.fetch.FetchIntent
 import com.darcy.kmpdemo.ui.base.impl.paging.PagingIntent
-import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenStateIntent
+import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
 import com.darcy.kmpdemo.ui.base.impl.tips.TipsIntent
 import com.darcy.kmpdemo.ui.components.structure.TipsDialog
-import com.darcy.kmpdemo.ui.screen.loaddata.intent.LoadDataIntent
 import com.darcy.kmpdemo.ui.screen.loaddata.state.LoadDataState
 import com.darcy.kmpdemo.ui.screen.loaddata.viewmodel.LoadDataViewModel
-import kmpdarcydemo.composeapp.generated.resources.Res
-import kmpdarcydemo.composeapp.generated.resources.confirm
-import kmpdarcydemo.composeapp.generated.resources.error
-import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ShowLoadDataPage() {
     val viewmodel: LoadDataViewModel = viewModel(factory = LoadDataViewModel.Factory)
     LaunchedEffect(Unit) {
-        viewmodel.dispatch(LoadDataIntent.ActionLoadData)
+        viewmodel.dispatch(FetchIntent.ActionLoadData)
     }
     InnerLoadDataPage(viewmodel, Modifier)
 }
@@ -118,7 +113,7 @@ fun ShowSuccess(uiState: LoadDataState, viewModel: LoadDataViewModel) {
                 Text(text = "上一页")
             }
             Button(modifier = Modifier.weight(1f), onClick = {
-                viewModel.dispatch(LoadDataIntent.ActionLoadData)
+                viewModel.dispatch(FetchIntent.ActionLoadData)
             }) {
                 Text(text = "刷新")
             }

@@ -8,12 +8,12 @@ import com.darcy.kmpdemo.log.logD
 import com.darcy.kmpdemo.ui.base.BaseViewModel
 import com.darcy.kmpdemo.ui.base.IIntent
 import com.darcy.kmpdemo.ui.base.IReducer
+import com.darcy.kmpdemo.ui.base.impl.fetch.FetchIntent
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
 import com.darcy.kmpdemo.ui.base.impl.paging.PageSize
 import com.darcy.kmpdemo.ui.base.impl.paging.PagingIntent
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenStateIntent
 import com.darcy.kmpdemo.ui.base.impl.tips.TipsIntent
-import com.darcy.kmpdemo.ui.screen.loaddata.intent.LoadDataIntent
 import com.darcy.kmpdemo.ui.screen.loaddata.reducer.LoadDataReducer
 import com.darcy.kmpdemo.ui.screen.loaddata.state.LoadDataState
 import kmpdarcydemo.composeapp.generated.resources.Res
@@ -21,7 +21,6 @@ import kmpdarcydemo.composeapp.generated.resources.confirm
 import kmpdarcydemo.composeapp.generated.resources.tips_success
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.getString
-import org.jetbrains.compose.resources.stringResource
 import kotlin.reflect.KClass
 
 class LoadDataViewModel : BaseViewModel<LoadDataState>() {
@@ -50,7 +49,7 @@ class LoadDataViewModel : BaseViewModel<LoadDataState>() {
     override fun dispatch(intent: IIntent) {
         logD("dispatch: $intent")
         when (intent) {
-            is LoadDataIntent.ActionLoadData -> {
+            is FetchIntent.ActionLoadData -> {
                 actionLoadData()
             }
 
@@ -83,8 +82,7 @@ class LoadDataViewModel : BaseViewModel<LoadDataState>() {
         io {
             dispatch(ScreenStateIntent.ScreenStateChange(ScreenState.Loading))
             delay(2_000)
-            val result = "加载数据成功"
-            dispatch(LoadDataIntent.RefreshByLoadData(result))
+            dispatch(FetchIntent.RefreshByFetchData(LoadDataResponse(age = 0, name = "darcy 加载数据成功")))
             dispatch(ScreenStateIntent.ScreenStateChange(ScreenState.Success))
             dispatch(TipsIntent.ShowTips(
                 title = getString(Res.string.tips_success),

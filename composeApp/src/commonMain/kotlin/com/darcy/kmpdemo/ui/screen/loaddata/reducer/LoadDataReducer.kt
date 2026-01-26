@@ -2,19 +2,28 @@ package com.darcy.kmpdemo.ui.screen.loaddata.reducer
 
 import com.darcy.kmpdemo.bean.http.LoadDataResponse
 import com.darcy.kmpdemo.ui.base.IIntent
-import com.darcy.kmpdemo.ui.base.combined.ScreenStatePagingTipsCombinedReducer
+import com.darcy.kmpdemo.ui.base.combined.ScreenStateFetchPagingTipsCombinedReducer
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
 import com.darcy.kmpdemo.ui.base.impl.tips.TipsIntent
-import com.darcy.kmpdemo.ui.screen.loaddata.intent.LoadDataIntent
 import com.darcy.kmpdemo.ui.screen.loaddata.state.LoadDataState
 
-class LoadDataReducer : ScreenStatePagingTipsCombinedReducer<LoadDataState, LoadDataResponse>() {
+class LoadDataReducer : ScreenStateFetchPagingTipsCombinedReducer<LoadDataState, LoadDataResponse>() {
 
     override fun onScreenState(
         state: LoadDataState,
         newScreenState: ScreenState
     ): LoadDataState {
         return state.copy(screenState = newScreenState)
+    }
+
+    override fun onRefreshByFetchData(
+        state: LoadDataState,
+        result: LoadDataResponse
+    ): LoadDataState {
+        return state.copy(
+            content = "${result.name} : ${result.age}",
+            screenState = ScreenState.Success
+        )
     }
 
     override fun onPaging(
@@ -53,12 +62,6 @@ class LoadDataReducer : ScreenStatePagingTipsCombinedReducer<LoadDataState, Load
     }
 
     override fun onReduce(intent: IIntent, state: LoadDataState): LoadDataState {
-        return when (intent) {
-            is LoadDataIntent.RefreshByLoadData -> {
-                state.copy(content = intent.result)
-            }
-
-            else -> state
-        }
+        return state
     }
 }

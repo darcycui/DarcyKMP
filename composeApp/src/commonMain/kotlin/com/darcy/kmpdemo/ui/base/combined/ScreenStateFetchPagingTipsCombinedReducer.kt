@@ -2,16 +2,22 @@ package com.darcy.kmpdemo.ui.base.combined
 
 import com.darcy.kmpdemo.ui.base.IIntent
 import com.darcy.kmpdemo.ui.base.IReducer
+import com.darcy.kmpdemo.ui.base.impl.fetch.FetchIntent
 import com.darcy.kmpdemo.ui.base.impl.paging.PagingIntent
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenStateIntent
 import com.darcy.kmpdemo.ui.base.impl.tips.TipsIntent
 
-abstract class ScreenStatePagingTipsCombinedReducer<S, R> : IReducer<S> {
+abstract class ScreenStateFetchPagingTipsCombinedReducer<S, R> : IReducer<S> {
     override fun reduce(intent: IIntent, state: S): S {
         return when (intent) {
             is ScreenStateIntent.ScreenStateChange -> {
                 onScreenState(state, intent.screenState)
+            }
+
+            is FetchIntent.RefreshByFetchData<*> -> {
+                @Suppress("UNCHECKED_CAST")
+                onRefreshByFetchData(state, intent.result as R)
             }
 
             is PagingIntent.RefreshByLoadNewPage<*> -> {
@@ -35,6 +41,9 @@ abstract class ScreenStatePagingTipsCombinedReducer<S, R> : IReducer<S> {
 
     // 更新屏幕状态
     abstract fun onScreenState(state: S, newScreenState: ScreenState): S
+
+    // 刷新数据
+    abstract fun onRefreshByFetchData(state: S, result: R): S
 
     // 更新分页数据
     abstract fun onPaging(state: S, pageNumber: Int, response: R): S
