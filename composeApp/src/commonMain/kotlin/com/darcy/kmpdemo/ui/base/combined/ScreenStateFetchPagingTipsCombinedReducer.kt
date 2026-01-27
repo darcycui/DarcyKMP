@@ -3,12 +3,24 @@ package com.darcy.kmpdemo.ui.base.combined
 import com.darcy.kmpdemo.ui.base.IIntent
 import com.darcy.kmpdemo.ui.base.IReducer
 import com.darcy.kmpdemo.ui.base.impl.fetch.FetchIntent
+import com.darcy.kmpdemo.ui.base.impl.fetch.IFetchReducer
+import com.darcy.kmpdemo.ui.base.impl.paging.IPagingReducer
 import com.darcy.kmpdemo.ui.base.impl.paging.PagingIntent
+import com.darcy.kmpdemo.ui.base.impl.screenstatus.IScreenStateReducer
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenStateIntent
+import com.darcy.kmpdemo.ui.base.impl.tips.ITipsReducer
 import com.darcy.kmpdemo.ui.base.impl.tips.TipsIntent
-
-abstract class ScreenStateFetchPagingTipsCombinedReducer<S, R> : IReducer<S> {
+/**
+ * Created by darcy
+ * 2026/01/27
+ *
+ * 屏幕状态、数据加载、分页、提示的组合 reducer
+ */
+abstract class ScreenStateFetchPagingTipsCombinedReducer<S, R> : IScreenStateReducer<S>,
+    IFetchReducer<S, R>,
+    IPagingReducer<S, R>,
+    ITipsReducer<S> {
     override fun reduce(intent: IIntent, state: S): S {
         return when (intent) {
             is ScreenStateIntent.ScreenStateChange -> {
@@ -17,7 +29,7 @@ abstract class ScreenStateFetchPagingTipsCombinedReducer<S, R> : IReducer<S> {
 
             is FetchIntent.RefreshByFetchData<*> -> {
                 @Suppress("UNCHECKED_CAST")
-                onRefreshByFetchData(state, intent.result as R)
+                onFetch(state, intent.result as R)
             }
 
             is PagingIntent.RefreshByLoadNewPage<*> -> {
@@ -38,22 +50,4 @@ abstract class ScreenStateFetchPagingTipsCombinedReducer<S, R> : IReducer<S> {
             }
         }
     }
-
-    // 更新屏幕状态
-    abstract fun onScreenState(state: S, newScreenState: ScreenState): S
-
-    // 刷新数据
-    abstract fun onRefreshByFetchData(state: S, result: R): S
-
-    // 更新分页数据
-    abstract fun onPaging(state: S, pageNumber: Int, response: R): S
-
-    // 显示提示
-    abstract fun onShowTips(state: S, intent: TipsIntent.ShowTips): S
-
-    // 隐藏提示
-    abstract fun onDismissTips(state: S): S
-
-    // 处理其他意图
-    abstract fun onReduce(intent: IIntent, state: S): S
 }

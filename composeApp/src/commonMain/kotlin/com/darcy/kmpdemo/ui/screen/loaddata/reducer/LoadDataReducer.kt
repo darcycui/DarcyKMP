@@ -16,7 +16,7 @@ class LoadDataReducer : ScreenStateFetchPagingTipsCombinedReducer<LoadDataState,
         return state.copy(screenState = newScreenState)
     }
 
-    override fun onRefreshByFetchData(
+    override fun onFetch(
         state: LoadDataState,
         result: LoadDataResponse
     ): LoadDataState {
@@ -48,7 +48,10 @@ class LoadDataReducer : ScreenStateFetchPagingTipsCombinedReducer<LoadDataState,
                 showTips = true,
                 title = intent.title,
                 tips = intent.tips,
-                middleButtonText = intent.middleButtonText
+                code = intent.code,
+                middleButtonText = intent.middleButtonText,
+                positiveButtonText = intent.positiveButtonText,
+                negativeButtonText = intent.negativeButtonText,
             )
         )
     }

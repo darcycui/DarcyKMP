@@ -107,7 +107,7 @@ fun ShowSuccess(uiState: LoadDataState, viewModel: LoadDataViewModel) {
         Row(modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter)) {
             Button(modifier = Modifier.weight(1f), onClick = {
                 val pageNumber =
-                    if (uiState.pagingState.currentPageNumber >= 1) (uiState.pagingState.currentPageNumber - 1) else 1
+                    if (uiState.pagingState.currentPageNumber > 1) (uiState.pagingState.currentPageNumber - 1) else 1
                 viewModel.dispatch(PagingIntent.ActionLoadNewPage(pageNumber))
             }) {
                 Text(text = "上一页")
