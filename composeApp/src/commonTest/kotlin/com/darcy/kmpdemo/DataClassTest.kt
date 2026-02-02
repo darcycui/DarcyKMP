@@ -1,7 +1,6 @@
 package com.darcy.kmpdemo
 
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
-import com.darcy.kmpdemo.ui.screen.loaddata.state.LoadDataState
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
