@@ -183,7 +183,7 @@ compose.desktop {
         mainClass = "com.darcy.kmpdemo.MainKt"
 
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Exe, TargetFormat.Deb)
             packageName = "com.darcy.kmpdemo"
             packageVersion = "1.0.0"
             windows {
@@ -192,6 +192,15 @@ compose.desktop {
                 // 图标配置
                 iconFile.set(project.file("src/desktopMain/resources/distribute/house_128.ico"))  // Windows
                 shortcut = true
+            }
+            buildTypes {
+                release {
+                    proguard {
+                        isEnabled = false
+                        obfuscate = false
+                        optimize = false
+                    }
+                }
             }
         }
     }
