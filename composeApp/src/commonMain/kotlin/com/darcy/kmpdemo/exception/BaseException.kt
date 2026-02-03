@@ -1,7 +1,7 @@
 package com.darcy.kmpdemo.exception
 
 open class BaseException (
-    exceptionCode: Int,
-    exceptionMessage: String
-) : IllegalStateException("exceptionCode=$exceptionCode exceptionMessage=$exceptionMessage") {
+    val errorCode: Int,
+    val errorMessage: String
+) : Exception("errorCode=$errorCode errorMessage=$errorMessage") {
 }

@@ -65,4 +65,6 @@ object AppColors {
     val color_f9a825 = Color(0xfff9a825)
     val color_4caf50 = Color(0xff4caf50)
 
+    val color_102c56 = Color(0xff102c56)
+
 }

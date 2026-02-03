@@ -1,4 +1,4 @@
-package com.example.myapplication.uiphone.navigation
+package com.darcy.kmpdemo.ui.screen.phone.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager
@@ -15,8 +15,6 @@ import com.darcy.kmpdemo.ui.screen.phone.chatlist.PhoneChatListScreen
 import com.darcy.kmpdemo.ui.screen.phone.dynamic.PhoneDynamicScreen
 import com.darcy.kmpdemo.ui.screen.phone.friends.PhoneFriendsScreen
 import com.darcy.kmpdemo.ui.screen.phone.mine.PhoneMineScreen
-import com.darcy.kmpdemo.ui.screen.phone.navigation.PhonePages
-import com.darcy.kmpdemo.ui.screen.phone.navigation.PhoneRoute
 
 object BottomBarNavigation {
     // 定义全局 SideNavController

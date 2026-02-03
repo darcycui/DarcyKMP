@@ -22,7 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.darcy.kmpdemo.log.logD
-import com.example.myapplication.uiphone.navigation.BottomBarNavigationNavHost
+import com.darcy.kmpdemo.ui.screen.phone.navigation.BottomBarNavigationNavHost
 import com.darcy.kmpdemo.ui.screen.phone.navigation.PhonePages
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource

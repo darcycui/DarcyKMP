@@ -4,9 +4,9 @@ import com.darcy.kmpdemo.exception.BaseException
 import io.ktor.http.HttpStatusCode
 
 class HttpException(
-    exceptionCode: Int,
-    exceptionMessage: String
-) : BaseException(exceptionCode, exceptionMessage) {
+    code: Int,
+    message: String
+) : BaseException(code, message) {
     constructor(httpStatusCode: HttpStatusCode) : this(
         httpStatusCode.value,
         httpStatusCode.description

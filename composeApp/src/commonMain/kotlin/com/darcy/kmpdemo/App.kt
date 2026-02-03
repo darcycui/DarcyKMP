@@ -20,8 +20,8 @@ fun App() {
     }
     AppTheme {
 //        LearnNavigation()
-//        PhoneAppMainScreen()
-        DesktopAppMainScreen()
+        PhoneAppMainScreen()
+//        DesktopAppMainScreen()
     }
 
 }
