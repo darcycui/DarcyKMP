@@ -26,6 +26,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -35,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil3.compose.AsyncImage
 import com.darcy.kmpdemo.bean.ui.ChatListItemBean
 import com.darcy.kmpdemo.ui.base.impl.fetch.FetchIntent
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
@@ -43,6 +45,7 @@ import com.darcy.kmpdemo.ui.base.impl.tips.TipsIntent
 import com.darcy.kmpdemo.ui.colors.AppColors
 import com.darcy.kmpdemo.ui.components.structure.TipsDialog
 import com.darcy.kmpdemo.ui.screen.phone.chatlist.state.ChatListState
+import io.ktor.http.encodeURLPath
 import kmpdarcydemo.composeapp.generated.resources.Res
 import kmpdarcydemo.composeapp.generated.resources.icon_header_default
 import org.jetbrains.compose.resources.painterResource
@@ -131,10 +134,12 @@ private fun ItemCard(
                 .padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 4.dp),
             verticalAlignment = Alignment.Top
         ) {
-            Image(
-                painter = painterResource(Res.drawable.icon_header_default),
+            AsyncImage(
+                model = bean.avatar.encodeURLPath(),
+                placeholder = painterResource(Res.drawable.icon_header_default),
+                error = painterResource(Res.drawable.icon_header_default),
                 contentDescription = null,
-                modifier = Modifier.size(48.dp)
+                modifier = Modifier.size(48.dp).clip(CircleShape)
             )
             Spacer(modifier = Modifier.width(10.dp))
             Box(modifier = Modifier.fillMaxSize()) {

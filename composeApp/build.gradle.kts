@@ -120,7 +120,9 @@ kotlin {
             implementation(libs.filekit.dialogs.compose)
             implementation(libs.filekit.coil)
             // coil
-
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network.ktor3)
+            implementation(libs.coil.network.core)
 
 
         }
