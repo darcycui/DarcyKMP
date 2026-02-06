@@ -123,6 +123,11 @@ kotlin {
             implementation(libs.coil.compose)
             implementation(libs.coil.network.ktor3)
             implementation(libs.coil.network.core)
+            // md5
+            // define the BOM and its version
+            implementation(project.dependencies.platform(libs.hash.bom))
+            // define MD5 artifacts without version
+            implementation(libs.hash.md)
 
 
         }

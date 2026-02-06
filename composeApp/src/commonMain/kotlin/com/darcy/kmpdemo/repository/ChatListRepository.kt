@@ -13,7 +13,7 @@ class ChatListRepository : IRepository {
                     id = 1,
                     title = "Tom",
                     subTitle = "最近一条消息",
-                    avatar = "https://img.tuxiangyan.com/zb_users/upload/2023/04/202304061680747621605719.jpg1",
+                    avatar = "https://img.tuxiangyan.com/zb_users/upload/2023/04/202304061680747621605719.jpg",
                 ),
                 ChatListItemBean(
                     id = 2,

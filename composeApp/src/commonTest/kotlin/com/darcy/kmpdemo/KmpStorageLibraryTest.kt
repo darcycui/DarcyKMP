@@ -15,7 +15,7 @@ class KmpStorageLibraryTest {
     }
 
     @Test
-    fun `test-method-call-from-kmp-library-multiplatform-settings`() {
+    fun `test-put-get-data-from-kmp-library-multiplatform-settings`() {
 
         logI("test start")
         val keyValueStorage = KeyValueHelper.getInstance("userInfo")
