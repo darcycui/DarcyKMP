@@ -13,4 +13,10 @@ actual object FilePlatform {
     }
 
     actual fun getDownloadDir(): Path {
+        TODO("Not yet implemented")
+    }
+
+    actual suspend fun dealUriIfNeed(uriPath: Path): Path {
+        TODO("Not yet implemented")
+    }
 }

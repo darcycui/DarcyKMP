@@ -16,4 +16,9 @@ actual object FilePlatform {
     actual fun getDownloadDir(): Path {
         return Path(System.getProperty("user.home"), "Downloads/${AppHelper.getAppName()}")
     }
+
+    actual suspend fun dealUriIfNeed(uriPath: Path): Path {
+        return uriPath
+    }
+
 }

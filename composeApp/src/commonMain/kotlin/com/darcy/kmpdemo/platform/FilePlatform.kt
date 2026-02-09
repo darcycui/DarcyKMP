@@ -19,4 +19,7 @@ expect object FilePlatform {
     // 期望函数：获取下载目录
     fun getDownloadDir(): Path
 
+    // 期望函数：处理uri android平台需要处理
+    suspend fun dealUriIfNeed(uriPath: Path): Path
+
 }

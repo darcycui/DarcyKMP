@@ -62,12 +62,12 @@ class ChatListViewModel(
             response.onSuccess {
                 dispatch(ScreenStateIntent.ScreenStateChange(ScreenState.Success))
                 dispatch(FetchIntent.RefreshByFetchData(it))
-                dispatch(TipsIntent.ShowTips(
-                    title = "提示",
-                    tips = "加载成功",
-                    code = 200,
-                    middleButtonText = "确定",
-                ))
+//                dispatch(TipsIntent.ShowTips(
+//                    title = "提示",
+//                    tips = "加载成功",
+//                    code = 200,
+//                    middleButtonText = "确定",
+//                ))
             }.onFailure {
                 dispatchFailure(it)
             }

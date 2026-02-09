@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.darcy.kmpdemo.exts.copyToCacheFile
 import com.darcy.kmpdemo.log.logE
 import com.darcy.kmpdemo.platform.FilePlatform.getDocumentsDir
 import kotlinx.coroutines.CoroutineScope
@@ -58,7 +59,7 @@ actual fun ShowUploadImage() {
                 return@rememberLauncherForActivityResult
             }
             scope.launch(Dispatchers.Default) {
-                val cacheFile = copyImageToCache(context, uri)
+                val cacheFile = uri.copyToCacheFile(context, "image")
                 imagePicker.setPickedImage(cacheFile)
 //                uploadFile(scope, imagePicker, filePath, imageBitmap, uploadResult)
             }

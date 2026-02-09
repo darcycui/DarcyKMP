@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import com.darcy.kmpdemo.platform.FilePlatform
 import com.darcy.kmpdemo.ui.colors.AppColors
 import com.darcy.kmpdemo.utils.FileHelper
 import com.darcy.kmpdemo.utils.PickHelper
@@ -73,9 +74,9 @@ fun PhoneMineScreen() {
                         scope.launch {
                             val path = PickHelper.pickImage()
                             println("pick image: $path")
-                            FileHelper.readFileBuffered(dealUriIfNeeded(path))
+                            val cachePath = FilePlatform.dealUriIfNeed(path)
                             withContext(Dispatchers.Main) {
-                                headerPath = path.toString()
+                                headerPath = cachePath.toString()
                             }
                         }
                     }

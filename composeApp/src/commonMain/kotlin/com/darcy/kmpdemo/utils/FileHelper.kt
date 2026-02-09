@@ -48,7 +48,7 @@ object FileHelper {
         runCatching {
             SystemFileSystem.source(path).buffered().use { source ->
                 // 从 source 中读取字节数据
-                val buffer = ByteArray(8096)  // 缓冲区大小
+                val buffer = ByteArray(8192)  // 缓冲区大小
                 var bytesRead: Int
 
                 while (true) {
