@@ -49,7 +49,8 @@ fun BottomBarNavigationNavHost(
     HorizontalPager(
         state = pagerState,
         modifier = modifier.fillMaxSize(),
-        userScrollEnabled = true
+        userScrollEnabled = true,
+        beyondViewportPageCount = 3 // 缓存额外页面数3 即：一共加载4个页面
     ) { page ->
         // 显示对应页面
         when (PhonePages.entries[page]) {

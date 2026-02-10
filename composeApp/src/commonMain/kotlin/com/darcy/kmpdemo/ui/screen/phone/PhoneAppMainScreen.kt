@@ -45,7 +45,10 @@ fun PhoneAppMainInnerPage(
         mutableIntStateOf(startDestination.ordinal)
     }
     val pagerState =
-        rememberPagerState(initialPage = currentPageIndex, pageCount = { PhonePages.entries.size })
+        rememberPagerState(
+            initialPage = currentPageIndex,
+            pageCount = { PhonePages.entries.size },
+        )
     // 监听页面滑动
     LaunchedEffect(pagerState) {
         snapshotFlow { pagerState.currentPage }.collect { newPageIndex ->

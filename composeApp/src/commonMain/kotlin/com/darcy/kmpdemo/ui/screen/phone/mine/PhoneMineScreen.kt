@@ -1,6 +1,5 @@
 package com.darcy.kmpdemo.ui.screen.phone.mine
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -25,17 +24,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontVariation.weight
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.darcy.kmpdemo.platform.FilePlatform
 import com.darcy.kmpdemo.ui.colors.AppColors
-import com.darcy.kmpdemo.utils.FileHelper
 import com.darcy.kmpdemo.utils.PickHelper
 import kmpdarcydemo.composeapp.generated.resources.Res
 import kmpdarcydemo.composeapp.generated.resources.icon_header_default
@@ -43,7 +38,6 @@ import kmpdarcydemo.composeapp.generated.resources.page_mine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.io.files.Path
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
