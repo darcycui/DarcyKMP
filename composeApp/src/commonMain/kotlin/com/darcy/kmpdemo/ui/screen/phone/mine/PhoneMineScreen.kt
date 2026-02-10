@@ -43,7 +43,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun PhoneMineScreen() {
     var headerPath: String by remember {
-        mutableStateOf("")
+        mutableStateOf("https://avatars.githubusercontent.com/u/10252602")
     }
     Box(modifier = Modifier.fillMaxSize()) {
         val scope = rememberCoroutineScope()

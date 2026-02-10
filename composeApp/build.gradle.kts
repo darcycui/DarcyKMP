@@ -11,7 +11,13 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinxSerialization)
     id("dev.icerock.mobile.multiplatform-resources")
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.androidx.room)
 }
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
 // config moko resources plugin
 multiplatformResources {
     resourcesPackage.set("org.example.library") // required
@@ -45,16 +51,16 @@ kotlin {
 
     // moko resources 0.25.2支持wasm
     // darcy.kmp.lib.storage
-    js {
-        browser()
-        binaries.executable()
-    }
-
-    @OptIn(ExperimentalWasmDsl::class)
-    wasmJs {
-        browser()
-        binaries.executable()
-    }
+//    js {
+//        browser()
+//        binaries.executable()
+//    }
+//
+//    @OptIn(ExperimentalWasmDsl::class)
+//    wasmJs {
+//        browser()
+//        binaries.executable()
+//    }
 
     compilerOptions {
         freeCompilerArgs.add("-Xexpect-actual-classes")
@@ -72,6 +78,8 @@ kotlin {
             api(libs.krossbow.stomp.core)
             api(libs.krossbow.websocket.builtin)
             api(libs.krossbow.websocket.ktor)
+            // Optional when using Room SQLite Wrapper
+            implementation(libs.androidx.room.sqlite.wrapper)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -128,6 +136,9 @@ kotlin {
             implementation(project.dependencies.platform(libs.hash.bom))
             // define MD5 artifacts without version
             implementation(libs.hash.md)
+            // database room
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.androidx.sqlite.bundled)
 
 
         }
@@ -183,6 +194,13 @@ android {
 
 dependencies {
     debugImplementation(libs.compose.ui.tooling)
+    add("kspAndroid", libs.androidx.room.compiler)
+    add("kspIosSimulatorArm64", libs.androidx.room.compiler)
+    add("kspIosArm64", libs.androidx.room.compiler)
+    add("kspDesktop", libs.androidx.room.compiler)
+//    add("kspJS", libs.androidx.room.compiler)
+//    add("kspWasm", libs.androidx.room.compiler)
+    // Add any other platform target you use in your project, for example kspDesktop
 }
 
 compose.desktop {

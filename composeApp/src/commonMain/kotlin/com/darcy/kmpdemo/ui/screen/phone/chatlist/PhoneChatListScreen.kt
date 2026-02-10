@@ -1,6 +1,5 @@
 package com.darcy.kmpdemo.ui.screen.phone.chatlist
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,9 +15,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,7 +23,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -116,14 +111,14 @@ fun PhoneChatListInnerPage(
 private fun ShowSuccessPage(uiState: ChatListState) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(uiState.items.size, key = { uiState.items[it].id }) { index ->
-            ItemCard(uiState.items[index], Modifier)
+            ChatListItem(uiState.items[index], Modifier)
         }
     }
 }
 
 
 @Composable
-private fun ItemCard(
+private fun ChatListItem(
     bean: ChatListItemBean,
     modifier: Modifier
 ) {
@@ -198,8 +193,8 @@ private fun ItemCard(
     backgroundColor = 0xffffffff
 )
 @Composable
-private fun ItemCardPreview() {
-    ItemCard(
+private fun ChatListItemPreview() {
+    ChatListItem(
         bean = ChatListItemBean(
             id = 1,
             title = "标题标题标题标题标题",
