@@ -4,21 +4,19 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class UserEntity (
+data class ConversationEntity(
     @PrimaryKey(autoGenerate = true)
-    val userId: Long = 0,
+    val conversationId: Long = 0,
     val name: String = "",
-    val nickName: String = "",
-    val age: Int = 0,
-    val sex: Int = 0,
     val avatar: String = "",
+    val type: Int = 0,
     val createdTime: Long = 0,
     val updatedTime: Long = 0,
-    val deletedTime: Long = 0,
-){
+    val deletedTime: Long = 0
+) {
     companion object {
-        fun empty(): UserEntity {
-            return UserEntity()
+        fun empty(): ConversationEntity {
+            return ConversationEntity()
         }
     }
 }

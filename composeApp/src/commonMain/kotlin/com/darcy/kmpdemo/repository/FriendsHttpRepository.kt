@@ -4,7 +4,7 @@ import com.darcy.kmpdemo.bean.http.FriendsResponse
 import com.darcy.kmpdemo.bean.ui.FriendsItemBean
 import kotlinx.coroutines.delay
 
-class FriendsRepository : IRepository {
+class FriendsHttpRepository : IRepository {
     suspend fun getFriendsList(): FriendsResponse {
         delay(1_000)
         return FriendsResponse(

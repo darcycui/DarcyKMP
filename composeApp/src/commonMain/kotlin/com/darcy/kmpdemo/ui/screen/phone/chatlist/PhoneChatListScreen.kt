@@ -15,11 +15,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,12 +37,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.darcy.kmpdemo.bean.ui.ChatListItemBean
+import com.darcy.kmpdemo.storage.database.tables.ConversationEntity
+import com.darcy.kmpdemo.storage.database.tables.UserEntity
+import com.darcy.kmpdemo.storage.memory.IMGlobalStorage
 import com.darcy.kmpdemo.ui.base.impl.fetch.FetchIntent
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenStateIntent
 import com.darcy.kmpdemo.ui.base.impl.tips.TipsIntent
 import com.darcy.kmpdemo.ui.colors.AppColors
 import com.darcy.kmpdemo.ui.components.structure.TipsDialog
+import com.darcy.kmpdemo.ui.screen.phone.chatlist.intent.ChatListIntent
 import com.darcy.kmpdemo.ui.screen.phone.chatlist.state.ChatListState
 import io.ktor.http.encodeURLPath
 import kmpdarcydemo.composeapp.generated.resources.Res
@@ -50,6 +58,13 @@ fun PhoneChatListScreen() {
     val viewModel: ChatListViewModel = viewModel(factory = ChatListViewModel.Factory)
     LaunchedEffect(Unit) {
         viewModel.dispatch(FetchIntent.ActionLoadData)
+        IMGlobalStorage.setCurrentUser(
+            UserEntity(
+                1,
+                "Darcy",
+                "https://avatars.githubusercontent.com/u/1020407?s=200&v=4"
+            )
+        )
     }
     PhoneChatListInnerPage(viewModel, Modifier.fillMaxSize())
 }
@@ -67,7 +82,7 @@ fun PhoneChatListInnerPage(
             }
 
             is ScreenState.Success -> {
-                ShowSuccessPage(uiState)
+                ShowSuccessPage(uiState, viewModel, modifier)
             }
 
             is ScreenState.Error -> {
@@ -108,10 +123,69 @@ fun PhoneChatListInnerPage(
 }
 
 @Composable
-private fun ShowSuccessPage(uiState: ChatListState) {
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
-        items(uiState.items.size, key = { uiState.items[it].id }) { index ->
-            ChatListItem(uiState.items[index], Modifier)
+private fun ShowSuccessPage(
+    uiState: ChatListState,
+    viewModel: ChatListViewModel,
+    modifier: Modifier = Modifier
+) {
+    var count: Long by remember { mutableStateOf(1) }
+
+    Column(modifier = modifier.fillMaxSize()) {
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Button(modifier = Modifier.weight(1f), onClick = {
+                count++
+                viewModel.dispatch(
+                    ChatListIntent.ActionCreateConversation(
+                        1,
+                        count,
+                        ConversationEntity(
+                            conversationId = count,
+                            name = "会话1",
+                            avatar = "",
+                            type = 1,
+                        )
+                    )
+                )
+            }) {
+                Text(text = "增")
+            }
+            Button(modifier = Modifier.weight(1f), onClick = {
+                viewModel.dispatch(
+                    ChatListIntent.ActionDeleteConversation(1)
+                )
+            }) {
+                Text(text = "删")
+            }
+            Button(modifier = Modifier.weight(1f), onClick = {
+                viewModel.dispatch(
+                    ChatListIntent.ActionUpdateConversation(
+                        1,
+                        ConversationEntity(
+                            conversationId = 1,
+                            name = "会话1修改-${RandomHelper.randomInt(100, 1000)}",
+                            avatar = "",
+                            type = 1,
+                        )
+                    )
+                )
+            }) {
+                Text(text = "改")
+            }
+            Button(modifier = Modifier.weight(1.5f), onClick = {
+                viewModel.dispatch(ChatListIntent.ActionQueryConversationsByUserId(IMGlobalStorage.getCurrentUserId()))
+            }) {
+                Text(text = "查1")
+            }
+            Button(modifier = Modifier.weight(1.5f), onClick = {
+                viewModel.dispatch(ChatListIntent.ActionQueryUsersByConversationId(1))
+            }) {
+                Text(text = "查2")
+            }
+        }
+        LazyColumn(modifier = Modifier.fillMaxWidth().weight(1f)) {
+            items(uiState.items.size, key = { uiState.items[it].id }) { index ->
+                ChatListItem(uiState.items[index], Modifier)
+            }
         }
     }
 }

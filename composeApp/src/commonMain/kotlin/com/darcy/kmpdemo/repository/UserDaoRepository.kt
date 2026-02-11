@@ -5,7 +5,7 @@ import com.darcy.kmpdemo.storage.database.getDarcyIMDatabase
 import com.darcy.kmpdemo.storage.database.tables.UserEntity
 import kotlinx.coroutines.flow.Flow
 
-class IMUserRepository(
+class UserDaoRepository(
     private val userDao: UserDao = getDarcyIMDatabase().userDao(),
 ) : IRepository {
     suspend fun insertUser(userEntity: UserEntity) {
@@ -14,6 +14,18 @@ class IMUserRepository(
 
     suspend fun deleteUser(id: Long) {
         userDao.delete(id)
+    }
+
+    suspend fun deleteUser(userEntity: UserEntity) {
+        userDao.delete(userEntity)
+    }
+
+    suspend fun deleteUserById(id: Long) {
+        userDao.delete(UserEntity(userId = id))
+    }
+
+    suspend fun updateUser(userEntity: UserEntity) {
+        userDao.update(userEntity)
     }
 
     suspend fun updateUser(id: Long, name: String) {

@@ -6,7 +6,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.darcy.kmpdemo.bean.http.FriendsResponse
 import com.darcy.kmpdemo.bean.ui.FriendsItemBean
 import com.darcy.kmpdemo.exception.BaseException
-import com.darcy.kmpdemo.repository.IMUserRepository
+import com.darcy.kmpdemo.repository.UserDaoRepository
 import com.darcy.kmpdemo.storage.database.tables.UserEntity
 import com.darcy.kmpdemo.ui.base.BaseViewModel
 import com.darcy.kmpdemo.ui.base.IIntent
@@ -23,7 +23,7 @@ import kotlin.reflect.KClass
 
 class FriendsViewModel(
     private val fetchChatListUseCase: FetchFriendsListUseCase = FetchFriendsListUseCase(),
-    private val repository: IMUserRepository = IMUserRepository()
+    private val repository: UserDaoRepository = UserDaoRepository()
 ) : BaseViewModel<FriendsState>() {
     companion object {
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
@@ -88,7 +88,7 @@ class FriendsViewModel(
         io {
             val userEntityList = repository.getAllUser().map { item ->
                 FriendsItemBean(
-                    id = item.id,
+                    id = item.userId,
                     name = item.name,
                     avatar = item.avatar,
                     nickName = item.nickName,
@@ -105,7 +105,7 @@ class FriendsViewModel(
             val userEntity = repository.getUser(id)
             userEntity?.also {
                 val uiBean = FriendsItemBean(
-                    id = it.id,
+                    id = it.userId,
                     name = it.name,
                     avatar = it.avatar,
                     nickName = it.nickName,

@@ -3,7 +3,13 @@ package com.darcy.kmpdemo.ui.screen.phone.chatlist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.darcy.kmpdemo.bean.http.ChatListResponse
+import com.darcy.kmpdemo.bean.ui.ChatListItemBean
 import com.darcy.kmpdemo.exception.BaseException
+import com.darcy.kmpdemo.repository.ConversationDaoRepository
+import com.darcy.kmpdemo.repository.ConversationUserCrossRefDaoRepository
+import com.darcy.kmpdemo.storage.database.tables.ConversationEntity
+import com.darcy.kmpdemo.storage.database.tables.ConversationUserCrossRef
 import com.darcy.kmpdemo.ui.base.BaseViewModel
 import com.darcy.kmpdemo.ui.base.IIntent
 import com.darcy.kmpdemo.ui.base.IReducer
@@ -11,7 +17,7 @@ import com.darcy.kmpdemo.ui.base.impl.fetch.FetchIntent
 import com.darcy.kmpdemo.ui.base.impl.paging.PagingIntent
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenStateIntent
-import com.darcy.kmpdemo.ui.base.impl.tips.TipsIntent
+import com.darcy.kmpdemo.ui.screen.phone.chatlist.intent.ChatListIntent
 import com.darcy.kmpdemo.ui.screen.phone.chatlist.reducer.ChatListReducer
 import com.darcy.kmpdemo.ui.screen.phone.chatlist.state.ChatListState
 import com.darcy.kmpdemo.ui.screen.phone.chatlist.usecase.FetchChatListUseCase
@@ -19,6 +25,8 @@ import kotlin.reflect.KClass
 
 class ChatListViewModel(
     private val fetchChatListUseCase: FetchChatListUseCase = FetchChatListUseCase(),
+    private val conversationDaoRepository: ConversationDaoRepository = ConversationDaoRepository(),
+    private val conversationUserCrossRefDaoRepository: ConversationUserCrossRefDaoRepository = ConversationUserCrossRefDaoRepository(),
 ) : BaseViewModel<ChatListState>() {
     companion object {
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
@@ -44,6 +52,31 @@ class ChatListViewModel(
                 actionFetchChatList()
             }
 
+            is ChatListIntent.ActionCreateConversation -> {
+                // 创建会话
+                actionCreateConversation(intent.userIdFrom, intent.userIdTo, intent.conversation)
+            }
+
+            is ChatListIntent.ActionDeleteConversation -> {
+                // 删除会话
+                actionDeleteConversation(intent.conversationId)
+            }
+
+            is ChatListIntent.ActionUpdateConversation -> {
+                // 更新会话
+                actionUpdateConversation(intent.conversationId, intent.conversation)
+            }
+
+            is ChatListIntent.ActionQueryUsersByConversationId -> {
+                // 查询会话中的用户
+                actionQueryUsersByConversationId(intent.conversationId)
+            }
+
+            is ChatListIntent.ActionQueryConversationsByUserId -> {
+                // 查询用户会话
+                actionQueryConversationsByUserId(intent.userId)
+            }
+
             is PagingIntent.ActionLoadNewPage -> {
                 // 分页
             }
@@ -51,6 +84,71 @@ class ChatListViewModel(
             else -> {
                 super.dispatch(intent)
             }
+        }
+    }
+
+    private fun actionQueryConversationsByUserId(userId: Long) {
+        io {
+            val crossRef =
+                conversationUserCrossRefDaoRepository.getConversationsByUserId(userId)
+            val uiBeanList = crossRef.conversations.map { item ->
+                ChatListItemBean(
+                    id = item.conversationId,
+                    title = item.name,
+                    subTitle = "",
+                    avatar = item.avatar,
+                )
+            }
+            dispatch(FetchIntent.RefreshByFetchData(ChatListResponse(uiBeanList)))
+        }
+    }
+
+    private fun actionQueryUsersByConversationId(conversationId: Long) {
+        io {
+            val crossRef =
+                conversationUserCrossRefDaoRepository.getUsersByConversationId(conversationId)
+//            val uiBeanList = crossRef.users.map {
+//                ChatDetailItemBean(
+//                )
+//            }
+            //dispatch(ChatListIntent.RefreshByQueryData(users))
+        }
+    }
+
+    private fun actionUpdateConversation(
+        conversationId: Long,
+        conversation: ConversationEntity
+    ) {
+        io {
+            conversationDaoRepository.updateConversation(conversation)
+        }
+    }
+
+    private fun actionDeleteConversation(conversationId: Long) {
+        io {
+            conversationDaoRepository.deleteConversationById(conversationId)
+        }
+    }
+
+    private fun actionCreateConversation(
+        userIdFrom: Long,
+        userIdTo: Long,
+        conversation: ConversationEntity
+    ) {
+        io {
+            conversationDaoRepository.createConversation(conversation)
+            conversationUserCrossRefDaoRepository.insert(
+                ConversationUserCrossRef(
+                    conversationId = conversation.conversationId,
+                    userId = userIdFrom
+                )
+            )
+            conversationUserCrossRefDaoRepository.insert(
+                ConversationUserCrossRef(
+                    conversationId = conversation.conversationId,
+                    userId = userIdTo
+                )
+            )
         }
     }
 

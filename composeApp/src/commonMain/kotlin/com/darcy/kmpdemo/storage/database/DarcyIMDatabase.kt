@@ -3,7 +3,11 @@ package com.darcy.kmpdemo.storage.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
+import com.darcy.kmpdemo.storage.database.daos.ConversationDao
+import com.darcy.kmpdemo.storage.database.daos.ConversationUserCrossRefDao
 import com.darcy.kmpdemo.storage.database.daos.UserDao
+import com.darcy.kmpdemo.storage.database.tables.ConversationEntity
+import com.darcy.kmpdemo.storage.database.tables.ConversationUserCrossRef
 import com.darcy.kmpdemo.storage.database.tables.UserEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -11,7 +15,9 @@ import kotlinx.coroutines.IO
 @Database(
     entities = [
         // 添加数据库表
-        UserEntity::class
+        UserEntity::class,
+        ConversationEntity::class,
+        ConversationUserCrossRef::class,
     ],
     version = 1,
     exportSchema = true
@@ -20,6 +26,8 @@ import kotlinx.coroutines.IO
 //@ConstructedBy(DarcyIMDatabaseConstructor::class)
 abstract class DarcyIMDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
+    abstract fun conversationDao(): ConversationDao
+    abstract fun conversationUserCrossRefDao(): ConversationUserCrossRefDao
 }
 
 fun getDarcyIMDatabase(): DarcyIMDatabase {

@@ -88,7 +88,7 @@ fun PhoneFriendsInnerPage(
 }
 
 @Composable
-fun ShowSuccessPage(
+private fun ShowSuccessPage(
     uiState: FriendsState,
     viewModel: FriendsViewModel,
     modifier: Modifier = Modifier

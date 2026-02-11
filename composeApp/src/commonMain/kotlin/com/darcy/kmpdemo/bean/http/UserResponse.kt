@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 // @OptIn 提示当前非稳定API
 @OptIn(InternalSerializationApi::class)
 @Serializable
-data class UserEntity(
+data class UserResponse(
     val id: Long = -1L,
     val name: String = "",
 ) : IEntity {

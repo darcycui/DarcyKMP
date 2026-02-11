@@ -93,14 +93,14 @@ abstract class BaseViewModel<S : IState> : ViewModel() {
      * 更新状态 这将触发 Composable重组 (UI刷新)
      */
     protected fun updateState(intent: IIntent) {
-        logD("更新前：state=${_uiState.value}")
+//        logD("更新前：state=${_uiState.value}")
         val newState = reducers.fold(_uiState.value) { currentState, reducer ->
             reducer.reduce(intent, currentState)
         }
         _uiState.update {
             newState
         }
-        logI("更新后：state=${_uiState.value}")
+//        logI("更新后：state=${_uiState.value}")
     }
 
     init {

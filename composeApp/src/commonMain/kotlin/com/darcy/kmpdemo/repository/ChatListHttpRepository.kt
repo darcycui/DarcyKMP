@@ -4,7 +4,7 @@ import com.darcy.kmpdemo.bean.http.ChatListResponse
 import com.darcy.kmpdemo.bean.ui.ChatListItemBean
 import kotlinx.coroutines.delay
 
-class ChatListRepository : IRepository {
+class ChatListHttpRepository : IRepository {
     suspend fun getChatList(): ChatListResponse {
         delay(1_000)
         return ChatListResponse(
