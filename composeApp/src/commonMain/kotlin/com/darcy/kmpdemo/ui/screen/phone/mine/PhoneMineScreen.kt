@@ -15,11 +15,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,34 +25,57 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
-import com.darcy.kmpdemo.platform.FilePlatform
+import com.darcy.kmpdemo.ui.base.impl.fetch.FetchIntent
 import com.darcy.kmpdemo.ui.colors.AppColors
-import com.darcy.kmpdemo.utils.PickHelper
+import com.darcy.kmpdemo.ui.screen.phone.mine.event.MineEvent
+import com.darcy.kmpdemo.ui.screen.phone.mine.intent.MineIntent
+import com.darcy.kmpdemo.ui.screen.phone.navigation.AppNavigation
+import com.darcy.kmpdemo.ui.screen.phone.navigation.PhoneRoute
+import com.darcy.kmpdemo.ui.screen.phone.navigation.customNavigate
 import kmpdarcydemo.composeapp.generated.resources.Res
 import kmpdarcydemo.composeapp.generated.resources.icon_header_default
 import kmpdarcydemo.composeapp.generated.resources.page_mine
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun PhoneMineScreen() {
-    var headerPath: String by remember {
-        mutableStateOf("https://avatars.githubusercontent.com/u/10252602")
+    val viewModel: MineViewModel = viewModel(factory = MineViewModel.Factory)
+    val appNavController = AppNavigation.navController()
+    LaunchedEffect(Unit) {
+        launch {
+            viewModel.event.collect {
+                when (it) {
+                    is MineEvent.ActionLogout -> {
+                        appNavController.customNavigate(PhoneRoute.Login)
+                    }
+                }
+            }
+        }
+        viewModel.dispatch(FetchIntent.ActionLoadData)
     }
+    PhoneMineInnerPage(viewModel, Modifier.fillMaxSize())
+}
+
+@Composable
+fun PhoneMineInnerPage(
+    viewModel: MineViewModel,
+    modifier: Modifier
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     Box(modifier = Modifier.fillMaxSize()) {
-        val scope = rememberCoroutineScope()
         Column(modifier = Modifier.fillMaxSize()) {
+            Spacer(modifier = Modifier.size(16.dp))
             AsyncImage(
-                model = headerPath.ifEmpty { Res.drawable.icon_header_default },
+                model = uiState.bean.avatar.ifEmpty { Res.drawable.icon_header_default },
                 contentDescription = stringResource(Res.string.page_mine),
                 modifier = Modifier.size(120.dp).align(Alignment.CenterHorizontally)
                     .clip(CircleShape)
                     .border(
                         width = 1.dp,
-//                        color = AppColors.bg_color_green_13ce66,
                         brush = Brush.linearGradient(
                             colors = listOf(
                                 AppColors.color_9e82f0,
@@ -65,19 +85,12 @@ fun PhoneMineScreen() {
                         shape = CircleShape
                     )
                     .clickable {
-                        scope.launch {
-                            val path = PickHelper.pickImage()
-                            println("pick image: $path")
-                            val cachePath = FilePlatform.dealUriIfNeed(path)
-                            withContext(Dispatchers.Main) {
-                                headerPath = cachePath.toString()
-                            }
-                        }
+                        viewModel.dispatch(MineIntent.ActionPickImage)
                     }
             )
             Spacer(modifier = Modifier.size(16.dp))
             Text(
-                text = "Darcy",
+                text = uiState.bean.name,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 maxLines = 1,
@@ -88,7 +101,9 @@ fun PhoneMineScreen() {
             Row(
                 modifier = Modifier.fillMaxWidth().height(40.dp).align(Alignment.CenterHorizontally)
             ) {
-                Button(modifier = Modifier.fillMaxHeight().weight(1f), onClick = {}) {
+                Button(modifier = Modifier.fillMaxHeight().weight(1f), onClick = {
+                    viewModel.dispatch(MineIntent.ActionLogout)
+                }) {
                     Text(text = "退出登录")
                 }
             }

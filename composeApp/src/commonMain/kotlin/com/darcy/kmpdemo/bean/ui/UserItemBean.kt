@@ -9,4 +9,10 @@ data class UserItemBean(
     val avatar: String = "",
     val age: Int = 0,
     val sex: Int = 0,
-) : IEntity
+) : IEntity {
+    companion object {
+        fun empty(): UserItemBean {
+            return UserItemBean()
+        }
+    }
+}

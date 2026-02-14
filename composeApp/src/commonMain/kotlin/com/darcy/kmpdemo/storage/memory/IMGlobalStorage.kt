@@ -6,7 +6,6 @@ import kotlinx.coroutines.sync.withLock
 
 object IMGlobalStorage {
     private var currentUser: UserEntity = UserEntity.empty()
-    private var currentUserId: Long = -1
 
     // kmp 同步代码 使用协程锁
     private val mutex: Mutex = Mutex()
@@ -16,13 +15,12 @@ object IMGlobalStorage {
     }
 
     fun getCurrentUserId(): Long {
-        return currentUserId
+        return currentUser.userId
     }
 
     suspend fun setCurrentUser(user: UserEntity) {
         mutex.withLock {
             currentUser = user
-            currentUserId = user.userId
         }
     }
 

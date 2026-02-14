@@ -23,7 +23,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -37,10 +36,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
-import com.darcy.kmpdemo.bean.ui.FriendsItemBean
 import com.darcy.kmpdemo.bean.ui.UserItemBean
 import com.darcy.kmpdemo.storage.database.tables.UserEntity
-import com.darcy.kmpdemo.storage.memory.IMGlobalStorage
 import com.darcy.kmpdemo.ui.colors.AppColors
 import com.darcy.kmpdemo.ui.screen.phone.login.event.LoginEvent
 import com.darcy.kmpdemo.ui.screen.phone.login.intent.LoginIntent
@@ -86,7 +83,17 @@ fun PhoneLoginInnerPage(viewModel: LoginViewModel) {
         Row(modifier = Modifier.fillMaxWidth()) {
             TextField(state = textFieldState)
             Button(modifier = Modifier.weight(1f), onClick = {
-                viewModel.dispatch(LoginIntent.ActionLogin(textFieldState.toLong(),"", ""))
+                val userId = textFieldState.toLong()
+                viewModel.dispatch(
+                    LoginIntent.ActionLogin(
+                        UserEntity(
+                            userId, "user$userId", "昵称$userId",
+                            age = 18,
+                            sex = 1,
+                            avatar = "https://avatars.githubusercontent.com/u/1021672"
+                        )
+                    )
+                )
             }) {
                 Text(stringResource(Res.string.page_login))
             }

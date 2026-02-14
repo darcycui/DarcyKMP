@@ -7,4 +7,10 @@ data class ChatListItemBean(
     val title: String = "",
     val subTitle: String = "",
     val avatar: String = "",
-) : IEntity
+) : IEntity {
+    companion object {
+        fun empty(): ChatListItemBean {
+            return ChatListItemBean()
+        }
+    }
+}

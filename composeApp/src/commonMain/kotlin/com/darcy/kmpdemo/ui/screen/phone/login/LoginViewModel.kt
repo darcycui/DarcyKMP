@@ -45,7 +45,7 @@ class LoginViewModel(
             }
 
             is LoginIntent.ActionLogin -> { // 登录
-                actionLogin(intent.userId, intent.name, intent.password)
+                actionLogin(intent.userEntity)
             }
 
             is LoginIntent.ActionAddUser -> { // 添加用户
@@ -71,16 +71,10 @@ class LoginViewModel(
         }
     }
 
-    private fun actionLogin(userId: Long, name: String, password: String) {
+    private fun actionLogin(userEntity: UserEntity) {
         io {
             // todo 登录逻辑
-            IMGlobalStorage.setCurrentUser(
-                UserEntity(
-                    userId,
-                    name,
-                    "https://avatars.githubusercontent.com/u/1020407?s=200&v=4"
-                )
-            )
+            IMGlobalStorage.setCurrentUser(userEntity)
             sendEvent(LoginEvent.LoginSuccessEvent)
         }
     }
