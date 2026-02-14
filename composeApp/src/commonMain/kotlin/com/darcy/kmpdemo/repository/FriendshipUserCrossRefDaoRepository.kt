@@ -2,11 +2,8 @@ package com.darcy.kmpdemo.repository
 
 import com.darcy.kmpdemo.storage.database.daos.FriendshipUserCrossRefDao
 import com.darcy.kmpdemo.storage.database.getDarcyIMDatabase
-import com.darcy.kmpdemo.storage.database.queryentities.IFriends
 import com.darcy.kmpdemo.storage.database.queryentities.UserFriends
 import com.darcy.kmpdemo.storage.database.tables.FriendshipUserCrossRef
-import com.darcy.kmpdemo.storage.database.tables.FromFriendshipUserCrossRef
-import com.darcy.kmpdemo.storage.database.tables.ToFriendshipUserCrossRef
 
 class FriendshipUserCrossRefDaoRepository(
     private val friendshipUserCrossRefDao: FriendshipUserCrossRefDao = getDarcyIMDatabase().friendshipUserCrossRefDao(),
@@ -14,24 +11,13 @@ class FriendshipUserCrossRefDaoRepository(
     suspend fun insert(item: FriendshipUserCrossRef) {
         friendshipUserCrossRefDao.insert(item)
     }
-    suspend fun insert(item: FromFriendshipUserCrossRef) {
-        friendshipUserCrossRefDao.insert(item)
-    }
 
-    suspend fun insert(item: ToFriendshipUserCrossRef) {
-        friendshipUserCrossRefDao.insert(item)
-    }
-
-    suspend fun update(item: FromFriendshipUserCrossRef) {
+    suspend fun update(item: FriendshipUserCrossRef) {
         friendshipUserCrossRefDao.update(item)
     }
 
-    suspend fun delete(item: FromFriendshipUserCrossRef) {
+    suspend fun delete(item: FriendshipUserCrossRef) {
         friendshipUserCrossRefDao.delete(item)
-    }
-
-    suspend fun getFriendsByUserId(userId: Long): List<IFriends> {
-        return friendshipUserCrossRefDao.getAllFriends(userId)
     }
 
     suspend fun getUserFriends(userId: Long): UserFriends {

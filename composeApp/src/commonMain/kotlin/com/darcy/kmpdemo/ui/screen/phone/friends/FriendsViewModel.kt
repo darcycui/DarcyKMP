@@ -11,8 +11,6 @@ import com.darcy.kmpdemo.repository.FriendshipUserCrossRefDaoRepository
 import com.darcy.kmpdemo.repository.UserDaoRepository
 import com.darcy.kmpdemo.storage.database.tables.FriendshipEntity
 import com.darcy.kmpdemo.storage.database.tables.FriendshipUserCrossRef
-import com.darcy.kmpdemo.storage.database.tables.FromFriendshipUserCrossRef
-import com.darcy.kmpdemo.storage.database.tables.ToFriendshipUserCrossRef
 import com.darcy.kmpdemo.ui.base.BaseViewModel
 import com.darcy.kmpdemo.ui.base.IIntent
 import com.darcy.kmpdemo.ui.base.IReducer
@@ -56,7 +54,6 @@ class FriendsViewModel(
             }
 
             is FriendsIntent.ActionAddFriend -> { // 添加好友
-//                actionAddFriend(intent.userIdFrom, intent.userIdTo, intent.markName)
                 actionAddFriend2(intent.userIdFrom, intent.userIdTo, intent.markName)
             }
 
@@ -69,7 +66,6 @@ class FriendsViewModel(
             }
 
             is FriendsIntent.ActionQueryFriendsList -> { // 获取好友列表
-//                actionQueryFriendsList(intent.userId)
                 actionQueryFriendsList2(intent.userId)
             }
 
@@ -80,28 +76,6 @@ class FriendsViewModel(
             else -> {
                 super.dispatch(intent)
             }
-        }
-    }
-
-    private fun actionQueryFriendsList(userId: Long) {
-        io {
-            val friends = friendshipUserCrossRefDaoRepository.getFriendsByUserId(userId)
-            val uiBeanList: MutableList<FriendsItemBean> = mutableListOf()
-            friends.forEach { iFriend ->
-                iFriend.getTheFriends().forEach {
-                    uiBeanList.add(
-                        FriendsItemBean(
-                            id = it.userId,
-                            name = it.name,
-                            nickName = it.nickName,
-                            avatar = it.avatar,
-                            age = it.age,
-                            sex = it.sex
-                        )
-                    )
-                }
-            }
-            dispatch(FetchIntent.RefreshByFetchData(FriendsResponse(uiBeanList)))
         }
     }
 
@@ -132,25 +106,6 @@ class FriendsViewModel(
     private fun actionDeleteFriend() {
 
 
-    }
-
-    private fun actionAddFriend(userIdFrom: Long, userIdTo: Long, markName: String) {
-        io {
-            friendshipDaoRepository.insert(
-                FriendshipEntity(
-                    userIdFrom = userIdFrom,
-                    userIdTo = userIdTo,
-                    markNameOfFrom = "",
-                    markNameOfTo = markName,
-                )
-            )
-            friendshipUserCrossRefDaoRepository.insert(
-                FromFriendshipUserCrossRef(userIdFrom, userIdTo)
-            )
-            friendshipUserCrossRefDaoRepository.insert(
-                ToFriendshipUserCrossRef(userIdTo, userIdFrom)
-            )
-        }
     }
 
     private fun actionAddFriend2(userIdFrom: Long, userIdTo: Long, markName: String) {
