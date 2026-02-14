@@ -34,7 +34,6 @@ fun PhoneAppMainScreen(modifier: Modifier = Modifier) {
     PhoneAppMainInnerPage(navController, startDestination, modifier.fillMaxSize())
 }
 
-@Preview
 @Composable
 fun PhoneAppMainInnerPage(
     navController: NavHostController,

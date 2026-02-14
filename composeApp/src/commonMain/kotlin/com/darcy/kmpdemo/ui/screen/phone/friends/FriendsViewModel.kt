@@ -6,8 +6,11 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.darcy.kmpdemo.bean.http.FriendsResponse
 import com.darcy.kmpdemo.bean.ui.FriendsItemBean
 import com.darcy.kmpdemo.exception.BaseException
-import com.darcy.kmpdemo.repository.UserDaoRepository
-import com.darcy.kmpdemo.storage.database.tables.UserEntity
+import com.darcy.kmpdemo.repository.FriendshipDaoRepository
+import com.darcy.kmpdemo.repository.FriendshipUserCrossRefDaoRepository
+import com.darcy.kmpdemo.storage.database.tables.FriendshipEntity
+import com.darcy.kmpdemo.storage.database.tables.FromFriendshipUserCrossRef
+import com.darcy.kmpdemo.storage.database.tables.ToFriendshipUserCrossRef
 import com.darcy.kmpdemo.ui.base.BaseViewModel
 import com.darcy.kmpdemo.ui.base.IIntent
 import com.darcy.kmpdemo.ui.base.IReducer
@@ -23,7 +26,8 @@ import kotlin.reflect.KClass
 
 class FriendsViewModel(
     private val fetchChatListUseCase: FetchFriendsListUseCase = FetchFriendsListUseCase(),
-    private val repository: UserDaoRepository = UserDaoRepository()
+    private val friendshipDaoRepository: FriendshipDaoRepository = FriendshipDaoRepository(),
+    private val friendshipUserCrossRefDaoRepository: FriendshipUserCrossRefDaoRepository = FriendshipUserCrossRefDaoRepository(),
 ) : BaseViewModel<FriendsState>() {
     companion object {
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
@@ -44,34 +48,24 @@ class FriendsViewModel(
 
     override fun dispatch(intent: IIntent) {
         when (intent) {
-            is FetchIntent.ActionLoadData -> {
-                // 获取数据
+            is FetchIntent.ActionLoadData -> { // 获取数据
                 actionFetchFriendsList()
             }
 
-            is FriendsIntent.ActionAddFriend -> {
-                // 添加好友
-                actionAddFriend(intent.userEntity)
+            is FriendsIntent.ActionAddFriend -> { // 添加好友
+                actionAddFriend(intent.userIdFrom, intent.userIdTo, intent.markName)
             }
 
-            is FriendsIntent.ActionDeleteFriend -> {
-                // 删除好友
-                actionDeleteFriend(intent.id)
+            is FriendsIntent.ActionDeleteFriend -> { // 删除好友
+                actionDeleteFriend()
             }
 
-            is FriendsIntent.ActionUpdateFriend -> {
-                // 更新好友
-                actionUpdateFriend(intent.id, intent.name)
+            is FriendsIntent.ActionUpdateFriend -> { // 更新好友
+                actionUpdateFriend()
             }
 
-            is FriendsIntent.ActionQueryFriend -> {
-                // 查询好友
-                actionQueryFriend(intent.id)
-            }
-
-            is FriendsIntent.ActionQueryFriendsList -> {
-                // 查询好友列表
-                actionQueryFriendsList()
+            is FriendsIntent.ActionQueryFriendsList -> { // 获取好友列表
+                actionQueryFriendsList(intent.userId)
             }
 
             is PagingIntent.ActionLoadNewPage -> {
@@ -84,55 +78,51 @@ class FriendsViewModel(
         }
     }
 
-    private fun actionQueryFriendsList() {
+    private fun actionQueryFriendsList(userId: Long) {
         io {
-            val userEntityList = repository.getAllUser().map { item ->
-                FriendsItemBean(
-                    id = item.userId,
-                    name = item.name,
-                    avatar = item.avatar,
-                    nickName = item.nickName,
-                    age = item.age,
-                    sex = item.sex,
-                )
+            val friends = friendshipUserCrossRefDaoRepository.getFriendsByUserId(userId)
+            val uiBeanList: MutableList<FriendsItemBean> = mutableListOf()
+            friends.forEach { iFriend ->
+                iFriend.getTheFriends().forEach {
+                    uiBeanList.add(
+                        FriendsItemBean(
+                            id = it.userId,
+                            name = it.name,
+                            nickName = it.nickName,
+                            avatar = it.avatar,
+                            age = it.age,
+                            sex = it.sex
+                        )
+                    )
+                }
             }
-            dispatch(FetchIntent.RefreshByFetchData(FriendsResponse(userEntityList)))
+            dispatch(FetchIntent.RefreshByFetchData(FriendsResponse(uiBeanList)))
         }
     }
 
-    private fun actionQueryFriend(id: Long) {
-        io {
-            val userEntity = repository.getUser(id)
-            userEntity?.also {
-                val uiBean = FriendsItemBean(
-                    id = it.userId,
-                    name = it.name,
-                    avatar = it.avatar,
-                    nickName = it.nickName,
-                    age = it.age,
-                    sex = it.sex,
-                )
-                dispatch(FetchIntent.RefreshByFetchData(FriendsResponse(listOf(uiBean))))
-            }
-        }
+    private fun actionUpdateFriend() {
+
+
     }
 
-    private fun actionUpdateFriend(id: Long, name: String) {
-        io {
-            repository.updateUser(id, name)
-        }
+    private fun actionDeleteFriend() {
+
+
     }
 
-    private fun actionDeleteFriend(id: Long) {
+    private fun actionAddFriend(userIdFrom: Long, userIdTo: Long, markName: String) {
         io {
-            repository.deleteUser(id)
+            friendshipDaoRepository.insert(
+                FriendshipEntity(userIdFrom, userIdTo, markName, "")
+            )
+            friendshipUserCrossRefDaoRepository.insert(
+                FromFriendshipUserCrossRef(userIdFrom, userIdTo)
+            )
+            friendshipUserCrossRefDaoRepository.insert(
+                ToFriendshipUserCrossRef(userIdTo, userIdFrom)
+            )
         }
-    }
 
-    private fun actionAddFriend(userEntity: UserEntity) {
-        io {
-            repository.insertUser(userEntity)
-        }
     }
 
     private fun actionFetchFriendsList() {

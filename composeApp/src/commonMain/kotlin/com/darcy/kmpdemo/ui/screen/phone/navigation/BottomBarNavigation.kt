@@ -17,23 +17,23 @@ import com.darcy.kmpdemo.ui.screen.phone.friends.PhoneFriendsScreen
 import com.darcy.kmpdemo.ui.screen.phone.mine.PhoneMineScreen
 
 object BottomBarNavigation {
-    // 定义全局 SideNavController
+    // 定义全局 BottomNavController
     private val bottomBarLocalNavController = staticCompositionLocalOf<NavHostController> {
-        error("SideNavController not provided")
+        error("BottomNavController not provided")
     }
 
     /**
-     * 获取 CompositionLocal 用于初始化 SideNavController
+     * 获取 CompositionLocal 用于初始化 BottomNavController
      */
-    fun getBottomBarCompositionLocal(): ProvidableCompositionLocal<NavHostController> {
+    fun getCompositionLocal(): ProvidableCompositionLocal<NavHostController> {
         return bottomBarLocalNavController
     }
 
     /**
-     * 获取 SideNavController 用于页面跳转
+     * 获取 BottomNavController 用于页面跳转
      */
     @Composable
-    fun bottomBarNavController(): NavHostController {
+    fun navController(): NavHostController {
         return bottomBarLocalNavController.current
     }
 }
@@ -61,7 +61,7 @@ fun BottomBarNavigationNavHost(
         }
     }
     // 将 NavController 添加到 LocalNavController
-    CompositionLocalProvider(BottomBarNavigation.getBottomBarCompositionLocal() provides navController) {
+    CompositionLocalProvider(BottomBarNavigation.getCompositionLocal() provides navController) {
         NavHost(
             navController,
             startDestination = startDestination
@@ -85,35 +85,4 @@ fun BottomBarNavigationNavHost(
             }
         }
     }
-}
-
-/**
- * 返回上一页
- */
-fun NavHostController.bottomBarGoBack() {
-    this.popBackStack()
-}
-
-/**
- * 跳转到指定页面
- */
-fun NavHostController.bottomBarNavigate(
-    route: PhoneRoute,
-    clearStack: Boolean = true,
-    includeRoot: Boolean = true
-) {
-    this.navigate(route) {
-        if (clearStack) {
-            popUpTo(0) {
-                inclusive = includeRoot
-            }
-        }
-    }
-}
-
-/**
- * 清空回退栈
- */
-fun NavHostController.bottomBarClearStack(route: PhoneRoute) {
-    this.clearBackStack<PhoneRoute>()
 }

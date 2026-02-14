@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 // @OptIn 提示当前非稳定API
 @OptIn(InternalSerializationApi::class)
 @Serializable
-data class IPResponse(
+data class JuHeIPResponse(
     @SerialName("City")
     val city: String = "",
     @SerialName("Country")

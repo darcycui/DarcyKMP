@@ -58,13 +58,6 @@ fun PhoneChatListScreen() {
     val viewModel: ChatListViewModel = viewModel(factory = ChatListViewModel.Factory)
     LaunchedEffect(Unit) {
         viewModel.dispatch(FetchIntent.ActionLoadData)
-        IMGlobalStorage.setCurrentUser(
-            UserEntity(
-                1,
-                "Darcy",
-                "https://avatars.githubusercontent.com/u/1020407?s=200&v=4"
-            )
-        )
     }
     PhoneChatListInnerPage(viewModel, Modifier.fillMaxSize())
 }

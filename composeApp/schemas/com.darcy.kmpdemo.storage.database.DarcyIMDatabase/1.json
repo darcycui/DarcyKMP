@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "97344965ea4e2b9d6331b96a1cc81c85",
+    "identityHash": "cfd6be8d10510abb01ac14756935401a",
     "entities": [
       {
         "tableName": "UserEntity",
@@ -160,11 +160,122 @@
             "userId"
           ]
         }
+      },
+      {
+        "tableName": "FriendshipEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userIdFrom` INTEGER NOT NULL, `userIdTo` INTEGER NOT NULL, `markNameOfTo` TEXT NOT NULL, `markNameOfFrom` TEXT NOT NULL, `createdTime` INTEGER NOT NULL, `updatedTime` INTEGER NOT NULL, `deletedTime` INTEGER NOT NULL, `friendshipId` TEXT NOT NULL, PRIMARY KEY(`userIdFrom`, `userIdTo`))",
+        "fields": [
+          {
+            "fieldPath": "userIdFrom",
+            "columnName": "userIdFrom",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userIdTo",
+            "columnName": "userIdTo",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "markNameOfTo",
+            "columnName": "markNameOfTo",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "markNameOfFrom",
+            "columnName": "markNameOfFrom",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdTime",
+            "columnName": "createdTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedTime",
+            "columnName": "updatedTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deletedTime",
+            "columnName": "deletedTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "friendshipId",
+            "columnName": "friendshipId",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "userIdFrom",
+            "userIdTo"
+          ]
+        }
+      },
+      {
+        "tableName": "FromFriendshipUserCrossRef",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userId` INTEGER NOT NULL, `userIdFrom` INTEGER NOT NULL, PRIMARY KEY(`userIdFrom`, `userId`))",
+        "fields": [
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userIdFrom",
+            "columnName": "userIdFrom",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "userIdFrom",
+            "userId"
+          ]
+        }
+      },
+      {
+        "tableName": "ToFriendshipUserCrossRef",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userId` INTEGER NOT NULL, `userIdTo` INTEGER NOT NULL, PRIMARY KEY(`userIdTo`, `userId`))",
+        "fields": [
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userIdTo",
+            "columnName": "userIdTo",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "userIdTo",
+            "userId"
+          ]
+        }
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '97344965ea4e2b9d6331b96a1cc81c85')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'cfd6be8d10510abb01ac14756935401a')"
     ]
   }
 }

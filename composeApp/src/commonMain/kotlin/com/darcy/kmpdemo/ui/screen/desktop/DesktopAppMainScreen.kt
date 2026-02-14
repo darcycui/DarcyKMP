@@ -31,7 +31,6 @@ fun DesktopAppMainScreen() {
     DesktopAppMainInnerPage(navController, startDestination)
 }
 
-@Preview
 @Composable
 fun DesktopAppMainInnerPage(
     navController: NavHostController,

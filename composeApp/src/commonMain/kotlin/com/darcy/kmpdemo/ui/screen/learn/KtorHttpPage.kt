@@ -13,8 +13,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.darcy.kmpdemo.bean.http.IPResponse
-import com.darcy.kmpdemo.bean.http.UserResponse
+import com.darcy.kmpdemo.bean.http.JuHeIPResponse
+import com.darcy.kmpdemo.bean.http.DarcyServerResponse
 import com.darcy.kmpdemo.log.logE
 import com.darcy.kmpdemo.log.logI
 import com.darcy.kmpdemo.network.http.HttpManager
@@ -70,7 +70,7 @@ const val urlDarcy = "https://darcycui.com.cn/users/all"
 
 private fun doGetJuHe(scope: CoroutineScope, content: MutableState<String>) {
     HttpManager.doGetRequest(
-        serializer<IPResponse>(),
+        serializer<JuHeIPResponse>(),
         urlJuHe,
         mapOf(
             "key" to "f128bfc760193c5762c5c3be2a6051d8",
@@ -91,7 +91,7 @@ private fun doGetJuHe(scope: CoroutineScope, content: MutableState<String>) {
 
 private fun doGetDarcy(scope: CoroutineScope, content: MutableState<String>) {
     HttpManager.doGetRequest(
-        serializer<UserResponse>(),
+        serializer<DarcyServerResponse>(),
         urlDarcy,
         mapOf(),
         needRetry = true,
@@ -109,7 +109,7 @@ private fun doGetDarcy(scope: CoroutineScope, content: MutableState<String>) {
 
 private fun doPost(scope: CoroutineScope, content: MutableState<String>) {
     HttpManager.doPostRequest(
-        serializer<IPResponse>(),
+        serializer<JuHeIPResponse>(),
         urlJuHe,
         mapOf(
             "key" to "f128bfc760193c5762c5c3be2a6051d8",

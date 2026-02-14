@@ -3,6 +3,7 @@ package com.darcy.kmpdemo.storage.database.daos
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.darcy.kmpdemo.storage.database.tables.UserEntity
@@ -11,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface UserDao {
     // 插入
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(item: UserEntity)
 
     // 根据id查询

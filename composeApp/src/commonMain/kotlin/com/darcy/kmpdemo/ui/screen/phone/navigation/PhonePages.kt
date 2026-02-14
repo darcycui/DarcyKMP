@@ -27,20 +27,26 @@ enum class PhonePages(
 @Serializable
 sealed class PhoneRoute() {
     @Serializable
-    object Default : PhoneRoute()
+    data object Default : PhoneRoute()
 
     @Serializable
-    object ChatList : PhoneRoute()
+    data object Login : PhoneRoute()
 
     @Serializable
-    object Friends : PhoneRoute()
+    data object AppMain : PhoneRoute()
 
     @Serializable
-    object Dynamic : PhoneRoute()
+    data object ChatList : PhoneRoute()
 
     @Serializable
-    object Mine : PhoneRoute()
+    data object Friends : PhoneRoute()
 
     @Serializable
-    object Chat : PhoneRoute()
+    data object Dynamic : PhoneRoute()
+
+    @Serializable
+    data object Mine : PhoneRoute()
+
+    @Serializable
+    data object Chat : PhoneRoute()
 }
