@@ -32,8 +32,8 @@ class UserDaoRepository(
         userDao.update(id, name)
     }
 
-    suspend fun getUser(id: Long): UserEntity? {
-        return userDao.getById(id)
+    suspend fun getUserById(id: Long): UserEntity {
+        return userDao.getById(id)?: UserEntity.empty()
     }
 
     suspend fun getUserCount(): Int {

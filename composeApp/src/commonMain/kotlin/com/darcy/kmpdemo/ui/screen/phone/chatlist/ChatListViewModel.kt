@@ -8,6 +8,7 @@ import com.darcy.kmpdemo.bean.ui.ChatListItemBean
 import com.darcy.kmpdemo.exception.BaseException
 import com.darcy.kmpdemo.repository.ConversationDaoRepository
 import com.darcy.kmpdemo.repository.ConversationUserCrossRefDaoRepository
+import com.darcy.kmpdemo.repository.UserDaoRepository
 import com.darcy.kmpdemo.storage.database.tables.ConversationEntity
 import com.darcy.kmpdemo.storage.database.tables.ConversationUserCrossRef
 import com.darcy.kmpdemo.ui.base.BaseViewModel
@@ -25,6 +26,7 @@ import kotlin.reflect.KClass
 
 class ChatListViewModel(
     private val fetchChatListUseCase: FetchChatListUseCase = FetchChatListUseCase(),
+    private val userDaoRepository: UserDaoRepository = UserDaoRepository(),
     private val conversationDaoRepository: ConversationDaoRepository = ConversationDaoRepository(),
     private val conversationUserCrossRefDaoRepository: ConversationUserCrossRefDaoRepository = ConversationUserCrossRefDaoRepository(),
 ) : BaseViewModel<ChatListState>() {
@@ -86,11 +88,13 @@ class ChatListViewModel(
             val crossRef =
                 conversationUserCrossRefDaoRepository.getConversationsByUserId(userId)
             val uiBeanList = crossRef.conversations.map { item ->
+                val userIdSelected = if (item.userIdFrom == userId) item.userIdTo else item.userIdFrom
+                val userAvatar = userDaoRepository.getUserById(userIdSelected).avatar
                 ChatListItemBean(
                     id = item.conversationId ?: -1L,
                     title = item.name,
                     subTitle = "",
-                    avatar = item.avatar,
+                    avatar = userAvatar,
                 )
             }
             dispatch(FetchIntent.RefreshByFetchData(ChatListResponse(uiBeanList)))

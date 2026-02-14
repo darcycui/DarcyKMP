@@ -39,6 +39,13 @@ class ConversationDaoRepository(
 
     suspend fun deleteConversationById(conversationId: Long) {
         // 删除会话
-        conversationDao.delete(ConversationEntity(conversationId = conversationId))
+        conversationDao.delete(
+            ConversationEntity(
+                conversationId = conversationId,
+                name = "",
+                userIdFrom = 0,
+                userIdTo = 0
+            )
+        )
     }
 }

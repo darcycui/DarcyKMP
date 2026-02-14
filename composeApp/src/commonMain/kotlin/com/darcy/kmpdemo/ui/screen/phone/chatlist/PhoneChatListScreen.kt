@@ -170,7 +170,8 @@ fun CreateConversationComponent(
                         userIdTo,
                         ConversationEntity(
                             name = "会话$userIdFrom-$userIdTo",
-                            avatar = "",
+                            userIdFrom = userIdFrom,
+                            userIdTo = userIdTo,
                             type = 1,
                         )
                     )
@@ -186,14 +187,17 @@ fun CreateConversationComponent(
                 Text(text = "删")
             }
             Button(modifier = Modifier.weight(1f), onClick = {
+                val userIdFrom = textFieldStateFrom.toLong()
+                val userIdTo = textFieldStateTo.toLong()
                 viewModel.dispatch(
                     ChatListIntent.ActionUpdateConversation(
                         1,
                         ConversationEntity(
                             conversationId = 1,
                             name = "会话1修改-${RandomHelper.randomInt(100, 1000)}",
-                            avatar = "",
                             type = 1,
+                            userIdFrom = userIdFrom,
+                            userIdTo = userIdTo,
                         )
                     )
                 )
@@ -207,12 +211,7 @@ fun CreateConversationComponent(
                     )
                 )
             }) {
-                Text(text = "查1")
-            }
-            Button(modifier = Modifier.weight(1.5f), onClick = {
-                viewModel.dispatch(ChatListIntent.ActionQueryUsersByConversationId(1))
-            }) {
-                Text(text = "查2")
+                Text(text = "查All")
             }
         }
     }
