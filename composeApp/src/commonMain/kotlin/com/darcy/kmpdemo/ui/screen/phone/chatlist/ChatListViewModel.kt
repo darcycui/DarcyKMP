@@ -47,33 +47,27 @@ class ChatListViewModel(
 
     override fun dispatch(intent: IIntent) {
         when (intent) {
-            is FetchIntent.ActionLoadData -> {
-                // 获取数据
+            is FetchIntent.ActionLoadData -> { // 获取数据
                 actionFetchChatList()
             }
 
-            is ChatListIntent.ActionCreateConversation -> {
-                // 创建会话
+            is ChatListIntent.ActionCreateConversation -> { // 创建会话
                 actionCreateConversation(intent.userIdFrom, intent.userIdTo, intent.conversation)
             }
 
-            is ChatListIntent.ActionDeleteConversation -> {
-                // 删除会话
+            is ChatListIntent.ActionDeleteConversation -> { // 删除会话
                 actionDeleteConversation(intent.conversationId)
             }
 
-            is ChatListIntent.ActionUpdateConversation -> {
-                // 更新会话
+            is ChatListIntent.ActionUpdateConversation -> { // 更新会话
                 actionUpdateConversation(intent.conversationId, intent.conversation)
             }
 
-            is ChatListIntent.ActionQueryUsersByConversationId -> {
-                // 查询会话中的用户
+            is ChatListIntent.ActionQueryUsersByConversationId -> { // 查询会话中的用户
                 actionQueryUsersByConversationId(intent.conversationId)
             }
 
-            is ChatListIntent.ActionQueryConversationsByUserId -> {
-                // 查询用户会话
+            is ChatListIntent.ActionQueryConversationsByUserId -> { // 查询用户会话
                 actionQueryConversationsByUserId(intent.userId)
             }
 
@@ -93,7 +87,7 @@ class ChatListViewModel(
                 conversationUserCrossRefDaoRepository.getConversationsByUserId(userId)
             val uiBeanList = crossRef.conversations.map { item ->
                 ChatListItemBean(
-                    id = item.conversationId,
+                    id = item.conversationId ?: -1L,
                     title = item.name,
                     subTitle = "",
                     avatar = item.avatar,
@@ -137,15 +131,18 @@ class ChatListViewModel(
     ) {
         io {
             conversationDaoRepository.createConversation(conversation)
+            val conversationName = "会话$userIdFrom-$userIdTo"
+            val conversationId =
+                conversationDaoRepository.getConversationByName(conversationName).conversationId ?: -1L
             conversationUserCrossRefDaoRepository.insert(
                 ConversationUserCrossRef(
-                    conversationId = conversation.conversationId,
+                    conversationId = conversationId,
                     userId = userIdFrom
                 )
             )
             conversationUserCrossRefDaoRepository.insert(
                 ConversationUserCrossRef(
-                    conversationId = conversation.conversationId,
+                    conversationId = conversationId,
                     userId = userIdTo
                 )
             )

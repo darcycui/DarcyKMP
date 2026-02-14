@@ -12,9 +12,14 @@ class ConversationDaoRepository(
         conversationDao.insert(item)
     }
 
-    suspend fun getConversationById(conversationId: Long): List<ConversationEntity> {
+    suspend fun getConversationById(conversationId: Long): ConversationEntity {
         // 获取会话
-        return conversationDao.getConversationById(conversationId)
+        return conversationDao.getConversationById(conversationId) ?: ConversationEntity.empty()
+    }
+
+    suspend fun getConversationByName(conversationName: String): ConversationEntity {
+        // 获取会话
+        return conversationDao.getConversationByName(conversationName) ?: ConversationEntity.empty()
     }
 
     suspend fun getAllConversations(): List<ConversationEntity> {

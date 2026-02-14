@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "cfd6be8d10510abb01ac14756935401a",
+    "identityHash": "bbee3387f9c17dec949c40533d878742",
     "entities": [
       {
         "tableName": "UserEntity",
@@ -72,13 +72,12 @@
       },
       {
         "tableName": "ConversationEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`conversationId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `avatar` TEXT NOT NULL, `type` INTEGER NOT NULL, `createdTime` INTEGER NOT NULL, `updatedTime` INTEGER NOT NULL, `deletedTime` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`conversationId` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `avatar` TEXT NOT NULL, `type` INTEGER NOT NULL, `createdTime` INTEGER NOT NULL, `updatedTime` INTEGER NOT NULL, `deletedTime` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "conversationId",
             "columnName": "conversationId",
-            "affinity": "INTEGER",
-            "notNull": true
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "name",
@@ -224,17 +223,17 @@
       },
       {
         "tableName": "FromFriendshipUserCrossRef",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userId` INTEGER NOT NULL, `userIdFrom` INTEGER NOT NULL, PRIMARY KEY(`userIdFrom`, `userId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userIdFrom` INTEGER NOT NULL, `userId` INTEGER NOT NULL, PRIMARY KEY(`userIdFrom`, `userId`))",
         "fields": [
           {
-            "fieldPath": "userId",
-            "columnName": "userId",
+            "fieldPath": "userIdFrom",
+            "columnName": "userIdFrom",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "userIdFrom",
-            "columnName": "userIdFrom",
+            "fieldPath": "userId",
+            "columnName": "userId",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -249,17 +248,17 @@
       },
       {
         "tableName": "ToFriendshipUserCrossRef",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userId` INTEGER NOT NULL, `userIdTo` INTEGER NOT NULL, PRIMARY KEY(`userIdTo`, `userId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userIdTo` INTEGER NOT NULL, `userId` INTEGER NOT NULL, PRIMARY KEY(`userIdTo`, `userId`))",
         "fields": [
           {
-            "fieldPath": "userId",
-            "columnName": "userId",
+            "fieldPath": "userIdTo",
+            "columnName": "userIdTo",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "userIdTo",
-            "columnName": "userIdTo",
+            "fieldPath": "userId",
+            "columnName": "userId",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -275,7 +274,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'cfd6be8d10510abb01ac14756935401a')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'bbee3387f9c17dec949c40533d878742')"
     ]
   }
 }

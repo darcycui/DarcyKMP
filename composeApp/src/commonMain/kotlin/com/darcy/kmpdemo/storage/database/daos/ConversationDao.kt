@@ -13,8 +13,11 @@ interface ConversationDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(item: ConversationEntity)
 
-    @Query("SELECT * FROM ConversationEntity WHERE conversationId=:conversationId")
-    suspend fun getConversationById(conversationId: Long): List<ConversationEntity>
+    @Query("SELECT * FROM ConversationEntity WHERE conversationId=:conversationId LIMIT 1")
+    suspend fun getConversationById(conversationId: Long): ConversationEntity?
+
+    @Query("SELECT * FROM ConversationEntity WHERE name=:conversationName LIMIT 1")
+    suspend fun getConversationByName(conversationName: String): ConversationEntity?
 
     @Query("SELECT * FROM ConversationEntity")
     suspend fun getAllConversations(): List<ConversationEntity>

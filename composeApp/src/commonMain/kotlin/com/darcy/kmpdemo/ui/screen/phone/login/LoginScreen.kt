@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.InputTransformation.Companion.keyboardOptions
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -35,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.room.util.TableInfo
 import coil3.compose.AsyncImage
 import com.darcy.kmpdemo.bean.ui.UserItemBean
 import com.darcy.kmpdemo.storage.database.tables.UserEntity
@@ -80,14 +82,65 @@ fun PhoneLoginInnerPage(viewModel: LoginViewModel) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val textFieldState: TextFieldState by remember { mutableStateOf(TextFieldState("1")) }
     Column(modifier = Modifier.fillMaxSize()) {
-        Row(modifier = Modifier.fillMaxWidth()) {
-            TextField(state = textFieldState)
+        LoginComponent(textFieldState, viewModel)
+        CreateUserComponent(viewModel)
+        Box(modifier = Modifier.fillMaxSize()) {
+            UserListComponent(uiState, viewModel, Modifier.fillMaxSize())
+        }
+    }
+}
+
+@Composable
+private fun LoginComponent(
+    textFieldState: TextFieldState,
+    viewModel: LoginViewModel
+) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        TextField(
+            state = textFieldState,
+            placeholder = { Text("登录用户id") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            modifier = Modifier.fillMaxWidth()
+        )
+        Button(modifier = Modifier.fillMaxWidth(), onClick = {
+            val userId = textFieldState.toLong()
+            viewModel.dispatch(
+                LoginIntent.ActionLogin(
+                    UserEntity(
+                        userId, "user$userId", "昵称$userId",
+                        age = 18,
+                        sex = 1,
+                        avatar = "https://avatars.githubusercontent.com/u/1021672"
+                    )
+                )
+            )
+        }) {
+            Text(stringResource(Res.string.page_login))
+        }
+    }
+}
+
+@Composable
+private fun CreateUserComponent(viewModel: LoginViewModel) {
+    val textFieldState: TextFieldState by remember { mutableStateOf(TextFieldState("")) }
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Text("创建用户")
+            TextField(
+                state = textFieldState,
+                placeholder = { Text(text = "新用户id") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Button(modifier = Modifier.weight(1f), onClick = {
                 val userId = textFieldState.toLong()
                 viewModel.dispatch(
-                    LoginIntent.ActionLogin(
+                    LoginIntent.ActionAddUser(
                         UserEntity(
-                            userId, "user$userId", "昵称$userId",
+                            userId = userId,
+                            name = "Darcy$userId",
                             age = 18,
                             sex = 1,
                             avatar = "https://avatars.githubusercontent.com/u/1021672"
@@ -95,12 +148,29 @@ fun PhoneLoginInnerPage(viewModel: LoginViewModel) {
                     )
                 )
             }) {
-                Text(stringResource(Res.string.page_login))
+                Text(text = "增")
             }
-        }
-        CreateUserComponent(viewModel)
-        Box(modifier = Modifier.fillMaxSize()) {
-            UserListComponent(uiState, viewModel, Modifier.fillMaxSize())
+            Button(modifier = Modifier.weight(1f), onClick = {
+                viewModel.dispatch(LoginIntent.ActionDeleteUser(1))
+            }) {
+                Text(text = "删")
+            }
+            Button(modifier = Modifier.weight(1f), onClick = {
+                val userId = textFieldState.toLong()
+                viewModel.dispatch(
+                    LoginIntent.ActionUpdateUser(
+                        userId,
+                        "DarcyUpdate${RandomHelper.randomInt(100, 999)}"
+                    )
+                )
+            }) {
+                Text(text = "改")
+            }
+            Button(modifier = Modifier.weight(1.5f), onClick = {
+                viewModel.dispatch(LoginIntent.ActionQueryUserList)
+            }) {
+                Text(text = "查All")
+            }
         }
     }
 }
@@ -154,58 +224,3 @@ private fun UserListItem(
     }
 }
 
-
-@Composable
-private fun CreateUserComponent(viewModel: LoginViewModel) {
-    val textFieldState: TextFieldState by remember { mutableStateOf(TextFieldState("")) }
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Row(modifier = Modifier.fillMaxWidth()) {
-            Text("创建用户")
-            TextField(
-                state = textFieldState,
-                placeholder = { Text(text = "用户id") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.weight(1f)
-            )
-        }
-        Row(modifier = Modifier.fillMaxWidth()) {
-            Button(modifier = Modifier.weight(1f), onClick = {
-                val userId = textFieldState.toLong()
-                viewModel.dispatch(
-                    LoginIntent.ActionAddUser(
-                        UserEntity(
-                            userId = userId,
-                            name = "Darcy$userId",
-                            age = 18,
-                            sex = 1,
-                            avatar = "https://avatars.githubusercontent.com/u/1021672"
-                        )
-                    )
-                )
-            }) {
-                Text(text = "增")
-            }
-            Button(modifier = Modifier.weight(1f), onClick = {
-                viewModel.dispatch(LoginIntent.ActionDeleteUser(1))
-            }) {
-                Text(text = "删")
-            }
-            Button(modifier = Modifier.weight(1f), onClick = {
-                val userId = textFieldState.toLong()
-                viewModel.dispatch(
-                    LoginIntent.ActionUpdateUser(
-                        userId,
-                        "DarcyUpdate${RandomHelper.randomInt(100, 999)}"
-                    )
-                )
-            }) {
-                Text(text = "改")
-            }
-            Button(modifier = Modifier.weight(1.5f), onClick = {
-                viewModel.dispatch(LoginIntent.ActionQueryUserList)
-            }) {
-                Text(text = "查All")
-            }
-        }
-    }
-}

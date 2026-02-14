@@ -114,8 +114,7 @@ private fun AddFriendComponent(viewModel: FriendsViewModel) {
     val textFieldStateFrom: TextFieldState by remember { mutableStateOf(TextFieldState("")) }
     val textFieldStateTo: TextFieldState by remember { mutableStateOf(TextFieldState("")) }
     Column(modifier = Modifier.fillMaxWidth()) {
-
-        Row(modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Text("添加好友")
             TextField(
                 state = textFieldStateFrom,

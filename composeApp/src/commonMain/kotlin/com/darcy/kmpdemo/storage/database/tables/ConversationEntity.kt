@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class ConversationEntity(
     @PrimaryKey(autoGenerate = true)
-    val conversationId: Long = 0,
+    val conversationId: Long? = null,
     val name: String = "",
     val avatar: String = "",
     val type: Int = 0,
