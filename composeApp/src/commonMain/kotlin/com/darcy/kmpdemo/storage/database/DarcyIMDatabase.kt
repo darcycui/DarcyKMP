@@ -11,6 +11,7 @@ import com.darcy.kmpdemo.storage.database.daos.UserDao
 import com.darcy.kmpdemo.storage.database.tables.ConversationEntity
 import com.darcy.kmpdemo.storage.database.tables.ConversationUserCrossRef
 import com.darcy.kmpdemo.storage.database.tables.FriendshipEntity
+import com.darcy.kmpdemo.storage.database.tables.FriendshipUserCrossRef
 import com.darcy.kmpdemo.storage.database.tables.FromFriendshipUserCrossRef
 import com.darcy.kmpdemo.storage.database.tables.ToFriendshipUserCrossRef
 import com.darcy.kmpdemo.storage.database.tables.UserEntity
@@ -26,6 +27,7 @@ import kotlinx.coroutines.IO
         FriendshipEntity::class,
         FromFriendshipUserCrossRef::class,
         ToFriendshipUserCrossRef::class,
+        FriendshipUserCrossRef::class,
     ],
     version = 1,
     exportSchema = true

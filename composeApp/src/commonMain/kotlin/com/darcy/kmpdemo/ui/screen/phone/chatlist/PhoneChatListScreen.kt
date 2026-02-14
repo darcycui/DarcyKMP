@@ -169,7 +169,6 @@ fun CreateConversationComponent(
                         userIdFrom,
                         userIdTo,
                         ConversationEntity(
-                            name = "会话$userIdFrom-$userIdTo",
                             userIdFrom = userIdFrom,
                             userIdTo = userIdTo,
                             type = 1,
@@ -194,7 +193,7 @@ fun CreateConversationComponent(
                         1,
                         ConversationEntity(
                             conversationId = 1,
-                            name = "会话1修改-${RandomHelper.randomInt(100, 1000)}",
+                            name = "会话1修改$userIdFrom-$userIdTo-${RandomHelper.randomInt(100, 1000)}",
                             type = 1,
                             userIdFrom = userIdFrom,
                             userIdTo = userIdTo,

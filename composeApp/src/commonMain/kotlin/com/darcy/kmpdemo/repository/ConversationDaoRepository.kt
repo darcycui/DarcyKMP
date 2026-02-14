@@ -42,7 +42,6 @@ class ConversationDaoRepository(
         conversationDao.delete(
             ConversationEntity(
                 conversationId = conversationId,
-                name = "",
                 userIdFrom = 0,
                 userIdTo = 0
             )

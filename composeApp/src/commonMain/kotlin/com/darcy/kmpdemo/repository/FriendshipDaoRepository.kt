@@ -19,7 +19,7 @@ class FriendshipDaoRepository(
         friendshipUserDao.delete(item)
     }
 
-    suspend fun getById(id: Long): FriendshipEntity {
-        return friendshipUserDao.getById(id)
+    suspend fun getByUserId(userIdFrom: Long, userIdTo: Long): FriendshipEntity {
+        return friendshipUserDao.getByUserId(userIdFrom, userIdTo)
     }
 }

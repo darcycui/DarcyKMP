@@ -19,7 +19,7 @@ interface FriendshipUserDao {
     @Delete
     suspend fun delete(item: FriendshipEntity)
 
-    @Query("SELECT * FROM FriendshipEntity WHERE friendshipId = :id")
-    suspend fun getById(id: Long): FriendshipEntity
+    @Query("SELECT * FROM FriendshipEntity WHERE userIdFrom = :userIdFrom AND userIdTo = :userIdTo")
+    suspend fun getByUserId(userIdFrom: Long, userIdTo: Long): FriendshipEntity
 
 }

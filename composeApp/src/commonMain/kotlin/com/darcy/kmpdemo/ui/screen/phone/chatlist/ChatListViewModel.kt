@@ -135,7 +135,7 @@ class ChatListViewModel(
     ) {
         io {
             conversationDaoRepository.createConversation(conversation)
-            val conversationName = "会话$userIdFrom-$userIdTo"
+            val conversationName = "$userIdFrom-$userIdTo"
             val conversationId =
                 conversationDaoRepository.getConversationByName(conversationName).conversationId ?: -1L
             conversationUserCrossRefDaoRepository.insert(

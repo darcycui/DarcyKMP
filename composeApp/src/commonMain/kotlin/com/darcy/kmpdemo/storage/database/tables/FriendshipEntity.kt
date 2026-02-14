@@ -1,12 +1,12 @@
 package com.darcy.kmpdemo.storage.database.tables
 
 import androidx.room.Entity
-import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
 
-@Entity(
-    primaryKeys = ["userIdFrom", "userIdTo"],
-)
+@Entity
 data class FriendshipEntity(
+    @PrimaryKey(autoGenerate = true)
+    val friendshipId: Long? = null,
     val userIdFrom: Long,
     val userIdTo: Long,
     val markNameOfTo: String,
@@ -14,7 +14,7 @@ data class FriendshipEntity(
     val createdTime: Long = 0,
     val updatedTime: Long = 0,
     val deletedTime: Long = 0,
-    val friendshipId: String = "$userIdFrom-$userIdTo",
+    val name: String = "$userIdFrom-$userIdTo",
 ) {
     companion object {
         fun empty(): FriendshipEntity {

@@ -11,12 +11,17 @@ import com.darcy.kmpdemo.log.logD
 import com.darcy.kmpdemo.storage.database.queryentities.FromFriends
 import com.darcy.kmpdemo.storage.database.queryentities.IFriends
 import com.darcy.kmpdemo.storage.database.queryentities.ToFriends
+import com.darcy.kmpdemo.storage.database.queryentities.UserFriends
+import com.darcy.kmpdemo.storage.database.tables.FriendshipUserCrossRef
 import com.darcy.kmpdemo.storage.database.tables.FromFriendshipUserCrossRef
 import com.darcy.kmpdemo.storage.database.tables.ToFriendshipUserCrossRef
 import com.darcy.kmpdemo.storage.database.tables.UserEntity
 
 @Dao
 interface FriendshipUserCrossRefDao {
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(item: FriendshipUserCrossRef)
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(item: FromFriendshipUserCrossRef)
 
@@ -66,5 +71,14 @@ interface FriendshipUserCrossRefDao {
             logD("all friends:${it.size} $it")
         }
     }
+
+
+
+    /**
+     * 查询用户所有好友
+     */
+    @Transaction
+    @Query("SELECT * FROM UserEntity  WHERE userId = :userId LIMIT 1")
+    suspend fun getUserFriends(userId: Long): UserFriends?
 
 }

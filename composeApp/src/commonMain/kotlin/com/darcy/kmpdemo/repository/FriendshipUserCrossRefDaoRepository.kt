@@ -3,12 +3,17 @@ package com.darcy.kmpdemo.repository
 import com.darcy.kmpdemo.storage.database.daos.FriendshipUserCrossRefDao
 import com.darcy.kmpdemo.storage.database.getDarcyIMDatabase
 import com.darcy.kmpdemo.storage.database.queryentities.IFriends
+import com.darcy.kmpdemo.storage.database.queryentities.UserFriends
+import com.darcy.kmpdemo.storage.database.tables.FriendshipUserCrossRef
 import com.darcy.kmpdemo.storage.database.tables.FromFriendshipUserCrossRef
 import com.darcy.kmpdemo.storage.database.tables.ToFriendshipUserCrossRef
 
 class FriendshipUserCrossRefDaoRepository(
     private val friendshipUserCrossRefDao: FriendshipUserCrossRefDao = getDarcyIMDatabase().friendshipUserCrossRefDao(),
 ) : IRepository {
+    suspend fun insert(item: FriendshipUserCrossRef) {
+        friendshipUserCrossRefDao.insert(item)
+    }
     suspend fun insert(item: FromFriendshipUserCrossRef) {
         friendshipUserCrossRefDao.insert(item)
     }
@@ -27,5 +32,9 @@ class FriendshipUserCrossRefDaoRepository(
 
     suspend fun getFriendsByUserId(userId: Long): List<IFriends> {
         return friendshipUserCrossRefDao.getAllFriends(userId)
+    }
+
+    suspend fun getUserFriends(userId: Long): UserFriends {
+        return friendshipUserCrossRefDao.getUserFriends(userId) ?: UserFriends.empty()
     }
 }

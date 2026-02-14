@@ -7,10 +7,10 @@ import androidx.room.PrimaryKey
 data class ConversationEntity(
     @PrimaryKey(autoGenerate = true)
     val conversationId: Long? = null,
-    val name: String,
     val userIdFrom: Long,
     val userIdTo: Long,
     val type: Int = 0,
+    val name: String = "$userIdFrom-$userIdTo",
     val createdTime: Long = 0,
     val updatedTime: Long = 0,
     val deletedTime: Long = 0
@@ -18,7 +18,6 @@ data class ConversationEntity(
     companion object {
         fun empty(): ConversationEntity {
             return ConversationEntity(
-                name = "",
                 userIdFrom = 0,
                 userIdTo = 0
             )

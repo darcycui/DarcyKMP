@@ -8,7 +8,9 @@ import com.darcy.kmpdemo.bean.ui.FriendsItemBean
 import com.darcy.kmpdemo.exception.BaseException
 import com.darcy.kmpdemo.repository.FriendshipDaoRepository
 import com.darcy.kmpdemo.repository.FriendshipUserCrossRefDaoRepository
+import com.darcy.kmpdemo.repository.UserDaoRepository
 import com.darcy.kmpdemo.storage.database.tables.FriendshipEntity
+import com.darcy.kmpdemo.storage.database.tables.FriendshipUserCrossRef
 import com.darcy.kmpdemo.storage.database.tables.FromFriendshipUserCrossRef
 import com.darcy.kmpdemo.storage.database.tables.ToFriendshipUserCrossRef
 import com.darcy.kmpdemo.ui.base.BaseViewModel
@@ -26,6 +28,7 @@ import kotlin.reflect.KClass
 
 class FriendsViewModel(
     private val fetchChatListUseCase: FetchFriendsListUseCase = FetchFriendsListUseCase(),
+    private val userDaoRepository: UserDaoRepository = UserDaoRepository(),
     private val friendshipDaoRepository: FriendshipDaoRepository = FriendshipDaoRepository(),
     private val friendshipUserCrossRefDaoRepository: FriendshipUserCrossRefDaoRepository = FriendshipUserCrossRefDaoRepository(),
 ) : BaseViewModel<FriendsState>() {
@@ -53,7 +56,8 @@ class FriendsViewModel(
             }
 
             is FriendsIntent.ActionAddFriend -> { // 添加好友
-                actionAddFriend(intent.userIdFrom, intent.userIdTo, intent.markName)
+//                actionAddFriend(intent.userIdFrom, intent.userIdTo, intent.markName)
+                actionAddFriend2(intent.userIdFrom, intent.userIdTo, intent.markName)
             }
 
             is FriendsIntent.ActionDeleteFriend -> { // 删除好友
@@ -65,7 +69,8 @@ class FriendsViewModel(
             }
 
             is FriendsIntent.ActionQueryFriendsList -> { // 获取好友列表
-                actionQueryFriendsList(intent.userId)
+//                actionQueryFriendsList(intent.userId)
+                actionQueryFriendsList2(intent.userId)
             }
 
             is PagingIntent.ActionLoadNewPage -> {
@@ -100,6 +105,25 @@ class FriendsViewModel(
         }
     }
 
+    private fun actionQueryFriendsList2(userId: Long) {
+        io {
+            val userFriends = friendshipUserCrossRefDaoRepository.getUserFriends(userId)
+            val uiBeanList: List<FriendsItemBean> = userFriends.friends.map { item ->
+                val userIdSelected =
+                    if (item.userIdFrom == userId) item.userIdTo else item.userIdFrom
+                val userName = userDaoRepository.getUserById(userIdSelected).name
+                val userAvatar = userDaoRepository.getUserById(userIdSelected).avatar
+                FriendsItemBean(
+                    id = userIdSelected,
+                    name = userName,
+                    nickName = item.markNameOfTo,
+                    avatar = userAvatar,
+                )
+            }
+            dispatch(FetchIntent.RefreshByFetchData(FriendsResponse(uiBeanList)))
+        }
+    }
+
     private fun actionUpdateFriend() {
 
 
@@ -113,7 +137,12 @@ class FriendsViewModel(
     private fun actionAddFriend(userIdFrom: Long, userIdTo: Long, markName: String) {
         io {
             friendshipDaoRepository.insert(
-                FriendshipEntity(userIdFrom, userIdTo, markName, "")
+                FriendshipEntity(
+                    userIdFrom = userIdFrom,
+                    userIdTo = userIdTo,
+                    markNameOfFrom = "",
+                    markNameOfTo = markName,
+                )
             )
             friendshipUserCrossRefDaoRepository.insert(
                 FromFriendshipUserCrossRef(userIdFrom, userIdTo)
@@ -122,7 +151,27 @@ class FriendsViewModel(
                 ToFriendshipUserCrossRef(userIdTo, userIdFrom)
             )
         }
+    }
 
+    private fun actionAddFriend2(userIdFrom: Long, userIdTo: Long, markName: String) {
+        io {
+            friendshipDaoRepository.insert(
+                FriendshipEntity(
+                    userIdFrom = userIdFrom,
+                    userIdTo = userIdTo,
+                    markNameOfFrom = "",
+                    markNameOfTo = markName,
+                )
+            )
+            val friendshipId =
+                friendshipDaoRepository.getByUserId(userIdFrom, userIdTo).friendshipId ?: -1L
+            friendshipUserCrossRefDaoRepository.insert(
+                FriendshipUserCrossRef(friendshipId, userIdFrom)
+            )
+            friendshipUserCrossRefDaoRepository.insert(
+                FriendshipUserCrossRef(friendshipId, userIdTo)
+            )
+        }
     }
 
     private fun actionFetchFriendsList() {
