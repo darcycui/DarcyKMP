@@ -5,6 +5,7 @@ import com.darcy.kmpdemo.ui.base.IIntent
 import com.darcy.kmpdemo.ui.base.combined.ScreenStateFetchPagingTipsCombinedReducer
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
 import com.darcy.kmpdemo.ui.base.impl.tips.TipsIntent
+import com.darcy.kmpdemo.ui.screen.phone.add_friend.intent.AddFriendIntent
 import com.darcy.kmpdemo.ui.screen.phone.add_friend.state.AddFriendState
 
 class AddFriendReducer :
@@ -13,7 +14,23 @@ class AddFriendReducer :
         intent: IIntent,
         state: AddFriendState
     ): AddFriendState {
-        return state
+        return when (intent) {
+            is AddFriendIntent.RefreshBySearchUser -> {
+                state.copy(
+                    userInfo = intent.response
+                )
+            }
+
+            is AddFriendIntent.RefreshByApplyFriend -> {
+                state.copy(
+                    statusText = intent.response
+                )
+            }
+
+            else -> {
+                state
+            }
+        }
     }
 
     override fun onScreenState(

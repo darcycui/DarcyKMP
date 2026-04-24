@@ -13,7 +13,7 @@ import com.darcy.kmpdemo.repository.IRepository
 import kotlinx.serialization.serializer
 
 class AddFriendRepository : IRepository {
-    suspend fun searchUser(
+    fun searchUser(
         phone: String,
         onSuccess: (SearchUserResponse) -> Unit,
         onError: (ErrorResponse) -> Unit
@@ -37,7 +37,7 @@ class AddFriendRepository : IRepository {
             })
     }
 
-    suspend fun applyFriend(
+    fun applyFriend(
         bean: AddFriendBean,
         onSuccess: (LoginResponse) -> Unit,
         onError: (ErrorResponse) -> Unit
@@ -46,8 +46,8 @@ class AddFriendRepository : IRepository {
             serializer<LoginResponse>(),
             ADD_FRIEND_URL,
             mapOf(
-                "fromUserId" to bean.fromUserId,
-                "toUserId" to bean.toUserId,
+                "fromUserId" to bean.fromUserId.toString(),
+                "toUserId" to bean.toUserId.toString(),
             ),
             needRetry = true,
             needCache = true,

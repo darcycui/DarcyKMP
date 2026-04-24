@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import com.darcy.kmpdemo.platform.isPhonePlatform
 import com.darcy.kmpdemo.ui.screen.desktop.DesktopAppMainScreen
 import com.darcy.kmpdemo.ui.screen.phone.PhoneAppMainScreen
+import com.darcy.kmpdemo.ui.screen.phone.add_friend.PhoneAddFriendScreen
 import com.darcy.kmpdemo.ui.screen.phone.login.PhoneLoginScreen
 import com.darcy.kmpdemo.ui.screen.phone.register.PhoneRegisterScreen
 
@@ -53,6 +54,9 @@ fun AppNavigationNavHost(
             }
             composable<PhoneRoute.Register> {
                 PhoneRegisterScreen()
+            }
+            composable<PhoneRoute.AddFriend> {
+                PhoneAddFriendScreen()
             }
             composable<PhoneRoute.AppMain> {
                 AppMainScreen()

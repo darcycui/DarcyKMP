@@ -53,6 +53,10 @@ class FriendsViewModel(
                 actionFetchFriendsList()
             }
 
+            is FriendsIntent.GoAddFriendPage -> {
+                actionGoAddFriend()
+            }
+
             is FriendsIntent.ActionAddFriend -> { // 添加好友
                 actionAddFriend2(intent.userIdFrom, intent.userIdTo, intent.markName)
             }
@@ -76,6 +80,12 @@ class FriendsViewModel(
             else -> {
                 super.dispatch(intent)
             }
+        }
+    }
+
+    private fun actionGoAddFriend() {
+        io {
+            sendEvent(FriendsEvent.GoAddFriend)
         }
     }
 

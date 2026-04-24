@@ -45,6 +45,9 @@ import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
 import com.darcy.kmpdemo.ui.colors.AppColors
 import com.darcy.kmpdemo.ui.screen.phone.friends.intent.FriendsIntent
 import com.darcy.kmpdemo.ui.screen.phone.friends.state.FriendsState
+import com.darcy.kmpdemo.ui.screen.phone.navigation.AppNavigation
+import com.darcy.kmpdemo.ui.screen.phone.navigation.PhoneRoute
+import com.darcy.kmpdemo.ui.screen.phone.navigation.customNavigate
 import com.darcy.kmpdemo.utils.toLong
 import io.ktor.http.encodeURLPath
 import kmpdarcydemo.composeapp.generated.resources.Res
@@ -54,8 +57,18 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun PhoneFriendsScreen() {
     val viewModel: FriendsViewModel = viewModel(factory = FriendsViewModel.Factory)
+    val appNavController = AppNavigation.navController()
     LaunchedEffect(Unit) {
         viewModel.dispatch(FetchIntent.ActionLoadData)
+        viewModel.event.collect {
+            when(it) {
+                FriendsEvent.GoAddFriend ->{
+                    appNavController.customNavigate(
+                        route = PhoneRoute.AddFriend, clearStack = false, includeRoot = true
+                    )
+                }
+            }
+        }
     }
     PhoneFriendsInnerPage(viewModel, modifier = Modifier.fillMaxSize())
 }
@@ -97,7 +110,12 @@ private fun ShowSuccessPage(
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.fillMaxSize()) {
-        AddFriendComponent(viewModel)
+//        AddFriendComponent(viewModel)
+        Button(onClick = {
+            viewModel.dispatch(FriendsIntent.GoAddFriendPage)
+        }) {
+            Text(text = "去加好友")
+        }
         LazyColumn(
             modifier = Modifier.weight(1f)
         ) {
