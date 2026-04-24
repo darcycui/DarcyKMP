@@ -1,6 +1,6 @@
 package com.darcy.kmpdemo.ui.screen.phone.friends.usecase
 
-import com.darcy.kmpdemo.bean.http.FriendsResponse
+import com.darcy.kmpdemo.bean.http.response.FriendsResponse
 import com.darcy.kmpdemo.repository.FriendsHttpRepository
 import com.darcy.kmpdemo.ui.base.IUseCase
 

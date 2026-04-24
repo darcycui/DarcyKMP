@@ -1,6 +1,7 @@
 package com.darcy.kmpdemo.network.http
 
 import com.darcy.kmpdemo.bean.http.base.BaseResult
+import com.darcy.kmpdemo.bean.http.error.ErrorResponse
 import com.darcy.kmpdemo.network.http.impl.ktor.KtorHttpClient
 import kotlinx.serialization.KSerializer
 
@@ -13,9 +14,9 @@ object HttpManager : IHttp {
         params: Map<String, String>,
         needRetry: Boolean,
         needCache: Boolean,
-        success: ((BaseResult<T>?) -> Unit)?,
-        successList: ((BaseResult<List<T>>?) -> Unit)?,
-        errors: ((String) -> Unit)?
+        success: (BaseResult<T>) -> Unit,
+        successList: (BaseResult<List<T>>) -> Unit,
+        errors: (ErrorResponse) -> Unit
     ) {
         iHttp.doGetRequest(serializer, url, params, needRetry, needCache, success, successList,
             errors
@@ -28,9 +29,9 @@ object HttpManager : IHttp {
         params: Map<String, String>,
         needRetry: Boolean,
         needCache: Boolean,
-        success: ((BaseResult<T>?) -> Unit)?,
-        successList: ((BaseResult<List<T>>?) -> Unit)?,
-        errors: ((String) -> Unit)?
+        success: (BaseResult<T>) -> Unit,
+        successList: (BaseResult<List<T>>) -> Unit,
+        errors: (ErrorResponse) -> Unit
     ) {
         iHttp.doPostRequest(serializer, url, params, needRetry, needCache, success, successList,
             errors

@@ -13,11 +13,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.darcy.kmpdemo.bean.http.JuHeIPResponse
-import com.darcy.kmpdemo.bean.http.DarcyServerResponse
+import com.darcy.kmpdemo.bean.http.response.JuHeIPResponse
+import com.darcy.kmpdemo.bean.http.response.DarcyServerResponse
 import com.darcy.kmpdemo.log.logE
 import com.darcy.kmpdemo.log.logI
 import com.darcy.kmpdemo.network.http.HttpManager
+import com.darcy.kmpdemo.network.http.urls.JuHe.IP_URL
 //import com.darcy.kmpdemo.network.ssl.SslSettings
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.CoroutineScope
@@ -62,8 +63,6 @@ fun ShowKtorHttp() {
 }
 
 
-const val urlJuHe = "https://apis.juhe.cn/ip/ipNewV3"
-
 // FIXME: CertPathValidatorException: Trust anchor for certification path not found.
 const val urlDarcy = "https://darcycui.com.cn/users/all"
 //const val urlDarcy = "https://10.0.0.241/api/users/all-"
@@ -71,7 +70,7 @@ const val urlDarcy = "https://darcycui.com.cn/users/all"
 private fun doGetJuHe(scope: CoroutineScope, content: MutableState<String>) {
     HttpManager.doGetRequest(
         serializer<JuHeIPResponse>(),
-        urlJuHe,
+        IP_URL,
         mapOf(
             "key" to "f128bfc760193c5762c5c3be2a6051d8",
             "ip" to "114.215.154.101"
@@ -79,13 +78,13 @@ private fun doGetJuHe(scope: CoroutineScope, content: MutableState<String>) {
         needRetry = true,
         needCache = true,
         success = {
-            logI("success: itClazz=${it?.result!!::class}")
+            logI("success: itClazz=${it.result::class}")
             updateText(scope, content, it.toString())
         },
         successList = {},
         errors = {
             logE("error: it=$it")
-            updateText(scope, content, it)
+            updateText(scope, content, "${it.status} ${it.message}")
         })
 }
 
@@ -98,19 +97,19 @@ private fun doGetDarcy(scope: CoroutineScope, content: MutableState<String>) {
         needCache = true,
         success = {},
         successList = {
-            println("success: itClazz=${it?.result!!::class}")
+            println("success: itClazz=${it.result::class}")
             updateText(scope, content, it.toString())
         },
         errors = {
             println("error: it=$it")
-            updateText(scope, content, it)
+            updateText(scope, content, "${it.status} ${it.message}")
         })
 }
 
 private fun doPost(scope: CoroutineScope, content: MutableState<String>) {
     HttpManager.doPostRequest(
         serializer<JuHeIPResponse>(),
-        urlJuHe,
+        IP_URL,
         mapOf(
             "key" to "f128bfc760193c5762c5c3be2a6051d8",
             "ip" to "114.215.154.101"
@@ -118,13 +117,13 @@ private fun doPost(scope: CoroutineScope, content: MutableState<String>) {
         needRetry = true,
         needCache = true,
         success = {
-            println("success: itClazz=${it?.result!!::class}")
+            println("success: itClazz=${it.result::class}")
             updateText(scope, content, it.toString())
         },
         successList = {},
         errors = {
             println("error: it=$it")
-            updateText(scope, content, it)
+            updateText(scope, content, "${it.status} ${it.message}")
         })
 }
 

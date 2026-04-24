@@ -8,8 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.darcy.kmpdemo.platform.isPhonePlatform
 import com.darcy.kmpdemo.ui.screen.desktop.DesktopAppMainScreen
-import com.darcy.kmpdemo.ui.screen.learn.navigation.LearnNavigation
 import com.darcy.kmpdemo.ui.screen.phone.PhoneAppMainScreen
 import com.darcy.kmpdemo.ui.screen.phone.login.PhoneLoginScreen
 
@@ -51,10 +51,18 @@ fun AppNavigationNavHost(
                 PhoneLoginScreen()
             }
             composable<PhoneRoute.AppMain> {
-                PhoneAppMainScreen()
-//                DesktopAppMainScreen()
+                AppMainScreen()
 //                LearnNavigation()
             }
         }
+    }
+}
+
+@Composable
+private fun AppMainScreen() {
+    if (isPhonePlatform()) {
+        PhoneAppMainScreen()
+    } else {
+        DesktopAppMainScreen()
     }
 }

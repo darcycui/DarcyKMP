@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "b153736fa0b0a72ba3d6b45bff053cbd",
+    "identityHash": "58ce2a6206c5a605fa9fade35ec0b944",
     "entities": [
       {
         "tableName": "UserEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `nickName` TEXT NOT NULL, `age` INTEGER NOT NULL, `sex` INTEGER NOT NULL, `avatar` TEXT NOT NULL, `createdTime` INTEGER NOT NULL, `updatedTime` INTEGER NOT NULL, `deletedTime` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `nickName` TEXT NOT NULL, `age` INTEGER NOT NULL, `sex` TEXT NOT NULL, `avatar` TEXT NOT NULL, `createdTime` INTEGER NOT NULL, `updatedTime` INTEGER NOT NULL, `deletedTime` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "userId",
@@ -35,7 +35,7 @@
           {
             "fieldPath": "sex",
             "columnName": "sex",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -259,7 +259,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b153736fa0b0a72ba3d6b45bff053cbd')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '58ce2a6206c5a605fa9fade35ec0b944')"
     ]
   }
 }

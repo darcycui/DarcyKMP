@@ -1,11 +1,13 @@
 package com.darcy.kmpdemo.network.http.impl.ktor
 
 import com.darcy.kmpdemo.bean.http.base.BaseResult
+import com.darcy.kmpdemo.bean.http.error.ErrorResponse
 import com.darcy.kmpdemo.log.logD
 import com.darcy.kmpdemo.network.http.IHttp
 import com.darcy.kmpdemo.network.parser.impl.JsonParserImpl
 import com.darcy.kmpdemo.utils.toFormDataContent
 import com.darcy.kmpdemo.utils.toUrlEncodedString
+import io.github.aakira.napier.Napier.i
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.post
@@ -42,23 +44,23 @@ class KtorHttpClient : IHttp {
         params: Map<String, String>,
         needRetry: Boolean,
         needCache: Boolean,
-        success: ((BaseResult<T>?) -> Unit)?,
-        successList: ((BaseResult<List<T>>?) -> Unit)?,
-        errors: ((String) -> Unit)?
+        success: ((BaseResult<T>) -> Unit),
+        successList: ((BaseResult<List<T>>) -> Unit),
+        errors: ((ErrorResponse) -> Unit)
     ) {
         scope.launch {
             // dealRetry(needRetry)
             // dealCache(needCache)
             runCatching {
                 val realUrl = url + "?" + params.toUrlEncodedString()
-                val json = ktorClient.get(realUrl){
+                val json = ktorClient.get(realUrl) {
                     this.header("User-Agent", "KMP Client by Ktor Get")
                     contentType(ContentType.Application.Json)
                 }.bodyAsText()
                 jsonParser.toBean(json, serializer, success, successList, errors)
             }.onFailure {
                 it.printStackTrace()
-                errors?.invoke("请求失败:${it.message}")
+                errors.invoke(ErrorResponse.create(message = it.message ?: "请求失败"))
                 // 触发协程的 exceptionHandler
                 // error("请求失败:${it.message}")
             }
@@ -71,9 +73,9 @@ class KtorHttpClient : IHttp {
         params: Map<String, String>,
         needRetry: Boolean,
         needCache: Boolean,
-        success: ((BaseResult<T>?) -> Unit)?,
-        successList: ((BaseResult<List<T>>?) -> Unit)?,
-        errors: ((String) -> Unit)?
+        success: (BaseResult<T>) -> Unit,
+        successList: (BaseResult<List<T>>) -> Unit,
+        errors: (ErrorResponse) -> Unit
     ) {
         scope.launch {
             runCatching {
@@ -86,7 +88,7 @@ class KtorHttpClient : IHttp {
                 jsonParser.toBean(json, serializer, success, successList, errors)
             }.onFailure {
                 it.printStackTrace()
-                errors?.invoke("请求失败:${it.message}")
+                errors.invoke(ErrorResponse.create(message = it.message ?: "请求失败"))
                 // 触发协程的 exceptionHandler
                 // error("请求失败:${it.message}")
             }

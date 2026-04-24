@@ -3,8 +3,10 @@ package com.darcy.kmpdemo.ui.screen.phone.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.darcy.kmpdemo.bean.http.UsersResponse
+import com.darcy.kmpdemo.bean.ui.LoginBean
+import com.darcy.kmpdemo.bean.http.response.UsersResponse
 import com.darcy.kmpdemo.bean.ui.UserItemBean
+import com.darcy.kmpdemo.log.logE
 import com.darcy.kmpdemo.repository.UserDaoRepository
 import com.darcy.kmpdemo.storage.database.tables.UserEntity
 import com.darcy.kmpdemo.storage.memory.IMGlobalStorage
@@ -12,14 +14,20 @@ import com.darcy.kmpdemo.ui.base.BaseViewModel
 import com.darcy.kmpdemo.ui.base.IIntent
 import com.darcy.kmpdemo.ui.base.IReducer
 import com.darcy.kmpdemo.ui.base.impl.fetch.FetchIntent
+import com.darcy.kmpdemo.ui.base.impl.tips.TipsIntent
 import com.darcy.kmpdemo.ui.screen.phone.login.event.LoginEvent
 import com.darcy.kmpdemo.ui.screen.phone.login.intent.LoginIntent
 import com.darcy.kmpdemo.ui.screen.phone.login.reducer.LoginReducer
+import com.darcy.kmpdemo.ui.screen.phone.login.repository.LoginRepository
 import com.darcy.kmpdemo.ui.screen.phone.login.state.LoginState
+import kmpdarcydemo.composeapp.generated.resources.Res
+import kmpdarcydemo.composeapp.generated.resources.confirm
+import org.jetbrains.compose.resources.getString
 import kotlin.reflect.KClass
 
 class LoginViewModel(
     private val repository: UserDaoRepository = UserDaoRepository(),
+    private val loginRepository: LoginRepository = LoginRepository(),
 ) : BaseViewModel<LoginState>() {
     companion object {
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
@@ -71,11 +79,31 @@ class LoginViewModel(
         }
     }
 
-    private fun actionLogin(userEntity: UserEntity) {
+    private fun actionLogin(userEntity: LoginBean) {
         io {
             // todo 登录逻辑
-            IMGlobalStorage.setCurrentUser(userEntity)
-            sendEvent(LoginEvent.LoginSuccessEvent)
+            loginRepository.login(
+                userEntity.name,
+                userEntity.password,
+                onSuccess = {
+                    io {
+                        IMGlobalStorage.setCurrentUser(it)
+                        sendEvent(LoginEvent.LoginSuccessEvent)
+                    }
+                },
+                onError = {
+                    logE("登录失败：$it")
+                    main {
+                        dispatch(
+                            TipsIntent.ShowTips(
+                                title = "登录失败",
+                                tips = it.message,
+                                code = it.status,
+                                middleButtonText = getString(Res.string.confirm),
+                            )
+                        )
+                    }
+                })
         }
     }
 

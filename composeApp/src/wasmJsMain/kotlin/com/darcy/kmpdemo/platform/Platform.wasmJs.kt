@@ -9,3 +9,7 @@ class WasmPlatform : Platform {
 actual fun getPlatform(): Platform {
     return WasmPlatform()
 }
+
+actual fun isPhonePlatform(): Boolean {
+    return false
+}

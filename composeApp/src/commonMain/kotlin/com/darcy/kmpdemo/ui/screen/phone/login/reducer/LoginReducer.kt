@@ -1,6 +1,6 @@
 package com.darcy.kmpdemo.ui.screen.phone.login.reducer
 
-import com.darcy.kmpdemo.bean.http.UsersResponse
+import com.darcy.kmpdemo.bean.http.response.UsersResponse
 import com.darcy.kmpdemo.ui.base.IIntent
 import com.darcy.kmpdemo.ui.base.combined.ScreenStateFetchPagingTipsCombinedReducer
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState

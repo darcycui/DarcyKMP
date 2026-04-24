@@ -1,6 +1,6 @@
-package com.darcy.kmpdemo.bean.http
+package com.darcy.kmpdemo.bean.http.response
 
-import com.darcy.kmpdemo.bean.IEntity
+import com.darcy.kmpdemo.bean.http.base.IUIBean
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 
@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 data class DarcyServerResponse(
     val id: Long = -1L,
     val name: String = "",
-) : IEntity {
+) : IUIBean {
     override fun toString(): String {
         return "UserEntity(id=$id, name='$name')"
     }

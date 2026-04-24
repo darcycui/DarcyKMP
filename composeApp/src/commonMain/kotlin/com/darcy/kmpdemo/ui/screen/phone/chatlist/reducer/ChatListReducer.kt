@@ -1,6 +1,6 @@
 package com.darcy.kmpdemo.ui.screen.phone.chatlist.reducer
 
-import com.darcy.kmpdemo.bean.http.ChatListResponse
+import com.darcy.kmpdemo.bean.http.response.ChatListResponse
 import com.darcy.kmpdemo.ui.base.IIntent
 import com.darcy.kmpdemo.ui.base.combined.ScreenStateFetchPagingTipsCombinedReducer
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState

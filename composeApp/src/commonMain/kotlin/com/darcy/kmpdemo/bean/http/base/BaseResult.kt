@@ -1,6 +1,5 @@
 package com.darcy.kmpdemo.bean.http.base
 
-import com.darcy.kmpdemo.bean.IEntity
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
@@ -20,7 +19,7 @@ data class BaseResult<T>(
     val reason: String = "",
 
     val result: T
-) : IEntity {
+) : IUIBean {
     companion object {
         // darcyRefactor: 使用顶层序列化函数 serializer()
         fun <T> createSerializer(elementSerializer: KSerializer<T>): KSerializer<BaseResult<T>> {

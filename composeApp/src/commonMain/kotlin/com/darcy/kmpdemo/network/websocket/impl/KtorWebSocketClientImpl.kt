@@ -1,6 +1,6 @@
 package com.darcy.kmpdemo.network.websocket.impl
 
-import com.darcy.kmpdemo.bean.websocket.MessageEntity
+import com.darcy.kmpdemo.bean.websocket.PrivateMessageDTO
 import com.darcy.kmpdemo.log.logD
 import com.darcy.kmpdemo.log.logV
 import com.darcy.kmpdemo.log.logW
@@ -82,7 +82,7 @@ class KtorWebSocketClientImpl : IWebSocketClient, IOuterListener {
             onSend(message)
             return
         }
-        val messageBean = MessageEntity(
+        val messageBean = PrivateMessageDTO(
             from = fromUser,
             to = toUser,
             message = message,

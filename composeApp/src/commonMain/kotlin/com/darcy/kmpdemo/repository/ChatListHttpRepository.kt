@@ -1,6 +1,6 @@
 package com.darcy.kmpdemo.repository
 
-import com.darcy.kmpdemo.bean.http.ChatListResponse
+import com.darcy.kmpdemo.bean.http.response.ChatListResponse
 import com.darcy.kmpdemo.bean.ui.ChatListItemBean
 import kotlinx.coroutines.delay
 

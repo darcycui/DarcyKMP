@@ -3,7 +3,7 @@ package com.darcy.kmpdemo.ui.screen.phone.friends
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.darcy.kmpdemo.bean.http.FriendsResponse
+import com.darcy.kmpdemo.bean.http.response.FriendsResponse
 import com.darcy.kmpdemo.bean.ui.FriendsItemBean
 import com.darcy.kmpdemo.exception.BaseException
 import com.darcy.kmpdemo.repository.FriendshipDaoRepository

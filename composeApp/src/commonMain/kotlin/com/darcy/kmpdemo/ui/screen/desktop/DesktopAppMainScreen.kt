@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,7 +38,7 @@ fun DesktopAppMainInnerPage(
     startDestination: PhonePages,
     modifier: Modifier = Modifier
 ) {
-    var selectedPageIndex by remember {
+    var selectedPageIndex by rememberSaveable {
         mutableIntStateOf(PhonePages.ChatList.ordinal)
     }
     Row(modifier = Modifier.fillMaxSize()) {
@@ -50,11 +51,12 @@ fun DesktopAppMainInnerPage(
                     onClick = {
                         selectedPageIndex = index
                         navController.navigate(page.route) {
-                            popUpTo(0) {
+                            popUpTo(navController.graph.startDestinationId) {
                                 inclusive = true
                                 saveState = true
                             }
                             launchSingleTop = true
+                            restoreState = true
                         }
                     },
                     icon = {

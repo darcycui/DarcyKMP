@@ -1,6 +1,6 @@
-package com.darcy.kmpdemo.bean.http
+package com.darcy.kmpdemo.bean.http.response
 
-import com.darcy.kmpdemo.bean.IEntity
+import com.darcy.kmpdemo.bean.http.base.IUIBean
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -21,7 +21,7 @@ data class JuHeIPResponse(
     val province: String = "",
 
     val time: String = "LocalDateTime.now()",
-): IEntity {
+): IUIBean {
     override fun toString(): String {
         return "IPEntity(city='$city', country='$country', district='$district', isp='$isp', province='$province', time=$time)"
     }

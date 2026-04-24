@@ -1,6 +1,6 @@
 package com.darcy.kmpdemo.bean.ui
 
-import com.darcy.kmpdemo.bean.IEntity
+import com.darcy.kmpdemo.bean.http.base.IUIBean
 
 data class UserItemBean(
     val id: Long = -1,
@@ -8,8 +8,8 @@ data class UserItemBean(
     val nickName: String = "",
     val avatar: String = "",
     val age: Int = 0,
-    val sex: Int = 0,
-) : IEntity {
+    val sex: String = "",
+) : IUIBean {
     companion object {
         fun empty(): UserItemBean {
             return UserItemBean()

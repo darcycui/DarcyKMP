@@ -1,6 +1,6 @@
 package com.darcy.kmpdemo.ui.screen.phone.chatlist.usecase
 
-import com.darcy.kmpdemo.bean.http.ChatListResponse
+import com.darcy.kmpdemo.bean.http.response.ChatListResponse
 import com.darcy.kmpdemo.repository.ChatListHttpRepository
 import com.darcy.kmpdemo.ui.base.IUseCase
 

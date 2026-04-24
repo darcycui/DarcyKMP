@@ -3,7 +3,7 @@ package com.darcy.kmpdemo.ui.screen.phone.chatlist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.darcy.kmpdemo.bean.http.ChatListResponse
+import com.darcy.kmpdemo.bean.http.response.ChatListResponse
 import com.darcy.kmpdemo.bean.ui.ChatListItemBean
 import com.darcy.kmpdemo.exception.BaseException
 import com.darcy.kmpdemo.repository.ConversationDaoRepository

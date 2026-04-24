@@ -1,4 +1,4 @@
-package com.darcy.kmpdemo.bean.http
+package com.darcy.kmpdemo.bean.http.response
 
 import kotlinx.serialization.Serializable
 

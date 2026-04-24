@@ -3,7 +3,7 @@ package com.darcy.kmpdemo.ui.screen.learn.loaddata.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.darcy.kmpdemo.bean.http.LoadDataResponse
+import com.darcy.kmpdemo.bean.http.response.LoadDataResponse
 import com.darcy.kmpdemo.log.logD
 import com.darcy.kmpdemo.ui.base.BaseViewModel
 import com.darcy.kmpdemo.ui.base.IIntent

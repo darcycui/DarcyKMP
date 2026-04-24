@@ -1,6 +1,6 @@
 package com.darcy.kmpdemo.repository
 
-import com.darcy.kmpdemo.bean.http.FriendsResponse
+import com.darcy.kmpdemo.bean.http.response.FriendsResponse
 import com.darcy.kmpdemo.bean.ui.FriendsItemBean
 import kotlinx.coroutines.delay
 

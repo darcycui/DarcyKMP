@@ -1,9 +1,8 @@
 package com.darcy.kmpdemo.ui.screen.phone.mine.reducer
 
-import com.darcy.kmpdemo.bean.http.MineResponse
+import com.darcy.kmpdemo.bean.http.response.MineResponse
 import com.darcy.kmpdemo.ui.base.IIntent
 import com.darcy.kmpdemo.ui.base.combined.ScreenStateFetchPagingTipsCombinedReducer
-import com.darcy.kmpdemo.ui.base.impl.fetch.FetchIntent
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
 import com.darcy.kmpdemo.ui.base.impl.tips.TipsIntent
 import com.darcy.kmpdemo.ui.screen.phone.mine.intent.MineIntent

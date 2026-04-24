@@ -49,7 +49,12 @@ fun SidebarNavigationRailNavHost(
             navHostController,
             startDestination = startPages.route
         ) {
-            composable<PhoneRoute.ChatList> {
+            composable<PhoneRoute.ChatList>(
+                enterTransition = null,
+                exitTransition = null,
+                popEnterTransition = null,
+                popExitTransition = null
+            ) {
                 PhoneChatListScreen()
             }
             composable<PhoneRoute.Friends> {

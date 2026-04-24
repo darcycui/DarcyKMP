@@ -8,3 +8,7 @@ class JsPlatform : Platform {
 actual fun getPlatform(): Platform {
     return JsPlatform()
 }
+
+actual fun isPhonePlatform(): Boolean {
+    return false
+}

@@ -9,20 +9,24 @@ import com.darcy.kmpdemo.ui.theme.AppTheme
 //import com.darcy.kmpdemo.network.ssl.SslSettings
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
-import com.darcy.kmpdemo.ui.screen.desktop.DesktopAppMainScreen
-import com.darcy.kmpdemo.ui.screen.learn.navigation.LearnNavigation
-import com.darcy.kmpdemo.ui.screen.phone.PhoneAppMainScreen
+import com.darcy.kmpdemo.platform.sslCertsConfig
 import com.darcy.kmpdemo.ui.screen.phone.navigation.AppNavigationNavHost
-import com.darcy.kmpdemo.ui.screen.phone.navigation.PhonePages
 import com.darcy.kmpdemo.ui.screen.phone.navigation.PhoneRoute
+import kmpdarcydemo.composeapp.generated.resources.Res
 
+// resources中内置证书路径
+const val KEYSTORE_PATH_IP = "files/ssl/test2IPSelf241.p12"
+const val KEYSTORE_PATH_SERVER = "files/ssl/test2ServerSelf.p12"
 @Composable
 @Preview
 fun App() {
     // init actions
     LaunchedEffect(Unit) {
         Loger.initLogger()
-//    SslCertsConfig()
+
+        val bytesIP = Res.readBytes(KEYSTORE_PATH_IP)
+        val bytesServer = Res.readBytes(KEYSTORE_PATH_SERVER)
+        sslCertsConfig(listOf(bytesIP, bytesServer))
     }
     val navController = rememberNavController()
     val startDestination = PhoneRoute.Login
@@ -31,19 +35,3 @@ fun App() {
     }
 
 }
-
-//@Composable
-//fun SslCertsConfig() {
-//    var bytesServer by remember {
-//        mutableStateOf(ByteArray(0))
-//    }
-//    var bytesIP by remember {
-//        mutableStateOf(ByteArray(0))
-//    }
-//    LaunchedEffect(Unit) {
-//        logV("SslCertsConfig: init ssl certs")
-//        bytesServer = Res.readBytes(SslSettings.KEYSTORE_PATH_SERVER)
-//        bytesIP = Res.readBytes(SslSettings.KEYSTORE_PATH_IP)
-//        SslSettings.initCertBytes(listOf(bytesServer, bytesIP))
-//    }
-//}

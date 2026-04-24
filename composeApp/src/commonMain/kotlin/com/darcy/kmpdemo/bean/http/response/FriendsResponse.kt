@@ -1,8 +1,8 @@
-package com.darcy.kmpdemo.bean.http
+package com.darcy.kmpdemo.bean.http.response
 
-import com.darcy.kmpdemo.bean.IEntity
+import com.darcy.kmpdemo.bean.http.base.IUIBean
 import com.darcy.kmpdemo.bean.ui.FriendsItemBean
 
 data class FriendsResponse(
     val items: List<FriendsItemBean> = emptyList(),
-): IEntity
+): IUIBean

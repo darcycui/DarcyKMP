@@ -8,3 +8,7 @@ class IOSPlatform : Platform {
 actual fun getPlatform(): Platform {
     return IOSPlatform()
 }
+
+actual fun isPhonePlatform(): Boolean {
+    return true
+}

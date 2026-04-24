@@ -3,8 +3,8 @@ package com.darcy.kmpdemo.ui.screen.phone.mine
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.darcy.kmpdemo.bean.http.MineResponse
+import com.darcy.kmpdemo.bean.http.response.LoginResponse
+import com.darcy.kmpdemo.bean.http.response.MineResponse
 import com.darcy.kmpdemo.bean.ui.UserItemBean
 import com.darcy.kmpdemo.platform.FilePlatform
 import com.darcy.kmpdemo.storage.database.tables.UserEntity
@@ -18,8 +18,6 @@ import com.darcy.kmpdemo.ui.screen.phone.mine.intent.MineIntent
 import com.darcy.kmpdemo.ui.screen.phone.mine.reducer.MineReducer
 import com.darcy.kmpdemo.ui.screen.phone.mine.state.MineState
 import com.darcy.kmpdemo.utils.PickHelper
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import kotlin.reflect.KClass
 
 class MineViewModel : BaseViewModel<MineState>() {
@@ -64,11 +62,11 @@ class MineViewModel : BaseViewModel<MineState>() {
         io {
             val user = IMGlobalStorage.getCurrentUser()
             val uiBean = UserItemBean(
-                id = user.userId,
-                name = user.name,
-                nickName = user.nickName,
+                id = user.id,
+                name = user.username,
+                nickName = user.nickname,
                 age = user.age,
-                sex = user.sex,
+                sex = user.gender,
                 avatar = user.avatar,
             )
             dispatch(FetchIntent.RefreshByFetchData(MineResponse(uiBean)))
@@ -77,7 +75,7 @@ class MineViewModel : BaseViewModel<MineState>() {
 
     private fun actionLogout() {
         io {
-            IMGlobalStorage.setCurrentUser(UserEntity.empty())
+            IMGlobalStorage.setCurrentUser(LoginResponse.empty())
             sendEvent(MineEvent.ActionLogout)
         }
     }

@@ -1,6 +1,7 @@
 package com.darcy.kmpdemo.network.parser.impl
 
 import com.darcy.kmpdemo.bean.http.base.BaseResult
+import com.darcy.kmpdemo.bean.http.error.ErrorResponse
 import com.darcy.kmpdemo.log.logD
 import com.darcy.kmpdemo.log.logE
 import com.darcy.kmpdemo.network.parser.IJsonParser
@@ -8,7 +9,9 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.int
 import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.modules.SerializersModule
 
 val kotlinxJson = Json {
@@ -24,39 +27,52 @@ val kotlinxJson = Json {
 class JsonParserImpl : IJsonParser {
     override fun <T> toBean(
         json: String,
-        kSerializer: KSerializer<T>?,
-        success: ((BaseResult<T>?) -> Unit)?,
-        successList: ((BaseResult<List<T>>?) -> Unit)?,
-        error: ((String) -> Unit)?
+        kSerializer: KSerializer<T>,
+        success: ((BaseResult<T>) -> Unit),
+        successList: ((BaseResult<List<T>>) -> Unit),
+        error: ((ErrorResponse) -> Unit)
     ) {
         // 解析时先转换为 JsonElement
         val jsonElement = kotlinxJson.parseToJsonElement(json)
-        // 根据result字段判断是object还是array
+        // 解析 error_code 字段
+        val errorCode = jsonElement.jsonObject["error_code"]?.jsonPrimitive?.int ?: 0
         val resultElement = jsonElement.jsonObject["result"]
+        logD("resultElement=$resultElement")
+        if (errorCode != 0) {
+            if (resultElement != null) {
+                val errorResponse = kotlinxJson.decodeFromJsonElement<ErrorResponse>(
+                    ErrorResponse.serializer(), resultElement
+                )
+                error.invoke(errorResponse)
+            } else {
+                error.invoke(
+                    ErrorResponse(
+                        status = errorCode,
+                        error = "未获取到错误信息"
+                    )
+                )
+            }
+            return
+        }
+        // 根据result字段判断是object还是array
         when (resultElement) {
             is JsonObject -> {
-                kSerializer?.let {
+                kSerializer.let {
                     // 创建序列化器
                     // https://github.com/Kotlin/kotlinx.serialization/blob/master/docs/serializers.md#builtin-primitive-serializers
                     val realSerializer = BaseResult.createSerializer(it)
-                    success?.invoke(
+                    success.invoke(
                         kotlinxJson.decodeFromString<BaseResult<T>>(realSerializer, json)
                     )
-                } ?: run {
-                    logE("json is JsonObject but kSerializer is null")
-                    error?.invoke("json is JsonObject but kSerializer is null")
                 }
             }
 
             is JsonArray -> {
-                kSerializer?.let {
+                kSerializer.let {
                     val realSerializer = BaseResult.createSerializerList(it)
-                    successList?.invoke(
+                    successList.invoke(
                         kotlinxJson.decodeFromString<BaseResult<List<T>>>(realSerializer, json)
                     )
-                } ?: run {
-                    logE("json is JsonArray but kSerializer is null")
-                    error?.invoke("json is JsonArray but kSerializer is null")
                 }
             }
 

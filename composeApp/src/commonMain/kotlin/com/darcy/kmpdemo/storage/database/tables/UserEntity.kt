@@ -10,7 +10,7 @@ data class UserEntity (
     val name: String = "",
     val nickName: String = "",
     val age: Int = 0,
-    val sex: Int = 0,
+    val sex: String = "",
     val avatar: String = "",
     val createdTime: Long = 0,
     val updatedTime: Long = 0,

@@ -1,6 +1,6 @@
 package com.darcy.kmpdemo.ui.screen.learn.loaddata.reducer
 
-import com.darcy.kmpdemo.bean.http.LoadDataResponse
+import com.darcy.kmpdemo.bean.http.response.LoadDataResponse
 import com.darcy.kmpdemo.ui.base.IIntent
 import com.darcy.kmpdemo.ui.base.combined.ScreenStateFetchPagingTipsCombinedReducer
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState

@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text.input.InputTransformation.Companion.keyboardOptions
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -36,11 +35,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.room.util.TableInfo
 import coil3.compose.AsyncImage
+import com.darcy.kmpdemo.bean.ui.LoginBean
 import com.darcy.kmpdemo.bean.ui.UserItemBean
 import com.darcy.kmpdemo.storage.database.tables.UserEntity
+import com.darcy.kmpdemo.ui.base.impl.tips.TipsIntent
 import com.darcy.kmpdemo.ui.colors.AppColors
+import com.darcy.kmpdemo.ui.components.structure.TipsDialog
 import com.darcy.kmpdemo.ui.screen.phone.login.event.LoginEvent
 import com.darcy.kmpdemo.ui.screen.phone.login.intent.LoginIntent
 import com.darcy.kmpdemo.ui.screen.phone.login.state.LoginState
@@ -80,37 +81,62 @@ fun PhoneLoginScreen() {
 @Composable
 fun PhoneLoginInnerPage(viewModel: LoginViewModel) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val textFieldState: TextFieldState by remember { mutableStateOf(TextFieldState("1")) }
-    Column(modifier = Modifier.fillMaxSize()) {
-        LoginComponent(textFieldState, viewModel)
-        CreateUserComponent(viewModel)
-        Box(modifier = Modifier.fillMaxSize()) {
-            UserListComponent(uiState, viewModel, Modifier.fillMaxSize())
+    val nameTextFieldState: TextFieldState by remember { mutableStateOf(TextFieldState("")) }
+    val passwordTextFieldState: TextFieldState by remember { mutableStateOf(TextFieldState("")) }
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            LoginComponent(nameTextFieldState, passwordTextFieldState, viewModel)
+//        CreateUserComponent(viewModel)
+//        Box(modifier = Modifier.fillMaxSize()) {
+//            UserListComponent(uiState, viewModel, Modifier.fillMaxSize())
+//        }
+        }
+
+        if (uiState.tipsState.showTips) {
+            uiState.tipsState.apply {
+                TipsDialog(
+                    titleStr = title,
+                    contentStr = tips,
+                    code = code,
+                    confirmStr = middleButtonText,
+                    onDismissRequest = {
+                        viewModel.dispatch(TipsIntent.DismissTips)
+                    },
+                    onConfirm = {
+                        viewModel.dispatch(TipsIntent.DismissTips)
+                    }
+                )
+            }
         }
     }
 }
 
 @Composable
 private fun LoginComponent(
-    textFieldState: TextFieldState,
+    nameTextFieldState: TextFieldState,
+    passwordTextFieldState: TextFieldState,
     viewModel: LoginViewModel
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         TextField(
-            state = textFieldState,
-            placeholder = { Text("登录用户id") },
+            state = nameTextFieldState,
+            placeholder = { Text("用户名") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
         )
+        TextField(
+            state = passwordTextFieldState,
+            placeholder = { Text("密码") },
+            modifier = Modifier.fillMaxWidth()
+        )
         Button(modifier = Modifier.fillMaxWidth(), onClick = {
-            val userId = textFieldState.toLong()
+            val name = nameTextFieldState.text.toString()
+            val password = passwordTextFieldState.text.toString()
             viewModel.dispatch(
                 LoginIntent.ActionLogin(
-                    UserEntity(
-                        userId, "user$userId", "昵称$userId",
-                        age = 18,
-                        sex = 1,
-                        avatar = "https://avatars.githubusercontent.com/u/1021672"
+                    LoginBean(
+                        name = name,
+                        password = password
                     )
                 )
             )
@@ -142,7 +168,7 @@ private fun CreateUserComponent(viewModel: LoginViewModel) {
                             userId = userId,
                             name = "Darcy$userId",
                             age = 18,
-                            sex = 1,
+                            sex = "male",
                             avatar = "https://avatars.githubusercontent.com/u/1021672"
                         )
                     )
