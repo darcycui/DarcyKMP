@@ -48,12 +48,12 @@ class LoginViewModel(
 
     override fun dispatch(intent: IIntent) {
         when (intent) {
-            is LoginIntent.ActionRegister -> { // 注册
-                actionRegister()
-            }
-
             is LoginIntent.ActionLogin -> { // 登录
                 actionLogin(intent.userEntity)
+            }
+
+            is LoginIntent.ActionGoRegister -> { // 注册
+                actionGoRegister()
             }
 
             is LoginIntent.ActionAddUser -> { // 添加用户
@@ -79,11 +79,16 @@ class LoginViewModel(
         }
     }
 
+    private fun actionGoRegister() {
+        io {
+            sendEvent(LoginEvent.GoRegisterEvent)
+        }
+    }
+
     private fun actionLogin(userEntity: LoginBean) {
         io {
-            // todo 登录逻辑
             loginRepository.login(
-                userEntity.name,
+                userEntity.username,
                 userEntity.password,
                 onSuccess = {
                     io {
@@ -106,11 +111,6 @@ class LoginViewModel(
                 })
         }
     }
-
-    private fun actionRegister() {
-        // todo 注册逻辑
-    }
-
 
     private fun actionQueryUserList() {
         io {

@@ -5,10 +5,11 @@ import com.darcy.kmpdemo.storage.database.tables.UserEntity
 import com.darcy.kmpdemo.ui.base.IIntent
 
 sealed class LoginIntent : IIntent {
-    data class ActionRegister(val name: String, val password: String) : LoginIntent()
     data class ActionLogin(
         val userEntity: LoginBean
     ) : LoginIntent()
+
+    data object ActionGoRegister : LoginIntent()
 
     data class ActionAddUser(val userEntity: UserEntity) : LoginIntent()
     data class ActionDeleteUser(val userId: Long) : LoginIntent()

@@ -51,6 +51,7 @@ import com.darcy.kmpdemo.ui.screen.phone.navigation.customNavigate
 import com.darcy.kmpdemo.utils.toLong
 import io.ktor.http.encodeURLPath
 import kmpdarcydemo.composeapp.generated.resources.Res
+import kmpdarcydemo.composeapp.generated.resources.go_register
 import kmpdarcydemo.composeapp.generated.resources.icon_header_default
 import kmpdarcydemo.composeapp.generated.resources.page_login
 import kotlinx.coroutines.launch
@@ -70,6 +71,11 @@ fun PhoneLoginScreen() {
                             route = PhoneRoute.AppMain, clearStack = true, includeRoot = true
                         )
                     }
+                    is LoginEvent.GoRegisterEvent -> {
+                        appNavController.customNavigate(
+                            route = PhoneRoute.Register, clearStack = false, includeRoot = true
+                        )
+                    }
                 }
             }
         }
@@ -86,6 +92,7 @@ fun PhoneLoginInnerPage(viewModel: LoginViewModel) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
             LoginComponent(nameTextFieldState, passwordTextFieldState, viewModel)
+            RegisterComponent(viewModel)
 //        CreateUserComponent(viewModel)
 //        Box(modifier = Modifier.fillMaxSize()) {
 //            UserListComponent(uiState, viewModel, Modifier.fillMaxSize())
@@ -108,6 +115,15 @@ fun PhoneLoginInnerPage(viewModel: LoginViewModel) {
                 )
             }
         }
+    }
+}
+
+@Composable
+fun RegisterComponent(viewModel: LoginViewModel) {
+    Button(modifier = Modifier.fillMaxWidth(), onClick = {
+        viewModel.dispatch(LoginIntent.ActionGoRegister)
+    }) {
+        Text(stringResource(Res.string.go_register))
     }
 }
 
@@ -135,7 +151,7 @@ private fun LoginComponent(
             viewModel.dispatch(
                 LoginIntent.ActionLogin(
                     LoginBean(
-                        name = name,
+                        username = name,
                         password = password
                     )
                 )

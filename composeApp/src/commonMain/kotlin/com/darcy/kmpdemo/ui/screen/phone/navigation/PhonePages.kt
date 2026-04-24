@@ -33,6 +33,9 @@ sealed class PhoneRoute() {
     data object Login : PhoneRoute()
 
     @Serializable
+    data object Register : PhoneRoute()
+
+    @Serializable
     data object AppMain : PhoneRoute()
 
     @Serializable

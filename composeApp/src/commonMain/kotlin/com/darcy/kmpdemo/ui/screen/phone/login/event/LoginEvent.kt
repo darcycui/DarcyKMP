@@ -4,4 +4,5 @@ import com.darcy.kmpdemo.ui.base.IEvent
 
 sealed class LoginEvent : IEvent {
     data object LoginSuccessEvent : LoginEvent()
+    data object GoRegisterEvent : LoginEvent()
 }

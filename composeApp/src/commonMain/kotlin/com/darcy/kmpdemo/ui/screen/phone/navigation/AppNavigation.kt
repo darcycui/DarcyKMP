@@ -12,6 +12,7 @@ import com.darcy.kmpdemo.platform.isPhonePlatform
 import com.darcy.kmpdemo.ui.screen.desktop.DesktopAppMainScreen
 import com.darcy.kmpdemo.ui.screen.phone.PhoneAppMainScreen
 import com.darcy.kmpdemo.ui.screen.phone.login.PhoneLoginScreen
+import com.darcy.kmpdemo.ui.screen.phone.register.PhoneRegisterScreen
 
 object AppNavigation {
 
@@ -49,6 +50,9 @@ fun AppNavigationNavHost(
         ) {
             composable<PhoneRoute.Login> {
                 PhoneLoginScreen()
+            }
+            composable<PhoneRoute.Register> {
+                PhoneRegisterScreen()
             }
             composable<PhoneRoute.AppMain> {
                 AppMainScreen()
