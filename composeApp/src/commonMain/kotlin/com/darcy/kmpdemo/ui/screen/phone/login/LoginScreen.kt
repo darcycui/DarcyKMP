@@ -92,7 +92,7 @@ fun PhoneLoginInnerPage(viewModel: LoginViewModel) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
             LoginComponent(nameTextFieldState, passwordTextFieldState, viewModel)
-            RegisterComponent(viewModel)
+            GoRegisterComponent(viewModel)
 //        CreateUserComponent(viewModel)
 //        Box(modifier = Modifier.fillMaxSize()) {
 //            UserListComponent(uiState, viewModel, Modifier.fillMaxSize())
@@ -119,7 +119,7 @@ fun PhoneLoginInnerPage(viewModel: LoginViewModel) {
 }
 
 @Composable
-fun RegisterComponent(viewModel: LoginViewModel) {
+private fun GoRegisterComponent(viewModel: LoginViewModel) {
     Button(modifier = Modifier.fillMaxWidth(), onClick = {
         viewModel.dispatch(LoginIntent.ActionGoRegister)
     }) {
