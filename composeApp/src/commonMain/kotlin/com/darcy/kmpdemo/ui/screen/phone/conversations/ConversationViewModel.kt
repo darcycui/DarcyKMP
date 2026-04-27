@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.darcy.kmpdemo.bean.http.response.ChatListResponse
+import com.darcy.kmpdemo.bean.http.response.ConversationResponse
 import com.darcy.kmpdemo.bean.ui.ChatListItemBean
 import com.darcy.kmpdemo.exception.BaseException
 import com.darcy.kmpdemo.repository.ConversationDaoRepository
@@ -11,6 +12,7 @@ import com.darcy.kmpdemo.repository.ConversationUserCrossRefDaoRepository
 import com.darcy.kmpdemo.repository.UserDaoRepository
 import com.darcy.kmpdemo.storage.database.tables.ConversationEntity
 import com.darcy.kmpdemo.storage.database.tables.ConversationUserCrossRef
+import com.darcy.kmpdemo.storage.memory.IMGlobalStorage
 import com.darcy.kmpdemo.ui.base.BaseViewModel
 import com.darcy.kmpdemo.ui.base.IIntent
 import com.darcy.kmpdemo.ui.base.IReducer
@@ -18,33 +20,34 @@ import com.darcy.kmpdemo.ui.base.impl.fetch.FetchIntent
 import com.darcy.kmpdemo.ui.base.impl.paging.PagingIntent
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenStateIntent
-import com.darcy.kmpdemo.ui.screen.phone.conversations.intent.ChatListIntent
-import com.darcy.kmpdemo.ui.screen.phone.conversations.reducer.ChatListReducer
-import com.darcy.kmpdemo.ui.screen.phone.conversations.state.ChatListState
-import com.darcy.kmpdemo.ui.screen.phone.conversations.usecase.FetchChatListUseCase
+import com.darcy.kmpdemo.ui.screen.phone.conversations.event.ConversationEvent
+import com.darcy.kmpdemo.ui.screen.phone.conversations.intent.ConversationIntent
+import com.darcy.kmpdemo.ui.screen.phone.conversations.reducer.ConversationReducer
+import com.darcy.kmpdemo.ui.screen.phone.conversations.repository.ConversationRepository
+import com.darcy.kmpdemo.ui.screen.phone.conversations.state.ConversationState
 import kotlin.reflect.KClass
 
-class ChatListViewModel(
-    private val fetchChatListUseCase: FetchChatListUseCase = FetchChatListUseCase(),
+class ConversationViewModel(
+    private val conversationRepository: ConversationRepository = ConversationRepository(),
     private val userDaoRepository: UserDaoRepository = UserDaoRepository(),
     private val conversationDaoRepository: ConversationDaoRepository = ConversationDaoRepository(),
     private val conversationUserCrossRefDaoRepository: ConversationUserCrossRefDaoRepository = ConversationUserCrossRefDaoRepository(),
-) : BaseViewModel<ChatListState>() {
+) : BaseViewModel<ConversationState>() {
     companion object {
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: KClass<T>, extras: CreationExtras): T {
-                return ChatListViewModel() as T
+                return ConversationViewModel() as T
             }
         }
     }
 
-    override fun initState(): ChatListState {
-        return ChatListState()
+    override fun initState(): ConversationState {
+        return ConversationState()
     }
 
-    override fun initReducers(): List<IReducer<ChatListState>> {
-        return listOf(ChatListReducer())
+    override fun initReducers(): List<IReducer<ConversationState>> {
+        return listOf(ConversationReducer())
     }
 
     override fun dispatch(intent: IIntent) {
@@ -53,23 +56,27 @@ class ChatListViewModel(
                 actionFetchChatList()
             }
 
-            is ChatListIntent.ActionCreateConversation -> { // 创建会话
+            is ConversationIntent.GoChatPage -> { // 进入聊天页面
+                actionGoChatPage(intent.response)
+            }
+
+            is ConversationIntent.ActionCreateConversation -> { // 创建会话
                 actionCreateConversation(intent.userIdFrom, intent.userIdTo, intent.conversation)
             }
 
-            is ChatListIntent.ActionDeleteConversation -> { // 删除会话
+            is ConversationIntent.ActionDeleteConversation -> { // 删除会话
                 actionDeleteConversation(intent.conversationId)
             }
 
-            is ChatListIntent.ActionUpdateConversation -> { // 更新会话
+            is ConversationIntent.ActionUpdateConversation -> { // 更新会话
                 actionUpdateConversation(intent.conversationId, intent.conversation)
             }
 
-            is ChatListIntent.ActionQueryUsersByConversationId -> { // 查询会话中的用户
+            is ConversationIntent.ActionQueryUsersByConversationId -> { // 查询会话中的用户
                 actionQueryUsersByConversationId(intent.conversationId)
             }
 
-            is ChatListIntent.ActionQueryConversationsByUserId -> { // 查询用户会话
+            is ConversationIntent.ActionQueryConversationsByUserId -> { // 查询用户会话
                 actionQueryConversationsByUserId(intent.userId)
             }
 
@@ -83,12 +90,19 @@ class ChatListViewModel(
         }
     }
 
+    private fun actionGoChatPage(response: ConversationResponse) {
+        io {
+            sendEvent(ConversationEvent.GoChatPage)
+        }
+    }
+
     private fun actionQueryConversationsByUserId(userId: Long) {
         io {
             val crossRef =
                 conversationUserCrossRefDaoRepository.getConversationsByUserId(userId)
             val uiBeanList = crossRef.conversations.map { item ->
-                val userIdSelected = if (item.userIdFrom == userId) item.userIdTo else item.userIdFrom
+                val userIdSelected =
+                    if (item.userIdFrom == userId) item.userIdTo else item.userIdFrom
                 val userAvatar = userDaoRepository.getUserById(userIdSelected).avatar
                 ChatListItemBean(
                     id = item.conversationId ?: -1L,
@@ -137,7 +151,8 @@ class ChatListViewModel(
             conversationDaoRepository.createConversation(conversation)
             val conversationName = "$userIdFrom-$userIdTo"
             val conversationId =
-                conversationDaoRepository.getConversationByName(conversationName).conversationId ?: -1L
+                conversationDaoRepository.getConversationByName(conversationName).conversationId
+                    ?: -1L
             conversationUserCrossRefDaoRepository.insert(
                 ConversationUserCrossRef(
                     conversationId = conversationId,
@@ -156,20 +171,16 @@ class ChatListViewModel(
     private fun actionFetchChatList() {
         io {
             dispatch(ScreenStateIntent.ScreenStateChange(ScreenState.Loading))
-            val response = fetchChatListUseCase()
-//            dispatchFailure(BaseException(404, "加载错误"))
-            response.onSuccess {
-                dispatch(ScreenStateIntent.ScreenStateChange(ScreenState.Success))
-                dispatch(FetchIntent.RefreshByFetchData(it))
-//                dispatch(TipsIntent.ShowTips(
-//                    title = "提示",
-//                    tips = "加载成功",
-//                    code = 200,
-//                    middleButtonText = "确定",
-//                ))
-            }.onFailure {
-                dispatchFailure(it)
-            }
+            val userId = IMGlobalStorage.getCurrentUserId()
+            conversationRepository.fetchConversations(
+                userId,
+                onSuccessList = {
+                    dispatch(ScreenStateIntent.ScreenStateChange(ScreenState.Success))
+                    dispatch(FetchIntent.RefreshByFetchData(it))
+                },
+                onError = {
+                    dispatchFailure(Exception(it.toString()))
+                })
         }
     }
 

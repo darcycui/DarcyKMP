@@ -1,5 +1,6 @@
 package com.darcy.kmpdemo.ui.screen.phone.friends.intent
 
+import com.darcy.kmpdemo.bean.http.response.FriendshipResponse
 import com.darcy.kmpdemo.ui.base.IIntent
 
 sealed class FriendsIntent : IIntent {
@@ -21,4 +22,5 @@ sealed class FriendsIntent : IIntent {
 
     data object GoAddFriendPage : FriendsIntent()
     data object GoAcceptFriendPage : FriendsIntent()
+    data class GoChatPage(val response: FriendshipResponse) : FriendsIntent()
 }

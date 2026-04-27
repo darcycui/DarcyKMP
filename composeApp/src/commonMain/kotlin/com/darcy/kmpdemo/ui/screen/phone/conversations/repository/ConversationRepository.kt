@@ -1,0 +1,69 @@
+package com.darcy.kmpdemo.ui.screen.phone.conversations.repository
+
+import com.darcy.kmpdemo.bean.http.error.ErrorResponse
+import com.darcy.kmpdemo.bean.http.response.ApplyFriendResponse
+import com.darcy.kmpdemo.bean.http.response.ConversationResponse
+import com.darcy.kmpdemo.bean.ui.AddFriendBean
+import com.darcy.kmpdemo.network.http.HttpManager
+import com.darcy.kmpdemo.network.http.urls.Darcy.APPLY_FRIEND_URL
+import com.darcy.kmpdemo.network.http.urls.Darcy.CONVERSATION_CREATE_URL
+import com.darcy.kmpdemo.network.http.urls.Darcy.CONVERSATION_LIST_URL
+import com.darcy.kmpdemo.repository.IRepository
+import kotlinx.serialization.serializer
+
+class ConversationRepository : IRepository {
+
+    fun fetchConversations(
+        userId: Long,
+        onSuccessList: (List<ConversationResponse>) -> Unit,
+        onError: (ErrorResponse) -> Unit
+    ): Unit {
+        HttpManager.doPostRequest(
+            serializer<ConversationResponse>(),
+            CONVERSATION_LIST_URL,
+            mapOf(
+                "userId" to userId.toString(),
+            ),
+            needRetry = true,
+            needCache = true,
+            success = {},
+            successList = {
+                println("success: itClazz=${it.result::class}")
+                onSuccessList(it.result)
+            },
+            errors = {
+                println("error: it=$it")
+                onError(it)
+            })
+    }
+
+
+    fun createConversation(
+        userId: String,
+        targetId: String,
+        conversationType: String,
+        onSuccess: (ConversationResponse) -> Unit,
+        onError: (ErrorResponse) -> Unit
+    ): Unit {
+        HttpManager.doPostRequest(
+            serializer<ConversationResponse>(),
+            CONVERSATION_CREATE_URL,
+            mapOf(
+                "userId" to userId,
+                "targetId" to targetId,
+                "conversationType" to conversationType,
+            ),
+            needRetry = true,
+            needCache = true,
+            success = {
+                println("success: itClazz=${it.result::class}")
+                onSuccess(it.result)
+            },
+            successList = { },
+            errors = {
+                println("error: it=$it")
+                onError(it)
+            })
+    }
+
+}

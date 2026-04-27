@@ -4,13 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.darcy.kmpdemo.bean.http.response.FriendsResponse
+import com.darcy.kmpdemo.bean.http.response.FriendshipResponse
 import com.darcy.kmpdemo.bean.ui.FriendsItemBean
 import com.darcy.kmpdemo.exception.BaseException
+import com.darcy.kmpdemo.log.logE
 import com.darcy.kmpdemo.repository.FriendshipDaoRepository
 import com.darcy.kmpdemo.repository.FriendshipUserCrossRefDaoRepository
 import com.darcy.kmpdemo.repository.UserDaoRepository
 import com.darcy.kmpdemo.storage.database.tables.FriendshipEntity
 import com.darcy.kmpdemo.storage.database.tables.FriendshipUserCrossRef
+import com.darcy.kmpdemo.storage.memory.IMGlobalStorage
 import com.darcy.kmpdemo.ui.base.BaseViewModel
 import com.darcy.kmpdemo.ui.base.IIntent
 import com.darcy.kmpdemo.ui.base.IReducer
@@ -18,14 +21,20 @@ import com.darcy.kmpdemo.ui.base.impl.fetch.FetchIntent
 import com.darcy.kmpdemo.ui.base.impl.paging.PagingIntent
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenStateIntent
+import com.darcy.kmpdemo.ui.base.impl.tips.TipsIntent
+import com.darcy.kmpdemo.ui.screen.phone.conversations.repository.ConversationRepository
 import com.darcy.kmpdemo.ui.screen.phone.friends.intent.FriendsIntent
 import com.darcy.kmpdemo.ui.screen.phone.friends.reducer.FriendsReducer
+import com.darcy.kmpdemo.ui.screen.phone.friends.repository.FriendsRepository
 import com.darcy.kmpdemo.ui.screen.phone.friends.state.FriendsState
-import com.darcy.kmpdemo.ui.screen.phone.friends.usecase.FetchFriendsListUseCase
+import kmpdarcydemo.composeapp.generated.resources.Res
+import kmpdarcydemo.composeapp.generated.resources.confirm
+import org.jetbrains.compose.resources.getString
 import kotlin.reflect.KClass
 
 class FriendsViewModel(
-    private val fetchChatListUseCase: FetchFriendsListUseCase = FetchFriendsListUseCase(),
+    private val repository: FriendsRepository = FriendsRepository(),
+    private val conversationRepository: ConversationRepository = ConversationRepository(),
     private val userDaoRepository: UserDaoRepository = UserDaoRepository(),
     private val friendshipDaoRepository: FriendshipDaoRepository = FriendshipDaoRepository(),
     private val friendshipUserCrossRefDaoRepository: FriendshipUserCrossRefDaoRepository = FriendshipUserCrossRefDaoRepository(),
@@ -61,6 +70,10 @@ class FriendsViewModel(
                 actionGoAccessFriend()
             }
 
+            is FriendsIntent.GoChatPage -> {
+                actionGoChatPage(intent.response)
+            }
+
             is FriendsIntent.ActionAddFriend -> { // 添加好友
                 actionAddFriend2(intent.userIdFrom, intent.userIdTo, intent.markName)
             }
@@ -84,6 +97,35 @@ class FriendsViewModel(
             else -> {
                 super.dispatch(intent)
             }
+        }
+    }
+
+    private fun actionGoChatPage(response: FriendshipResponse) {
+        io {
+            conversationRepository.createConversation(
+                userId = IMGlobalStorage.getCurrentUserId().toString(),
+                targetId = response.friend.id.toString(),
+                conversationType = "1",
+                onSuccess = {
+                    io {
+                        sendEvent(FriendsEvent.GoChat)
+                    }
+                },
+                onError = {
+                    logE("创建会话失败：$it")
+                    main {
+                        dispatch(
+                            TipsIntent.ShowTips(
+                                title = "创建会话失败",
+                                tips = it.message,
+                                code = it.status,
+                                middleButtonText = getString(Res.string.confirm),
+                            )
+                        )
+                    }
+                }
+            )
+            sendEvent(FriendsEvent.GoChat)
         }
     }
 
@@ -152,20 +194,16 @@ class FriendsViewModel(
     private fun actionFetchFriendsList() {
         io {
             dispatch(ScreenStateIntent.ScreenStateChange(ScreenState.Loading))
-            val response = fetchChatListUseCase()
-//            dispatchFailure(BaseException(404, "加载错误"))
-            response.onSuccess {
-                dispatch(ScreenStateIntent.ScreenStateChange(ScreenState.Success))
-                dispatch(FetchIntent.RefreshByFetchData(it))
-//                dispatch(TipsIntent.ShowTips(
-//                    title = "提示",
-//                    tips = "加载成功",
-//                    code = 200,
-//                    middleButtonText = "确定",
-//                ))
-            }.onFailure {
-                dispatchFailure(it)
-            }
+            val userId = IMGlobalStorage.getCurrentUserId()
+            repository.fetchFriends(
+                userId,
+                onSuccessList = {
+                    dispatch(ScreenStateIntent.ScreenStateChange(ScreenState.Success))
+                    dispatch(FetchIntent.RefreshByFetchData(it))
+                },
+                onError = {
+                    dispatchFailure(Exception(it.toString()))
+                })
         }
     }
 

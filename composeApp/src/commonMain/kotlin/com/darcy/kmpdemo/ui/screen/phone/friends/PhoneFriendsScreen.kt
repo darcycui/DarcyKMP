@@ -2,6 +2,7 @@ package com.darcy.kmpdemo.ui.screen.phone.friends
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -30,13 +32,14 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
-import com.darcy.kmpdemo.bean.ui.FriendsItemBean
+import com.darcy.kmpdemo.bean.http.response.FriendshipResponse
 import com.darcy.kmpdemo.ui.base.impl.fetch.FetchIntent
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
 import com.darcy.kmpdemo.ui.colors.AppColors
 import com.darcy.kmpdemo.ui.screen.phone.friends.intent.FriendsIntent
 import com.darcy.kmpdemo.ui.screen.phone.friends.state.FriendsState
 import com.darcy.kmpdemo.ui.screen.phone.navigation.AppNavigation
+import com.darcy.kmpdemo.ui.screen.phone.navigation.BottomBarNavigation
 import com.darcy.kmpdemo.ui.screen.phone.navigation.PhoneRoute
 import com.darcy.kmpdemo.ui.screen.phone.navigation.customNavigate
 import io.ktor.http.encodeURLPath
@@ -57,9 +60,15 @@ fun PhoneFriendsScreen() {
                         route = PhoneRoute.AddFriend, clearStack = false, includeRoot = true
                     )
                 }
+
                 FriendsEvent.GoAcceptFriend -> {
                     appNavController.customNavigate(
                         route = PhoneRoute.AcceptFriend, clearStack = false, includeRoot = true
+                    )
+                }
+                FriendsEvent.GoChat -> {
+                    appNavController.customNavigate(
+                        route = PhoneRoute.Chat, clearStack = false, includeRoot = true
                     )
                 }
             }
@@ -120,8 +129,10 @@ private fun ShowSuccessPage(
         LazyColumn(
             modifier = Modifier.weight(1f)
         ) {
-            items(uiState.items.size, key = { index -> index }) { index ->
-                FriendsItem(uiState.items[index])
+            items(uiState.items, key = { it.id}) { item->
+                FriendsItem(item, onItemClick = {
+                    viewModel.dispatch(FriendsIntent.GoChatPage(item))
+                })
             }
         }
     }
@@ -129,17 +140,21 @@ private fun ShowSuccessPage(
 
 @Composable
 private fun FriendsItem(
-    bean: FriendsItemBean,
-    modifier: Modifier = Modifier
+    bean: FriendshipResponse = FriendshipResponse(),
+    modifier: Modifier = Modifier,
+    onItemClick: () -> Unit = {}
 ) {
     Column(modifier = Modifier.fillMaxWidth().height(50.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth().weight(1f)
+                .clickable(onClick = {
+                    onItemClick()
+                })
                 .padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 4.dp),
             verticalAlignment = Alignment.Top
         ) {
             AsyncImage(
-                model = bean.avatar.encodeURLPath(),
+                model = bean.friend.avatar.ifEmpty { Res.drawable.icon_header_default },
                 placeholder = painterResource(Res.drawable.icon_header_default),
                 error = painterResource(Res.drawable.icon_header_default),
                 contentDescription = null,
@@ -151,7 +166,7 @@ private fun FriendsItem(
             )
             Spacer(modifier = Modifier.width(10.dp))
             Text(
-                text = "${bean.id}: ${bean.name} ",
+                text = "${bean.id}: ${bean.friend.username} ",
                 fontSize = 16.sp,
                 color = AppColors.color_102c56,
                 fontWeight = FontWeight.Bold,
@@ -173,13 +188,5 @@ private fun FriendsItem(
 )
 @Composable
 private fun FriendsItemPreview() {
-    FriendsItem(
-        bean = FriendsItemBean(
-            id = 1,
-            name = "Darcy",
-            nickName = "Hello there!",
-            avatar = "https://avatars.githubusercontent.com/u/10252602"
-        )
-    )
-
+    FriendsItem()
 }

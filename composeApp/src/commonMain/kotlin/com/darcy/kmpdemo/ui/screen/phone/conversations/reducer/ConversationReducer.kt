@@ -1,51 +1,51 @@
 package com.darcy.kmpdemo.ui.screen.phone.conversations.reducer
 
-import com.darcy.kmpdemo.bean.http.response.ChatListResponse
+import com.darcy.kmpdemo.bean.http.response.ConversationResponse
 import com.darcy.kmpdemo.ui.base.IIntent
 import com.darcy.kmpdemo.ui.base.combined.ScreenStateFetchPagingTipsCombinedReducer
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
 import com.darcy.kmpdemo.ui.base.impl.tips.TipsIntent
-import com.darcy.kmpdemo.ui.screen.phone.conversations.state.ChatListState
+import com.darcy.kmpdemo.ui.screen.phone.conversations.state.ConversationState
 
-class ChatListReducer :
-    ScreenStateFetchPagingTipsCombinedReducer<ChatListState, ChatListResponse>() {
+class ConversationReducer :
+    ScreenStateFetchPagingTipsCombinedReducer<ConversationState, List<ConversationResponse>>() {
     override fun onReduce(
         intent: IIntent,
-        state: ChatListState
-    ): ChatListState {
+        state: ConversationState
+    ): ConversationState {
         return state
     }
 
     override fun onScreenState(
-        state: ChatListState,
+        state: ConversationState,
         newScreenState: ScreenState
-    ): ChatListState {
+    ): ConversationState {
         return state.copy(screenState = newScreenState)
     }
 
     override fun onFetch(
-        state: ChatListState,
-        result: ChatListResponse
-    ): ChatListState {
+        state: ConversationState,
+        result: List<ConversationResponse>
+    ): ConversationState {
         return state.copy(
-            items = result.items
+            items = result
         )
     }
 
     override fun onPaging(
-        state: ChatListState,
+        state: ConversationState,
         pageNumber: Int,
-        response: ChatListResponse
-    ): ChatListState {
+        response: List<ConversationResponse>
+    ): ConversationState {
         return state.copy(
-            items = state.items + response.items
+            items = state.items + response
         )
     }
 
     override fun onShowTips(
-        state: ChatListState,
+        state: ConversationState,
         intent: TipsIntent.ShowTips
-    ): ChatListState {
+    ): ConversationState {
         return state.copy(
             tipsState = state.tipsState.copy(
                 showTips = true,
@@ -59,7 +59,7 @@ class ChatListReducer :
         )
     }
 
-    override fun onDismissTips(state: ChatListState): ChatListState {
+    override fun onDismissTips(state: ConversationState): ConversationState {
         return state.copy(
             tipsState = state.tipsState.copy(
                 showTips = false

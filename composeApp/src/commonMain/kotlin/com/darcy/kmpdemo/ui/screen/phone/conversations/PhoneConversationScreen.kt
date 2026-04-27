@@ -1,6 +1,7 @@
 package com.darcy.kmpdemo.ui.screen.phone.conversations
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -32,34 +34,48 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
-import com.darcy.kmpdemo.bean.ui.ChatListItemBean
+import com.darcy.kmpdemo.bean.http.response.ConversationResponse
 import com.darcy.kmpdemo.ui.base.impl.fetch.FetchIntent
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenStateIntent
 import com.darcy.kmpdemo.ui.base.impl.tips.TipsIntent
 import com.darcy.kmpdemo.ui.colors.AppColors
 import com.darcy.kmpdemo.ui.components.structure.TipsDialog
-import com.darcy.kmpdemo.ui.screen.phone.conversations.state.ChatListState
-import io.ktor.http.encodeURLPath
+import com.darcy.kmpdemo.ui.screen.phone.conversations.event.ConversationEvent
+import com.darcy.kmpdemo.ui.screen.phone.conversations.intent.ConversationIntent
+import com.darcy.kmpdemo.ui.screen.phone.conversations.state.ConversationState
+import com.darcy.kmpdemo.ui.screen.phone.navigation.AppNavigation
+import com.darcy.kmpdemo.ui.screen.phone.navigation.PhoneRoute
+import com.darcy.kmpdemo.ui.screen.phone.navigation.customNavigate
 import kmpdarcydemo.composeapp.generated.resources.Res
 import kmpdarcydemo.composeapp.generated.resources.icon_header_default
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun PhoneChatListScreen() {
-    val viewModel: ChatListViewModel = viewModel(factory = ChatListViewModel.Factory)
+fun PhoneConversationScreen() {
+    val viewModel: ConversationViewModel = viewModel(factory = ConversationViewModel.Factory)
+    val appNavController = AppNavigation.navController()
     LaunchedEffect(Unit) {
         viewModel.dispatch(FetchIntent.ActionFetchData)
+        viewModel.event.collect {
+            when (it) {
+                ConversationEvent.GoChatPage -> {
+                    appNavController.customNavigate(
+                        route = PhoneRoute.Chat, clearStack = false, includeRoot = true
+                    )
+                }
+            }
+        }
     }
     PhoneChatListInnerPage(viewModel, Modifier.fillMaxSize())
 }
 
 @Composable
 fun PhoneChatListInnerPage(
-    viewModel: ChatListViewModel,
+    viewModel: ConversationViewModel,
     modifier: Modifier = Modifier
 ) {
-    val uiState: ChatListState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState: ConversationState by viewModel.uiState.collectAsStateWithLifecycle()
     Box(modifier = Modifier.fillMaxSize()) {
         when (uiState.screenState) {
             is ScreenState.Loading -> {
@@ -109,14 +125,17 @@ fun PhoneChatListInnerPage(
 
 @Composable
 private fun ShowSuccessPage(
-    uiState: ChatListState,
-    viewModel: ChatListViewModel,
+    uiState: ConversationState,
+    viewModel: ConversationViewModel,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.fillMaxSize()) {
         LazyColumn(modifier = Modifier.fillMaxWidth().weight(1f)) {
-            items(uiState.items.size, key = { uiState.items[it].id }) { index ->
-                ChatListItem(uiState.items[index], Modifier)
+            items(uiState.items, key = { it.id }) { item ->
+                ChatListItem(item, Modifier,
+                    onItemClick = {
+                        viewModel.dispatch(ConversationIntent.GoChatPage(item))
+                    })
             }
         }
     }
@@ -124,18 +143,20 @@ private fun ShowSuccessPage(
 
 @Composable
 private fun ChatListItem(
-    bean: ChatListItemBean,
-    modifier: Modifier
+    bean: ConversationResponse = ConversationResponse(),
+    modifier: Modifier,
+    onItemClick: () -> Unit = {}
 ) {
 
     Column(modifier = Modifier.fillMaxWidth().height(68.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth().weight(1f)
+                .clickable(onClick = onItemClick)
                 .padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 4.dp),
             verticalAlignment = Alignment.Top
         ) {
             AsyncImage(
-                model = bean.avatar.encodeURLPath(),
+                model = bean.user.avatar,
                 placeholder = painterResource(Res.drawable.icon_header_default),
                 error = painterResource(Res.drawable.icon_header_default),
                 contentDescription = null,
@@ -145,7 +166,7 @@ private fun ChatListItem(
             Box(modifier = Modifier.fillMaxSize()) {
                 Column {
                     Text(
-                        text = bean.title,
+                        text = bean.user.username,
                         fontSize = 16.sp,
                         color = AppColors.color_102c56,
                         fontWeight = FontWeight.Bold,
@@ -155,7 +176,7 @@ private fun ChatListItem(
                     )
                     Spacer(modifier = Modifier.height(5.dp))
                     Text(
-                        text = bean.subTitle,
+                        text = bean.user.nickname,
                         fontSize = 14.sp,
                         color = AppColors.color_102c56,
                         fontWeight = FontWeight.Normal,
@@ -200,12 +221,6 @@ private fun ChatListItem(
 @Composable
 private fun ChatListItemPreview() {
     ChatListItem(
-        bean = ChatListItemBean(
-            id = 1,
-            title = "标题标题标题标题标题",
-            subTitle = "副标题副标题副标题副标题副标题副题副题副标题副标题副标题副",
-            avatar = "https://picsum.photos/200/300"
-        ),
         modifier = Modifier.fillMaxWidth()
     )
 }

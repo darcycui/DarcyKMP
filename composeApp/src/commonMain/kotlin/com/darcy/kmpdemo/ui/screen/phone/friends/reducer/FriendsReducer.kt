@@ -1,6 +1,7 @@
 package com.darcy.kmpdemo.ui.screen.phone.friends.reducer
 
 import com.darcy.kmpdemo.bean.http.response.FriendsResponse
+import com.darcy.kmpdemo.bean.http.response.FriendshipResponse
 import com.darcy.kmpdemo.ui.base.IIntent
 import com.darcy.kmpdemo.ui.base.combined.ScreenStateFetchPagingTipsCombinedReducer
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
@@ -8,7 +9,7 @@ import com.darcy.kmpdemo.ui.base.impl.tips.TipsIntent
 import com.darcy.kmpdemo.ui.screen.phone.friends.state.FriendsState
 
 class FriendsReducer :
-    ScreenStateFetchPagingTipsCombinedReducer<FriendsState, FriendsResponse>() {
+    ScreenStateFetchPagingTipsCombinedReducer<FriendsState, List<FriendshipResponse>>() {
     override fun onReduce(
         intent: IIntent,
         state: FriendsState
@@ -25,20 +26,20 @@ class FriendsReducer :
 
     override fun onFetch(
         state: FriendsState,
-        result: FriendsResponse
+        result: List<FriendshipResponse>
     ): FriendsState {
         return state.copy(
-            items = result.items
+            items = result
         )
     }
 
     override fun onPaging(
         state: FriendsState,
         pageNumber: Int,
-        response: FriendsResponse
+        response: List<FriendshipResponse>
     ): FriendsState {
         return state.copy(
-            items = state.items + response.items
+            items = state.items + response
         )
     }
 

@@ -13,6 +13,7 @@ import com.darcy.kmpdemo.ui.screen.desktop.DesktopAppMainScreen
 import com.darcy.kmpdemo.ui.screen.phone.PhoneAppMainScreen
 import com.darcy.kmpdemo.ui.screen.phone.accept_friend.PhoneAcceptFriendScreen
 import com.darcy.kmpdemo.ui.screen.phone.apply_friend.PhoneAddFriendScreen
+import com.darcy.kmpdemo.ui.screen.phone.chat.PhoneChatScreen
 import com.darcy.kmpdemo.ui.screen.phone.login.PhoneLoginScreen
 import com.darcy.kmpdemo.ui.screen.phone.register.PhoneRegisterScreen
 
@@ -61,6 +62,9 @@ fun AppNavigationNavHost(
             }
             composable<PhoneRoute.AcceptFriend> {
                 PhoneAcceptFriendScreen()
+            }
+            composable<PhoneRoute.Chat> {
+                PhoneChatScreen()
             }
             composable<PhoneRoute.AppMain> {
                 AppMainScreen()

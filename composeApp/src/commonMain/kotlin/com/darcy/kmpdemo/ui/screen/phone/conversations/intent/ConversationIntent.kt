@@ -1,29 +1,34 @@
 package com.darcy.kmpdemo.ui.screen.phone.conversations.intent
 
+import com.darcy.kmpdemo.bean.http.response.ConversationResponse
 import com.darcy.kmpdemo.storage.database.tables.ConversationEntity
 import com.darcy.kmpdemo.ui.base.IIntent
 
-sealed class ChatListIntent : IIntent {
+sealed class ConversationIntent : IIntent {
     data class ActionCreateConversation(
         val userIdFrom: Long,
         val userIdTo: Long,
         val conversation: ConversationEntity
-    ) : ChatListIntent()
+    ) : ConversationIntent()
 
     data class ActionDeleteConversation(
         val conversationId: Long,
-    ) : ChatListIntent()
+    ) : ConversationIntent()
 
     data class ActionUpdateConversation(
         val conversationId: Long,
         val conversation: ConversationEntity
-    ) : ChatListIntent()
+    ) : ConversationIntent()
 
     data class ActionQueryUsersByConversationId(
         val conversationId: Long
-    ) : ChatListIntent()
+    ) : ConversationIntent()
 
     data class ActionQueryConversationsByUserId(
         val userId: Long
-    ) : ChatListIntent()
+    ) : ConversationIntent()
+
+    data class GoChatPage(
+        val response: ConversationResponse
+    ) : ConversationIntent()
 }
