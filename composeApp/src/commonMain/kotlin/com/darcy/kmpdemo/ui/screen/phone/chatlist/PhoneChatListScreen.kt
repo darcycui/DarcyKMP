@@ -15,22 +15,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text.input.TextFieldState
-import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,17 +33,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.darcy.kmpdemo.bean.ui.ChatListItemBean
-import com.darcy.kmpdemo.storage.database.tables.ConversationEntity
-import com.darcy.kmpdemo.storage.memory.IMGlobalStorage
 import com.darcy.kmpdemo.ui.base.impl.fetch.FetchIntent
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenStateIntent
 import com.darcy.kmpdemo.ui.base.impl.tips.TipsIntent
 import com.darcy.kmpdemo.ui.colors.AppColors
 import com.darcy.kmpdemo.ui.components.structure.TipsDialog
-import com.darcy.kmpdemo.ui.screen.phone.chatlist.intent.ChatListIntent
 import com.darcy.kmpdemo.ui.screen.phone.chatlist.state.ChatListState
-import com.darcy.kmpdemo.utils.toLong
 import io.ktor.http.encodeURLPath
 import kmpdarcydemo.composeapp.generated.resources.Res
 import kmpdarcydemo.composeapp.generated.resources.icon_header_default
@@ -60,7 +49,7 @@ import org.jetbrains.compose.resources.painterResource
 fun PhoneChatListScreen() {
     val viewModel: ChatListViewModel = viewModel(factory = ChatListViewModel.Factory)
     LaunchedEffect(Unit) {
-        viewModel.dispatch(FetchIntent.ActionLoadData)
+        viewModel.dispatch(FetchIntent.ActionFetchData)
     }
     PhoneChatListInnerPage(viewModel, Modifier.fillMaxSize())
 }

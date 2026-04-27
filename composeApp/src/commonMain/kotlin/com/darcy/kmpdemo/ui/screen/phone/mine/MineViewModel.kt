@@ -7,7 +7,6 @@ import com.darcy.kmpdemo.bean.http.response.LoginResponse
 import com.darcy.kmpdemo.bean.http.response.MineResponse
 import com.darcy.kmpdemo.bean.ui.UserItemBean
 import com.darcy.kmpdemo.platform.FilePlatform
-import com.darcy.kmpdemo.storage.database.tables.UserEntity
 import com.darcy.kmpdemo.storage.memory.IMGlobalStorage
 import com.darcy.kmpdemo.ui.base.BaseViewModel
 import com.darcy.kmpdemo.ui.base.IIntent
@@ -40,7 +39,7 @@ class MineViewModel : BaseViewModel<MineState>() {
 
     override fun dispatch(intent: IIntent) {
         when (intent) {
-            is FetchIntent.ActionLoadData -> { // 加载数据
+            is FetchIntent.ActionFetchData -> { // 加载数据
                 actionLoadData()
             }
 

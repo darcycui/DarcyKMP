@@ -49,12 +49,16 @@ class FriendsViewModel(
 
     override fun dispatch(intent: IIntent) {
         when (intent) {
-            is FetchIntent.ActionLoadData -> { // 获取数据
+            is FetchIntent.ActionFetchData -> { // 获取数据
                 actionFetchFriendsList()
             }
 
             is FriendsIntent.GoAddFriendPage -> {
                 actionGoAddFriend()
+            }
+
+            is FriendsIntent.GoAcceptFriendPage -> {
+                actionGoAccessFriend()
             }
 
             is FriendsIntent.ActionAddFriend -> { // 添加好友
@@ -86,6 +90,12 @@ class FriendsViewModel(
     private fun actionGoAddFriend() {
         io {
             sendEvent(FriendsEvent.GoAddFriend)
+        }
+    }
+
+    private fun actionGoAccessFriend() {
+        io {
+            sendEvent(FriendsEvent.GoAcceptFriend)
         }
     }
 

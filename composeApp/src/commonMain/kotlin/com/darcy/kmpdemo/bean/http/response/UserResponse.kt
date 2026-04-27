@@ -3,7 +3,7 @@ package com.darcy.kmpdemo.bean.http.response
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SearchUserResponse(
+data class UserResponse(
     val username: String = "",
     val passwordHash: String = "",
     val nickname: String = "",
@@ -25,8 +25,8 @@ data class SearchUserResponse(
     val updatedAt: String = ""
 ) {
     companion object {
-        fun empty(): SearchUserResponse {
-            return SearchUserResponse()
+        fun empty(): UserResponse {
+            return UserResponse()
         }
     }
 }

@@ -49,7 +49,7 @@ class ChatListViewModel(
 
     override fun dispatch(intent: IIntent) {
         when (intent) {
-            is FetchIntent.ActionLoadData -> { // 获取数据
+            is FetchIntent.ActionFetchData -> { // 获取数据
                 actionFetchChatList()
             }
 

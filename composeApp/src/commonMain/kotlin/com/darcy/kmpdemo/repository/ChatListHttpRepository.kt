@@ -6,7 +6,7 @@ import kotlinx.coroutines.delay
 
 class ChatListHttpRepository : IRepository {
     suspend fun getChatList(): ChatListResponse {
-        delay(1_000)
+//        delay(1_000)
         return ChatListResponse(
             items = listOf(
                 ChatListItemBean(

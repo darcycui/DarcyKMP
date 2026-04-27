@@ -20,4 +20,5 @@ sealed class FriendsIntent : IIntent {
     data class ActionQueryFriendsList(val userId: Long) : FriendsIntent()
 
     data object GoAddFriendPage : FriendsIntent()
+    data object GoAcceptFriendPage : FriendsIntent()
 }

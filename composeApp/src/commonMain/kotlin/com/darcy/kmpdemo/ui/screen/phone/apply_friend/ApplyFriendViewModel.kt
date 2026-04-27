@@ -3,12 +3,14 @@ package com.darcy.kmpdemo.ui.screen.phone.apply_friend
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.darcy.kmpdemo.bean.http.response.ApplyFriendResponse
 import com.darcy.kmpdemo.bean.ui.AddFriendBean
 import com.darcy.kmpdemo.log.logE
 import com.darcy.kmpdemo.storage.memory.IMGlobalStorage
 import com.darcy.kmpdemo.ui.base.BaseViewModel
 import com.darcy.kmpdemo.ui.base.IIntent
 import com.darcy.kmpdemo.ui.base.IReducer
+import com.darcy.kmpdemo.ui.base.impl.fetch.FetchIntent
 import com.darcy.kmpdemo.ui.base.impl.tips.TipsIntent
 import com.darcy.kmpdemo.ui.screen.phone.apply_friend.intent.ApplyFriendIntent
 import com.darcy.kmpdemo.ui.screen.phone.apply_friend.reducer.ApplyFriendReducer
@@ -44,6 +46,9 @@ class ApplyFriendViewModel(
             is ApplyFriendIntent.ActionSearchUser -> {
                 actionSearchUser(intent.phone)
             }
+            is FetchIntent.ActionFetchData -> {
+                actionFetchFriendApplys()
+            }
 
             is ApplyFriendIntent.ActionApplyFriend -> {
                 actionApplyFriend(intent.userId)
@@ -56,19 +61,41 @@ class ApplyFriendViewModel(
         }
     }
 
+    private fun actionFetchFriendApplys() {
+        repository.fetchFriendApplys(
+            fromUserId = IMGlobalStorage.getCurrentUserId(),
+            onSuccessList = {
+                dispatch(FetchIntent.RefreshByFetchData(it))
+            },
+            onError = {
+                logE("获取申请列表失败：$it")
+                main {
+                    dispatch(
+                        TipsIntent.ShowTips(
+                            title = "获取申请列表失败",
+                            tips = it.message,
+                            code = it.status,
+                            middleButtonText = getString(Res.string.confirm),
+                        )
+                    )
+                }
+            }
+        )
+    }
+
     private fun actionApplyFriend(userId: Long) {
         // todo apply friend
         val formUserId = IMGlobalStorage.getCurrentUserId()
         repository.applyFriend(AddFriendBean(formUserId,userId),
             onSuccess = {
-                dispatch(ApplyFriendIntent.RefreshByApplyFriend("已申请"))
+                dispatch(ApplyFriendIntent.RefreshByApplyFriend(ApplyFriendResponse.RequestStatus.fromCode(it.status).name))
             },
             onError = {
-                logE("添加失败：$it")
+                logE("申请失败：$it")
                 main {
                     dispatch(
                         TipsIntent.ShowTips(
-                            title = "添加失败",
+                            title = "申请失败",
                             tips = it.message,
                             code = it.status,
                             middleButtonText = getString(Res.string.confirm),

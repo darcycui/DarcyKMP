@@ -1,6 +1,6 @@
 package com.darcy.kmpdemo.ui.screen.phone.apply_friend.intent
 
-import com.darcy.kmpdemo.bean.http.response.SearchUserResponse
+import com.darcy.kmpdemo.bean.http.response.UserResponse
 import com.darcy.kmpdemo.ui.base.IIntent
 
 sealed class ApplyFriendIntent : IIntent {
@@ -9,7 +9,7 @@ sealed class ApplyFriendIntent : IIntent {
     ) : ApplyFriendIntent()
 
     data class RefreshBySearchUser(
-        val response: SearchUserResponse
+        val response: UserResponse
     ): ApplyFriendIntent()
 
     data class ActionApplyFriend(

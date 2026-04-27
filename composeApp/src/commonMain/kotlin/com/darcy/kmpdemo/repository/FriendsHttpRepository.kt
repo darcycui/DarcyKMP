@@ -6,7 +6,7 @@ import kotlinx.coroutines.delay
 
 class FriendsHttpRepository : IRepository {
     suspend fun getFriendsList(): FriendsResponse {
-        delay(1_000)
+//        delay(1_000)
         return FriendsResponse(
             items = listOf(
                 FriendsItemBean(

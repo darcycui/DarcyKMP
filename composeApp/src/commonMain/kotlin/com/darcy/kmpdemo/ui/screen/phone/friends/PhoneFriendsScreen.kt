@@ -49,12 +49,17 @@ fun PhoneFriendsScreen() {
     val viewModel: FriendsViewModel = viewModel(factory = FriendsViewModel.Factory)
     val appNavController = AppNavigation.navController()
     LaunchedEffect(Unit) {
-        viewModel.dispatch(FetchIntent.ActionLoadData)
+        viewModel.dispatch(FetchIntent.ActionFetchData)
         viewModel.event.collect {
-            when(it) {
-                FriendsEvent.GoAddFriend ->{
+            when (it) {
+                FriendsEvent.GoAddFriend -> {
                     appNavController.customNavigate(
                         route = PhoneRoute.AddFriend, clearStack = false, includeRoot = true
+                    )
+                }
+                FriendsEvent.GoAcceptFriend -> {
+                    appNavController.customNavigate(
+                        route = PhoneRoute.AcceptFriend, clearStack = false, includeRoot = true
                     )
                 }
             }
@@ -100,10 +105,17 @@ private fun ShowSuccessPage(
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.fillMaxSize()) {
-        Button(onClick = {
-            viewModel.dispatch(FriendsIntent.GoAddFriendPage)
-        }) {
-            Text(text = "去加好友")
+        Row {
+            Button(onClick = {
+                viewModel.dispatch(FriendsIntent.GoAddFriendPage)
+            }) {
+                Text(text = "申请好友")
+            }
+            Button(onClick = {
+                viewModel.dispatch(FriendsIntent.GoAcceptFriendPage)
+            }) {
+                Text(text = "同意好友")
+            }
         }
         LazyColumn(
             modifier = Modifier.weight(1f)

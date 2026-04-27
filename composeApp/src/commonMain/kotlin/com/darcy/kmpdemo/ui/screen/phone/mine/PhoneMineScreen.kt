@@ -55,7 +55,7 @@ fun PhoneMineScreen() {
                 }
             }
         }
-        viewModel.dispatch(FetchIntent.ActionLoadData)
+        viewModel.dispatch(FetchIntent.ActionFetchData)
     }
     PhoneMineInnerPage(viewModel, Modifier.fillMaxSize())
 }

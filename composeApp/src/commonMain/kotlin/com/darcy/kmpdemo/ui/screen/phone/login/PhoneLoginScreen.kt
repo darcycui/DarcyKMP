@@ -61,8 +61,8 @@ fun PhoneLoginScreen() {
 @Composable
 fun PhoneLoginInnerPage(viewModel: LoginViewModel) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val nameTextFieldState: TextFieldState by remember { mutableStateOf(TextFieldState("")) }
-    val passwordTextFieldState: TextFieldState by remember { mutableStateOf(TextFieldState("")) }
+    val nameTextFieldState: TextFieldState by remember { mutableStateOf(TextFieldState("150000111222")) }
+    val passwordTextFieldState: TextFieldState by remember { mutableStateOf(TextFieldState("123456")) }
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
             LoginComponent(nameTextFieldState, passwordTextFieldState, viewModel)

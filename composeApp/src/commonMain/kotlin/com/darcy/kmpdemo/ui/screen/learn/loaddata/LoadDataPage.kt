@@ -25,7 +25,7 @@ import com.darcy.kmpdemo.ui.screen.learn.loaddata.viewmodel.LoadDataViewModel
 fun ShowLoadDataPage() {
     val viewmodel: LoadDataViewModel = viewModel(factory = LoadDataViewModel.Companion.Factory)
     LaunchedEffect(Unit) {
-        viewmodel.dispatch(FetchIntent.ActionLoadData)
+        viewmodel.dispatch(FetchIntent.ActionFetchData)
     }
     InnerLoadDataPage(viewmodel, Modifier)
 }
@@ -113,7 +113,7 @@ fun ShowSuccess(uiState: LoadDataState, viewModel: LoadDataViewModel) {
                 Text(text = "上一页")
             }
             Button(modifier = Modifier.weight(1f), onClick = {
-                viewModel.dispatch(FetchIntent.ActionLoadData)
+                viewModel.dispatch(FetchIntent.ActionFetchData)
             }) {
                 Text(text = "刷新")
             }

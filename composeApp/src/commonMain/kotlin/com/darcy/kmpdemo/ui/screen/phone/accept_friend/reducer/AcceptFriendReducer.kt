@@ -1,33 +1,31 @@
-package com.darcy.kmpdemo.ui.screen.phone.apply_friend.reducer
+package com.darcy.kmpdemo.ui.screen.phone.accept_friend.reducer
 
 import com.darcy.kmpdemo.bean.http.response.ApplyFriendResponse
-import com.darcy.kmpdemo.bean.http.response.UserResponse
 import com.darcy.kmpdemo.ui.base.IIntent
 import com.darcy.kmpdemo.ui.base.combined.ScreenStateFetchPagingTipsCombinedReducer
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
 import com.darcy.kmpdemo.ui.base.impl.tips.TipsIntent
-import com.darcy.kmpdemo.ui.screen.phone.apply_friend.intent.ApplyFriendIntent
-import com.darcy.kmpdemo.ui.screen.phone.apply_friend.state.ApplyFriendState
+import com.darcy.kmpdemo.ui.screen.phone.accept_friend.intent.AcceptFriendIntent
+import com.darcy.kmpdemo.ui.screen.phone.accept_friend.state.AcceptFriendState
 
-class ApplyFriendReducer :
-    ScreenStateFetchPagingTipsCombinedReducer<ApplyFriendState, List<ApplyFriendResponse>>() {
+class AcceptFriendReducer :
+    ScreenStateFetchPagingTipsCombinedReducer<AcceptFriendState, List<ApplyFriendResponse>>() {
     override fun onReduce(
         intent: IIntent,
-        state: ApplyFriendState
-    ): ApplyFriendState {
+        state: AcceptFriendState
+    ): AcceptFriendState {
         return when (intent) {
-            is ApplyFriendIntent.RefreshBySearchUser -> {
+            is AcceptFriendIntent.RefreshByAcceptFriend -> {
                 state.copy(
-                    userInfo = intent.response
+                    applys = state.applys.map {
+                        if (it.id == intent.response.id) {
+                            intent.response
+                        } else {
+                            it
+                        }
+                    }
                 )
             }
-
-            is ApplyFriendIntent.RefreshByApplyFriend -> {
-                state.copy(
-                    statusText = intent.response
-                )
-            }
-
             else -> {
                 state
             }
@@ -35,33 +33,33 @@ class ApplyFriendReducer :
     }
 
     override fun onScreenState(
-        state: ApplyFriendState,
+        state: AcceptFriendState,
         newScreenState: ScreenState
-    ): ApplyFriendState {
+    ): AcceptFriendState {
         return state.copy(screenState = newScreenState)
     }
 
     override fun onFetch(
-        state: ApplyFriendState,
+        state: AcceptFriendState,
         result: List<ApplyFriendResponse>
-    ): ApplyFriendState {
+    ): AcceptFriendState {
         return state.copy(
             applys = result
         )
     }
 
     override fun onPaging(
-        state: ApplyFriendState,
+        state: AcceptFriendState,
         pageNumber: Int,
         response: List<ApplyFriendResponse>
-    ): ApplyFriendState {
+    ): AcceptFriendState {
         TODO("Not yet implemented")
     }
 
     override fun onShowTips(
-        state: ApplyFriendState,
+        state: AcceptFriendState,
         intent: TipsIntent.ShowTips
-    ): ApplyFriendState {
+    ): AcceptFriendState {
 
         return state.copy(
             tipsState = state.tipsState.copy(
@@ -76,7 +74,7 @@ class ApplyFriendReducer :
         )
     }
 
-    override fun onDismissTips(state: ApplyFriendState): ApplyFriendState {
+    override fun onDismissTips(state: AcceptFriendState): AcceptFriendState {
         return state.copy(
             tipsState = state.tipsState.copy(
                 showTips = false

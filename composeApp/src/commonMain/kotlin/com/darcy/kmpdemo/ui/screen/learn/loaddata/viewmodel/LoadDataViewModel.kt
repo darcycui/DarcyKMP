@@ -49,7 +49,7 @@ class LoadDataViewModel : BaseViewModel<LoadDataState>() {
     override fun dispatch(intent: IIntent) {
         logD("dispatch: $intent")
         when (intent) {
-            is FetchIntent.ActionLoadData -> {
+            is FetchIntent.ActionFetchData -> {
                 actionLoadData()
             }
 
