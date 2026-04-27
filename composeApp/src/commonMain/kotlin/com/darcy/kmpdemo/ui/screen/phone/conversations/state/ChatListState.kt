@@ -1,4 +1,4 @@
-package com.darcy.kmpdemo.ui.screen.phone.chatlist.state
+package com.darcy.kmpdemo.ui.screen.phone.conversations.state
 
 import com.darcy.kmpdemo.bean.ui.ChatListItemBean
 import com.darcy.kmpdemo.ui.base.IState

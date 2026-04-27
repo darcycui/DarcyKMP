@@ -1,4 +1,4 @@
-package com.darcy.kmpdemo.ui.screen.phone.chatlist
+package com.darcy.kmpdemo.ui.screen.phone.conversations
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -18,10 +18,10 @@ import com.darcy.kmpdemo.ui.base.impl.fetch.FetchIntent
 import com.darcy.kmpdemo.ui.base.impl.paging.PagingIntent
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenStateIntent
-import com.darcy.kmpdemo.ui.screen.phone.chatlist.intent.ChatListIntent
-import com.darcy.kmpdemo.ui.screen.phone.chatlist.reducer.ChatListReducer
-import com.darcy.kmpdemo.ui.screen.phone.chatlist.state.ChatListState
-import com.darcy.kmpdemo.ui.screen.phone.chatlist.usecase.FetchChatListUseCase
+import com.darcy.kmpdemo.ui.screen.phone.conversations.intent.ChatListIntent
+import com.darcy.kmpdemo.ui.screen.phone.conversations.reducer.ChatListReducer
+import com.darcy.kmpdemo.ui.screen.phone.conversations.state.ChatListState
+import com.darcy.kmpdemo.ui.screen.phone.conversations.usecase.FetchChatListUseCase
 import kotlin.reflect.KClass
 
 class ChatListViewModel(

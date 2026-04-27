@@ -6,7 +6,7 @@ import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.darcy.kmpdemo.ui.screen.phone.chatlist.PhoneChatListScreen
+import com.darcy.kmpdemo.ui.screen.phone.conversations.PhoneChatListScreen
 import com.darcy.kmpdemo.ui.screen.phone.navigation.PhonePages
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable

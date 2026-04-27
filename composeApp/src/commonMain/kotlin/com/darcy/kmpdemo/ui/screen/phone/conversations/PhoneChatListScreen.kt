@@ -1,4 +1,4 @@
-package com.darcy.kmpdemo.ui.screen.phone.chatlist
+package com.darcy.kmpdemo.ui.screen.phone.conversations
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -39,7 +39,7 @@ import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenStateIntent
 import com.darcy.kmpdemo.ui.base.impl.tips.TipsIntent
 import com.darcy.kmpdemo.ui.colors.AppColors
 import com.darcy.kmpdemo.ui.components.structure.TipsDialog
-import com.darcy.kmpdemo.ui.screen.phone.chatlist.state.ChatListState
+import com.darcy.kmpdemo.ui.screen.phone.conversations.state.ChatListState
 import io.ktor.http.encodeURLPath
 import kmpdarcydemo.composeapp.generated.resources.Res
 import kmpdarcydemo.composeapp.generated.resources.icon_header_default

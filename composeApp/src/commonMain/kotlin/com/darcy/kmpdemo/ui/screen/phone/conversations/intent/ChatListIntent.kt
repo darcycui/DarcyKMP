@@ -1,7 +1,6 @@
-package com.darcy.kmpdemo.ui.screen.phone.chatlist.intent
+package com.darcy.kmpdemo.ui.screen.phone.conversations.intent
 
 import com.darcy.kmpdemo.storage.database.tables.ConversationEntity
-import com.darcy.kmpdemo.storage.database.tables.UserEntity
 import com.darcy.kmpdemo.ui.base.IIntent
 
 sealed class ChatListIntent : IIntent {

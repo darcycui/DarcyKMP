@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.darcy.kmpdemo.ui.screen.phone.chatlist.PhoneChatListScreen
+import com.darcy.kmpdemo.ui.screen.phone.conversations.PhoneChatListScreen
 import com.darcy.kmpdemo.ui.screen.phone.dynamic.PhoneDynamicScreen
 import com.darcy.kmpdemo.ui.screen.phone.friends.PhoneFriendsScreen
 import com.darcy.kmpdemo.ui.screen.phone.mine.PhoneMineScreen

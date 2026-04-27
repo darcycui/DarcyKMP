@@ -1,11 +1,11 @@
-package com.darcy.kmpdemo.ui.screen.phone.chatlist.reducer
+package com.darcy.kmpdemo.ui.screen.phone.conversations.reducer
 
 import com.darcy.kmpdemo.bean.http.response.ChatListResponse
 import com.darcy.kmpdemo.ui.base.IIntent
 import com.darcy.kmpdemo.ui.base.combined.ScreenStateFetchPagingTipsCombinedReducer
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
 import com.darcy.kmpdemo.ui.base.impl.tips.TipsIntent
-import com.darcy.kmpdemo.ui.screen.phone.chatlist.state.ChatListState
+import com.darcy.kmpdemo.ui.screen.phone.conversations.state.ChatListState
 
 class ChatListReducer :
     ScreenStateFetchPagingTipsCombinedReducer<ChatListState, ChatListResponse>() {
