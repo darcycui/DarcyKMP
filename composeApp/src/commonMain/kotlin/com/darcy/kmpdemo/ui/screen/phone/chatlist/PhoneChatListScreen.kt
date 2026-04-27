@@ -125,7 +125,6 @@ private fun ShowSuccessPage(
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.fillMaxSize()) {
-        CreateConversationComponent(uiState, viewModel, Modifier.fillMaxWidth())
         LazyColumn(modifier = Modifier.fillMaxWidth().weight(1f)) {
             items(uiState.items.size, key = { uiState.items[it].id }) { index ->
                 ChatListItem(uiState.items[index], Modifier)
@@ -133,89 +132,6 @@ private fun ShowSuccessPage(
         }
     }
 }
-
-@Composable
-fun CreateConversationComponent(
-    uiState: ChatListState,
-    viewModel: ChatListViewModel,
-    modifier: Modifier
-) {
-    val textFieldStateFrom: TextFieldState by remember { mutableStateOf(TextFieldState("")) }
-    val textFieldStateTo: TextFieldState by remember { mutableStateOf(TextFieldState("")) }
-
-    Column(modifier = modifier.fillMaxWidth()) {
-        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Text("新建会话")
-            TextField(
-                state = textFieldStateFrom,
-                placeholder = { Text(text = "我的id") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.weight(1f)
-            )
-            Spacer(modifier = Modifier.width(10.dp))
-            TextField(
-                state = textFieldStateTo,
-                placeholder = { Text(text = "对方id") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.weight(1f)
-            )
-        }
-        Row(modifier = Modifier.fillMaxWidth()) {
-            Button(modifier = Modifier.weight(1f), onClick = {
-                val userIdFrom = textFieldStateFrom.toLong()
-                val userIdTo = textFieldStateTo.toLong()
-                viewModel.dispatch(
-                    ChatListIntent.ActionCreateConversation(
-                        userIdFrom,
-                        userIdTo,
-                        ConversationEntity(
-                            userIdFrom = userIdFrom,
-                            userIdTo = userIdTo,
-                            type = 1,
-                        )
-                    )
-                )
-            }) {
-                Text(text = "增")
-            }
-            Button(modifier = Modifier.weight(1f), onClick = {
-                viewModel.dispatch(
-                    ChatListIntent.ActionDeleteConversation(1)
-                )
-            }) {
-                Text(text = "删")
-            }
-            Button(modifier = Modifier.weight(1f), onClick = {
-                val userIdFrom = textFieldStateFrom.toLong()
-                val userIdTo = textFieldStateTo.toLong()
-                viewModel.dispatch(
-                    ChatListIntent.ActionUpdateConversation(
-                        1,
-                        ConversationEntity(
-                            conversationId = 1,
-                            name = "会话1修改$userIdFrom-$userIdTo-${RandomHelper.randomInt(100, 1000)}",
-                            type = 1,
-                            userIdFrom = userIdFrom,
-                            userIdTo = userIdTo,
-                        )
-                    )
-                )
-            }) {
-                Text(text = "改")
-            }
-            Button(modifier = Modifier.weight(1.5f), onClick = {
-                viewModel.dispatch(
-                    ChatListIntent.ActionQueryConversationsByUserId(
-                        IMGlobalStorage.getCurrentUserId()
-                    )
-                )
-            }) {
-                Text(text = "查All")
-            }
-        }
-    }
-}
-
 
 @Composable
 private fun ChatListItem(

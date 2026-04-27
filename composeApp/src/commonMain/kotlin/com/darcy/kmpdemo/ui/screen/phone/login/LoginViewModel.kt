@@ -88,7 +88,7 @@ class LoginViewModel(
     private fun actionLogin(userEntity: LoginBean) {
         io {
             loginRepository.login(
-                userEntity.username,
+                userEntity.phone,
                 userEntity.password,
                 onSuccess = {
                     io {

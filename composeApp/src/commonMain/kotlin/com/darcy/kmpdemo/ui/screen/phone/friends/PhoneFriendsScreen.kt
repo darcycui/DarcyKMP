@@ -13,23 +13,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -38,8 +31,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.darcy.kmpdemo.bean.ui.FriendsItemBean
-import com.darcy.kmpdemo.storage.database.tables.UserEntity
-import com.darcy.kmpdemo.storage.memory.IMGlobalStorage
 import com.darcy.kmpdemo.ui.base.impl.fetch.FetchIntent
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
 import com.darcy.kmpdemo.ui.colors.AppColors
@@ -48,7 +39,6 @@ import com.darcy.kmpdemo.ui.screen.phone.friends.state.FriendsState
 import com.darcy.kmpdemo.ui.screen.phone.navigation.AppNavigation
 import com.darcy.kmpdemo.ui.screen.phone.navigation.PhoneRoute
 import com.darcy.kmpdemo.ui.screen.phone.navigation.customNavigate
-import com.darcy.kmpdemo.utils.toLong
 import io.ktor.http.encodeURLPath
 import kmpdarcydemo.composeapp.generated.resources.Res
 import kmpdarcydemo.composeapp.generated.resources.icon_header_default
@@ -110,7 +100,6 @@ private fun ShowSuccessPage(
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.fillMaxSize()) {
-//        AddFriendComponent(viewModel)
         Button(onClick = {
             viewModel.dispatch(FriendsIntent.GoAddFriendPage)
         }) {
@@ -121,65 +110,6 @@ private fun ShowSuccessPage(
         ) {
             items(uiState.items.size, key = { index -> index }) { index ->
                 FriendsItem(uiState.items[index])
-            }
-        }
-    }
-}
-
-
-@Composable
-private fun AddFriendComponent(viewModel: FriendsViewModel) {
-    val textFieldStateFrom: TextFieldState by remember { mutableStateOf(TextFieldState("")) }
-    val textFieldStateTo: TextFieldState by remember { mutableStateOf(TextFieldState("")) }
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Text("添加好友")
-            TextField(
-                state = textFieldStateFrom,
-                placeholder = { Text(text = "我的id") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.weight(1f)
-            )
-            Spacer(modifier = Modifier.width(10.dp))
-            TextField(
-                state = textFieldStateTo,
-                placeholder = { Text(text = "对方id") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.weight(1f)
-            )
-        }
-        Row(modifier = Modifier.fillMaxWidth()) {
-            Button(modifier = Modifier.weight(1f), onClick = {
-                val userIdFrom = textFieldStateFrom.toLong()
-                val userIdTo = textFieldStateTo.toLong()
-                viewModel.dispatch(
-                    FriendsIntent.ActionAddFriend(userIdFrom, userIdTo, "备注名称")
-                )
-            }) {
-                Text(text = "增")
-            }
-            Button(modifier = Modifier.weight(1f), onClick = {
-                val userIdFrom = textFieldStateFrom.toLong()
-                val userIdTo = textFieldStateTo.toLong()
-                viewModel.dispatch(FriendsIntent.ActionDeleteFriend(userIdFrom, userIdTo))
-            }) {
-                Text(text = "删")
-            }
-            Button(modifier = Modifier.weight(1f), onClick = {
-                val userIdFrom = textFieldStateFrom.toLong()
-                val userIdTo = textFieldStateTo.toLong()
-                viewModel.dispatch(
-                    FriendsIntent.ActionUpdateFriend(
-                        userIdFrom, userIdTo, "备注名称修改:${RandomHelper.randomInt(100, 999)}"
-                    )
-                )
-            }) {
-                Text(text = "改")
-            }
-            Button(modifier = Modifier.weight(1.5f), onClick = {
-                viewModel.dispatch(FriendsIntent.ActionQueryFriendsList(IMGlobalStorage.getCurrentUserId()))
-            }) {
-                Text(text = "查All")
             }
         }
     }

@@ -1,7 +1,6 @@
 package com.darcy.kmpdemo.ui.screen.phone.add_friend
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,14 +27,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
-import com.darcy.kmpdemo.bean.http.response.SearchUserResponse
-import com.darcy.kmpdemo.bean.ui.UserItemBean
 import com.darcy.kmpdemo.ui.base.impl.tips.TipsIntent
 import com.darcy.kmpdemo.ui.colors.AppColors
 import com.darcy.kmpdemo.ui.components.structure.TipsDialog
 import com.darcy.kmpdemo.ui.screen.phone.add_friend.intent.AddFriendIntent
 import com.darcy.kmpdemo.ui.screen.phone.add_friend.state.AddFriendState
-import com.darcy.kmpdemo.ui.screen.phone.mine.intent.MineIntent
 import kmpdarcydemo.composeapp.generated.resources.Res
 import kmpdarcydemo.composeapp.generated.resources.icon_header_default
 import kmpdarcydemo.composeapp.generated.resources.page_mine
@@ -88,20 +84,17 @@ private fun SearchUserComponent(
     viewModel: AddFriendViewModel? = null
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        Row {
-            TextField(
-                state = nameTextFieldState,
-                placeholder = {
-                    Text(text = "请输入手机号")
-                },
-                modifier = Modifier.weight(1f)
-            )
-            Button(onClick = {
-                val phone = nameTextFieldState.text.toString()
-                viewModel?.dispatch(AddFriendIntent.ActionSearchUser(phone))
-            }) {
-                Text(text = "搜索")
-            }
+        TextField(
+            state = nameTextFieldState,
+            placeholder = {
+                Text(text = "请输入手机号")
+            },
+        )
+        Button(onClick = {
+            val phone = nameTextFieldState.text.toString()
+            viewModel?.dispatch(AddFriendIntent.ActionSearchUser(phone))
+        }) {
+            Text(text = "搜索")
         }
     }
 }

@@ -18,7 +18,7 @@ class LoginRepository : IRepository {
             serializer<LoginResponse>(),
             LOGIN_URL,
             mapOf(
-                "name" to username,
+                "phone" to username,
                 "password" to password
             ),
             needRetry = true,
