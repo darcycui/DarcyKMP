@@ -1,22 +1,22 @@
-package com.darcy.kmpdemo.ui.screen.phone.add_friend.intent
+package com.darcy.kmpdemo.ui.screen.phone.apply_friend.intent
 
 import com.darcy.kmpdemo.bean.http.response.SearchUserResponse
 import com.darcy.kmpdemo.ui.base.IIntent
 
-sealed class AddFriendIntent : IIntent {
+sealed class ApplyFriendIntent : IIntent {
     data class ActionSearchUser(
         val phone: String
-    ) : AddFriendIntent()
+    ) : ApplyFriendIntent()
 
     data class RefreshBySearchUser(
         val response: SearchUserResponse
-    ): AddFriendIntent()
+    ): ApplyFriendIntent()
 
     data class ActionApplyFriend(
         val userId: Long
-    ) : AddFriendIntent()
+    ) : ApplyFriendIntent()
 
     data class RefreshByApplyFriend(
         val response: String
-    ): AddFriendIntent()
+    ): ApplyFriendIntent()
 }

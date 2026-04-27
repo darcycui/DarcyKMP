@@ -1,4 +1,4 @@
-package com.darcy.kmpdemo.ui.screen.phone.add_friend
+package com.darcy.kmpdemo.ui.screen.phone.apply_friend
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -30,8 +30,8 @@ import coil3.compose.AsyncImage
 import com.darcy.kmpdemo.ui.base.impl.tips.TipsIntent
 import com.darcy.kmpdemo.ui.colors.AppColors
 import com.darcy.kmpdemo.ui.components.structure.TipsDialog
-import com.darcy.kmpdemo.ui.screen.phone.add_friend.intent.AddFriendIntent
-import com.darcy.kmpdemo.ui.screen.phone.add_friend.state.AddFriendState
+import com.darcy.kmpdemo.ui.screen.phone.apply_friend.intent.ApplyFriendIntent
+import com.darcy.kmpdemo.ui.screen.phone.apply_friend.state.ApplyFriendState
 import kmpdarcydemo.composeapp.generated.resources.Res
 import kmpdarcydemo.composeapp.generated.resources.icon_header_default
 import kmpdarcydemo.composeapp.generated.resources.page_mine
@@ -39,14 +39,14 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun PhoneAddFriendScreen() {
-    val viewModel: AddFriendViewModel = viewModel(
-        factory = AddFriendViewModel.Factory
+    val viewModel: ApplyFriendViewModel = viewModel(
+        factory = ApplyFriendViewModel.Factory
     )
     PhoneAddFriendInnerPage(viewModel)
 }
 
 @Composable
-fun PhoneAddFriendInnerPage(viewModel: AddFriendViewModel) {
+fun PhoneAddFriendInnerPage(viewModel: ApplyFriendViewModel) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val nameTextFieldState: TextFieldState by remember { mutableStateOf(TextFieldState("")) }
     Box(modifier = Modifier.fillMaxSize()) {
@@ -81,7 +81,7 @@ fun PhoneAddFriendInnerPage(viewModel: AddFriendViewModel) {
 @Composable
 private fun SearchUserComponent(
     nameTextFieldState: TextFieldState = TextFieldState(""),
-    viewModel: AddFriendViewModel? = null
+    viewModel: ApplyFriendViewModel? = null
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         TextField(
@@ -92,7 +92,7 @@ private fun SearchUserComponent(
         )
         Button(onClick = {
             val phone = nameTextFieldState.text.toString()
-            viewModel?.dispatch(AddFriendIntent.ActionSearchUser(phone))
+            viewModel?.dispatch(ApplyFriendIntent.ActionSearchUser(phone))
         }) {
             Text(text = "搜索")
         }
@@ -103,8 +103,8 @@ private fun SearchUserComponent(
 @Preview
 @Composable
 fun UserInfoComponent(
-    uiState: AddFriendState = AddFriendState(),
-    viewModel: AddFriendViewModel? = null
+    uiState: ApplyFriendState = ApplyFriendState(),
+    viewModel: ApplyFriendViewModel? = null
 ) {
     val user = uiState.userInfo
     Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
@@ -128,7 +128,7 @@ fun UserInfoComponent(
         Spacer(modifier = Modifier.width(8.dp))
         Text(text = user.username, modifier = Modifier.weight(1f))
         Button(onClick = {
-            viewModel?.dispatch(AddFriendIntent.ActionApplyFriend(user.id))
+            viewModel?.dispatch(ApplyFriendIntent.ActionApplyFriend(user.id))
         }) {
             Text(text = uiState.statusText)
         }
