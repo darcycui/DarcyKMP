@@ -1,0 +1,8 @@
+package com.darcy.kmpdemo.ui.screen.phone.chat.privatechat.intent
+
+import com.darcy.kmpdemo.bean.http.response.PrivateMessageResponse
+import com.darcy.kmpdemo.ui.base.IIntent
+
+sealed class ChatIntent : IIntent {
+    data class ActionSendMessage(val message: PrivateMessageResponse): ChatIntent()
+}
