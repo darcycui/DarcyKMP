@@ -3,6 +3,7 @@ package com.darcy.kmpdemo.ui.screen.phone.apply_friend
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.darcy.kmpdemo.bean.http.error.toTipsIntent
 import com.darcy.kmpdemo.bean.http.response.ApplyFriendResponse
 import com.darcy.kmpdemo.bean.ui.AddFriendBean
 import com.darcy.kmpdemo.log.logE
@@ -69,16 +70,7 @@ class ApplyFriendViewModel(
             },
             onError = {
                 logE("获取申请列表失败：$it")
-                main {
-                    dispatch(
-                        TipsIntent.ShowTips(
-                            title = "获取申请列表失败",
-                            tips = it.message,
-                            code = it.status,
-                            middleButtonText = getString(Res.string.confirm),
-                        )
-                    )
-                }
+                main { dispatch(it.toTipsIntent()) }
             }
         )
     }
@@ -92,16 +84,7 @@ class ApplyFriendViewModel(
             },
             onError = {
                 logE("申请失败：$it")
-                main {
-                    dispatch(
-                        TipsIntent.ShowTips(
-                            title = "申请失败",
-                            tips = it.message,
-                            code = it.status,
-                            middleButtonText = getString(Res.string.confirm),
-                        )
-                    )
-                }
+                main { dispatch(it.toTipsIntent()) }
             })
 
     }
@@ -115,16 +98,7 @@ class ApplyFriendViewModel(
             },
             onError = {
                 logE("搜索失败：$it")
-                main {
-                    dispatch(
-                        TipsIntent.ShowTips(
-                            title = "搜索失败",
-                            tips = it.message,
-                            code = it.status,
-                            middleButtonText = getString(Res.string.confirm),
-                        )
-                    )
-                }
+                main { dispatch(it.toTipsIntent()) }
             })
     }
 }

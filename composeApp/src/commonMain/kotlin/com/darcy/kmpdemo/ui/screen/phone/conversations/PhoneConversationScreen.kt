@@ -56,12 +56,17 @@ fun PhoneConversationScreen() {
     val viewModel: ConversationViewModel = viewModel(factory = ConversationViewModel.Factory)
     val appNavController = AppNavigation.navController()
     LaunchedEffect(Unit) {
-        viewModel.dispatch(FetchIntent.ActionFetchData)
+        viewModel.dispatch(FetchIntent.ActionFetchData())
         viewModel.event.collect {
             when (it) {
-                ConversationEvent.GoChatPage -> {
+                is ConversationEvent.GoChatPage -> {
                     appNavController.customNavigate(
-                        route = PhoneRoute.Chat, clearStack = false, includeRoot = true
+                        route = PhoneRoute.Chat(
+                            conversationId = it.conversationId,
+                            userId = it.userId,
+                            userName = it.userName,
+                            userAvatar = it.userAvatar
+                        ), clearStack = false, includeRoot = true
                     )
                 }
             }
@@ -156,7 +161,7 @@ private fun ChatListItem(
             verticalAlignment = Alignment.Top
         ) {
             AsyncImage(
-                model = bean.user.avatar,
+                model = bean.target.avatar,
                 placeholder = painterResource(Res.drawable.icon_header_default),
                 error = painterResource(Res.drawable.icon_header_default),
                 contentDescription = null,
@@ -166,7 +171,7 @@ private fun ChatListItem(
             Box(modifier = Modifier.fillMaxSize()) {
                 Column {
                     Text(
-                        text = bean.user.username,
+                        text = bean.target.username,
                         fontSize = 16.sp,
                         color = AppColors.color_102c56,
                         fontWeight = FontWeight.Bold,
@@ -176,7 +181,7 @@ private fun ChatListItem(
                     )
                     Spacer(modifier = Modifier.height(5.dp))
                     Text(
-                        text = bean.user.nickname,
+                        text = bean.target.nickname,
                         fontSize = 14.sp,
                         color = AppColors.color_102c56,
                         fontWeight = FontWeight.Normal,

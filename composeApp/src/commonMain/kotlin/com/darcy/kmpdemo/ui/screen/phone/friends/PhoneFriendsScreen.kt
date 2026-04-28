@@ -52,7 +52,7 @@ fun PhoneFriendsScreen() {
     val viewModel: FriendsViewModel = viewModel(factory = FriendsViewModel.Factory)
     val appNavController = AppNavigation.navController()
     LaunchedEffect(Unit) {
-        viewModel.dispatch(FetchIntent.ActionFetchData)
+        viewModel.dispatch(FetchIntent.ActionFetchData())
         viewModel.event.collect {
             when (it) {
                 FriendsEvent.GoAddFriend -> {
@@ -66,9 +66,14 @@ fun PhoneFriendsScreen() {
                         route = PhoneRoute.AcceptFriend, clearStack = false, includeRoot = true
                     )
                 }
-                FriendsEvent.GoChat -> {
+               is FriendsEvent.GoChat -> {
                     appNavController.customNavigate(
-                        route = PhoneRoute.Chat, clearStack = false, includeRoot = true
+                        route = PhoneRoute.Chat(
+                            conversationId = it.conversationId,
+                            userId = it.userId,
+                            userName = it.userName,
+                            userAvatar = it.userAvatar
+                        ), clearStack = false, includeRoot = true
                     )
                 }
             }

@@ -3,6 +3,7 @@ package com.darcy.kmpdemo.ui.screen.phone.register
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.darcy.kmpdemo.bean.http.error.toTipsIntent
 import com.darcy.kmpdemo.log.logE
 import com.darcy.kmpdemo.storage.memory.IMGlobalStorage
 import com.darcy.kmpdemo.ui.base.BaseViewModel
@@ -61,16 +62,7 @@ class RegisterViewModel(
                 },
                 onError = {
                     logE("注册失败：$it")
-                    main {
-                        dispatch(
-                            TipsIntent.ShowTips(
-                                title = "注册失败",
-                                tips = it.message,
-                                code = it.status,
-                                middleButtonText = getString(Res.string.confirm),
-                            )
-                        )
-                    }
+                    main { dispatch(it.toTipsIntent()) }
                 }
             )
         }

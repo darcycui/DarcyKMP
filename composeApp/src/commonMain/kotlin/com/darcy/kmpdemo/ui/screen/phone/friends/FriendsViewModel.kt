@@ -3,6 +3,7 @@ package com.darcy.kmpdemo.ui.screen.phone.friends
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.darcy.kmpdemo.bean.http.error.toTipsIntent
 import com.darcy.kmpdemo.bean.http.response.FriendsResponse
 import com.darcy.kmpdemo.bean.http.response.FriendshipResponse
 import com.darcy.kmpdemo.bean.ui.FriendsItemBean
@@ -108,24 +109,21 @@ class FriendsViewModel(
                 conversationType = "1",
                 onSuccess = {
                     io {
-                        sendEvent(FriendsEvent.GoChat)
+                        sendEvent(
+                            FriendsEvent.GoChat(
+                                conversationId = it.id,
+                                userId = it.target.id,
+                                userName = it.target.username,
+                                userAvatar = it.target.avatar,
+                            )
+                        )
                     }
                 },
                 onError = {
                     logE("创建会话失败：$it")
-                    main {
-                        dispatch(
-                            TipsIntent.ShowTips(
-                                title = "创建会话失败",
-                                tips = it.message,
-                                code = it.status,
-                                middleButtonText = getString(Res.string.confirm),
-                            )
-                        )
-                    }
+                    main { dispatch(it.toTipsIntent()) }
                 }
             )
-            sendEvent(FriendsEvent.GoChat)
         }
     }
 

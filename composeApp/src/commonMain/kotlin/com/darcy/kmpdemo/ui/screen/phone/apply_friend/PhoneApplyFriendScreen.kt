@@ -53,7 +53,7 @@ fun PhoneAddFriendScreen() {
         factory = ApplyFriendViewModel.Factory
     )
     LaunchedEffect(viewModel) {
-        viewModel.dispatch(FetchIntent.ActionFetchData)
+        viewModel.dispatch(FetchIntent.ActionFetchData())
     }
     PhoneAddFriendInnerPage(viewModel)
 }

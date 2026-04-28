@@ -1,5 +1,6 @@
 package com.darcy.kmpdemo.bean.http.error
 
+import com.darcy.kmpdemo.ui.base.impl.tips.TipsIntent
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -33,4 +34,16 @@ data class ErrorResponse(
             )
         }
     }
+}
+
+fun ErrorResponse.toTipsIntent(
+    title: String = "发生错误",
+    middleButtonText: String = "确定"
+): TipsIntent {
+    return TipsIntent.ShowTips(
+        title = title,
+        tips = message,
+        code = status,
+        middleButtonText = middleButtonText
+    )
 }

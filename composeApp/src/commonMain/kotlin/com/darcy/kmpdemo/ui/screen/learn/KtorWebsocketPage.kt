@@ -112,7 +112,7 @@ private fun sendWS(
 ) {
     scope.launch(Dispatchers.Default) {
         count++
-        WebSocketManager.send("hello-$count", "three-to-kmp")
+//        WebSocketManager.send("hello-$count")
     }
 }
 

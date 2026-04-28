@@ -73,7 +73,7 @@ class HeartbeatHelper(
     }
 
     private suspend fun sendPing() {
-        iWebSocketClient.send("ping", "")
+//        iWebSocketClient.send("ping")
     }
 
     private suspend fun dealPongTimeout() {

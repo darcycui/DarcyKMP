@@ -92,7 +92,12 @@ class ConversationViewModel(
 
     private fun actionGoChatPage(response: ConversationResponse) {
         io {
-            sendEvent(ConversationEvent.GoChatPage)
+            sendEvent(ConversationEvent.GoChatPage(
+                conversationId = response.id,
+                userId = response.target.id,
+                userName = response.target.username,
+                userAvatar = response.target.avatar,
+            ))
         }
     }
 

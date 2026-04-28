@@ -3,6 +3,7 @@ package com.darcy.kmpdemo.ui.screen.phone.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.darcy.kmpdemo.bean.http.error.toTipsIntent
 import com.darcy.kmpdemo.bean.ui.LoginBean
 import com.darcy.kmpdemo.bean.http.response.UsersResponse
 import com.darcy.kmpdemo.bean.ui.UserItemBean
@@ -98,16 +99,7 @@ class LoginViewModel(
                 },
                 onError = {
                     logE("登录失败：$it")
-                    main {
-                        dispatch(
-                            TipsIntent.ShowTips(
-                                title = "登录失败",
-                                tips = it.message,
-                                code = it.status,
-                                middleButtonText = getString(Res.string.confirm),
-                            )
-                        )
-                    }
+                    main { dispatch(it.toTipsIntent()) }
                 })
         }
     }

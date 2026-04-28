@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import com.darcy.kmpdemo.platform.isPhonePlatform
 import com.darcy.kmpdemo.ui.screen.desktop.DesktopAppMainScreen
 import com.darcy.kmpdemo.ui.screen.phone.PhoneAppMainScreen
@@ -63,8 +64,14 @@ fun AppNavigationNavHost(
             composable<PhoneRoute.AcceptFriend> {
                 PhoneAcceptFriendScreen()
             }
-            composable<PhoneRoute.Chat> {
-                PhoneChatScreen()
+            composable<PhoneRoute.Chat> {backStackEntry->
+                val chatRoute = backStackEntry.toRoute<PhoneRoute.Chat>()
+                PhoneChatScreen(
+                    conversationId = chatRoute.conversationId,
+                    userId = chatRoute.userId,
+                    userName = chatRoute.userName,
+                    userAvatar = chatRoute.userAvatar
+                )
             }
             composable<PhoneRoute.AppMain> {
                 AppMainScreen()

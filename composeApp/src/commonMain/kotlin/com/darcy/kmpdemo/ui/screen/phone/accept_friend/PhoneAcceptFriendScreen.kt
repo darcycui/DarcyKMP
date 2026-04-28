@@ -48,7 +48,7 @@ fun PhoneAcceptFriendScreen() {
         factory = AcceptFriendViewModel.Factory
     )
     LaunchedEffect(viewModel){
-        viewModel.dispatch(FetchIntent.ActionFetchData)
+        viewModel.dispatch(FetchIntent.ActionFetchData())
     }
     PhoneAcceptFriendInnerPage(viewModel)
 }

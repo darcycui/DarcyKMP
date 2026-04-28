@@ -1,18 +1,34 @@
 package com.darcy.kmpdemo.ui.screen.phone.chat.privatechat.reducer
 
 import com.darcy.kmpdemo.bean.http.response.PrivateMessageResponse
+import com.darcy.kmpdemo.bean.http.response.PrivateMessageResponsePage
 import com.darcy.kmpdemo.ui.base.IIntent
 import com.darcy.kmpdemo.ui.base.combined.ScreenStateFetchPagingTipsCombinedReducer
 import com.darcy.kmpdemo.ui.base.impl.screenstatus.ScreenState
 import com.darcy.kmpdemo.ui.base.impl.tips.TipsIntent
+import com.darcy.kmpdemo.ui.screen.phone.chat.privatechat.intent.ChatIntent
 import com.darcy.kmpdemo.ui.screen.phone.chat.privatechat.state.ChatState
 
-class ChatReducer : ScreenStateFetchPagingTipsCombinedReducer<ChatState, List<PrivateMessageResponse>>(){
+class ChatReducer :
+    ScreenStateFetchPagingTipsCombinedReducer<ChatState, PrivateMessageResponsePage>() {
     override fun onReduce(
         intent: IIntent,
         state: ChatState
     ): ChatState {
-        TODO("Not yet implemented")
+        return when (intent) {
+            is ChatIntent.RefreshByReceiveMessage -> {
+                state.copy(
+                    items = listOf(intent.message) + state.items
+                )
+            }
+            is ChatIntent.RefreshBySendMessage -> {
+                state.copy(
+                    items = listOf(intent.message) + state.items
+                )
+            }
+
+            else -> super.reduce(intent, state)
+        }
     }
 
     override fun onScreenState(
@@ -24,20 +40,20 @@ class ChatReducer : ScreenStateFetchPagingTipsCombinedReducer<ChatState, List<Pr
 
     override fun onFetch(
         state: ChatState,
-        result: List<PrivateMessageResponse>
+        result: PrivateMessageResponsePage
     ): ChatState {
         return state.copy(
-            items = result
+            items = result.content
         )
     }
 
     override fun onPaging(
         state: ChatState,
         pageNumber: Int,
-        response: List<PrivateMessageResponse>
+        response: PrivateMessageResponsePage
     ): ChatState {
         return state.copy(
-            items = state.items + response
+            items = state.items + response.content
         )
     }
 

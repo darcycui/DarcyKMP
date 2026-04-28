@@ -2,22 +2,24 @@ package com.darcy.kmpdemo.ui.screen.phone.chat.privatechat.repository
 
 import com.darcy.kmpdemo.bean.http.error.ErrorResponse
 import com.darcy.kmpdemo.bean.http.response.PrivateMessageResponse
+import com.darcy.kmpdemo.bean.http.response.PrivateMessageResponsePage
 import com.darcy.kmpdemo.network.http.HttpManager
 import com.darcy.kmpdemo.network.http.urls.Darcy.QUERY_PRIVATE_MESSAGE_URL
 import com.darcy.kmpdemo.repository.IRepository
 import kotlinx.serialization.serializer
 
-class ChatRepository: IRepository {
+class ChatRepository : IRepository {
 
     fun fetchMessages(
+        userId: Long,
         conversationId: Long,
-        page:Int,
+        page: Int,
         size: Int,
-        onSuccessList: (List<PrivateMessageResponse>) -> Unit,
+        onSuccess: (PrivateMessageResponsePage) -> Unit,
         onError: (ErrorResponse) -> Unit
     ): Unit {
         HttpManager.doPostRequest(
-            serializer<PrivateMessageResponse>(),
+            serializer<PrivateMessageResponsePage>(),
             QUERY_PRIVATE_MESSAGE_URL,
             mapOf(
                 "conversationId" to conversationId.toString(),
@@ -26,11 +28,11 @@ class ChatRepository: IRepository {
             ),
             needRetry = true,
             needCache = true,
-            success = {},
-            successList = {
+            success = {
                 println("success: itClazz=${it.result::class}")
-                onSuccessList(it.result)
+                onSuccess(it.result)
             },
+            successList = {},
             errors = {
                 println("error: it=$it")
                 onError(it)

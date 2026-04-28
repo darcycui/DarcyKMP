@@ -37,7 +37,7 @@ class JsonParserImpl : IJsonParser {
         // 解析 error_code 字段
         val errorCode = jsonElement.jsonObject["error_code"]?.jsonPrimitive?.int ?: 0
         val resultElement = jsonElement.jsonObject["result"]
-        logD("resultElement=$resultElement")
+        // logD("resultElement=$resultElement")
         if (errorCode != 0) {
             if (resultElement != null) {
                 val errorResponse = kotlinxJson.decodeFromJsonElement<ErrorResponse>(

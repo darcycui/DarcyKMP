@@ -4,5 +4,9 @@ import com.darcy.kmpdemo.bean.http.response.PrivateMessageResponse
 import com.darcy.kmpdemo.ui.base.IIntent
 
 sealed class ChatIntent : IIntent {
-    data class ActionSendMessage(val message: PrivateMessageResponse): ChatIntent()
+    data class ActionSendMessage(val message: PrivateMessageResponse) : ChatIntent()
+    data class RefreshBySendMessage(val message: PrivateMessageResponse) : ChatIntent()
+
+    data object ActionRegisterReceiveMessage : ChatIntent()
+    data class RefreshByReceiveMessage(val message: PrivateMessageResponse) : ChatIntent()
 }

@@ -57,5 +57,10 @@ sealed class PhoneRoute() {
     data object Mine : PhoneRoute()
 
     @Serializable
-    data object Chat : PhoneRoute()
+    data class Chat (
+        val conversationId: Long,
+        val userId: Long,
+        val userName: String,
+        val userAvatar: String
+    ) : PhoneRoute()
 }

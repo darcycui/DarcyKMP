@@ -7,7 +7,7 @@ data class ConversationResponse(
     val conversationId: String = "",
     val user: UserResponse = UserResponse(),
     val conversationType: Int = 0,
-    val targetId: Long = 0L,
+    val target: UserResponse = UserResponse(),
     val lastMsgId: String = "",
     val lastMsgContent: String = "",
     val lastMsgType: Int = 0,

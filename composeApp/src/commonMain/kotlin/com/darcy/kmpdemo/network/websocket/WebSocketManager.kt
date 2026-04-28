@@ -1,12 +1,12 @@
 package com.darcy.kmpdemo.network.websocket
 
-//import com.darcy.kmpdemo.network.websocket.impl.KrossbowWebsocketClientImpl
-import com.darcy.kmpdemo.network.websocket.impl.KtorWebSocketClientImpl
+import com.darcy.kmpdemo.bean.websocket.stomp.STOMPMessage
+import com.darcy.kmpdemo.network.websocket.impl.KrossbowWebsocketClientImpl
 import com.darcy.kmpdemo.network.websocket.listener.IOuterListener
 
 object WebSocketManager : IWebSocketClient {
-    private var iWebsocketClient: IWebSocketClient = KtorWebSocketClientImpl()
-//    private var iWebsocketClient: IWebSocketClient = KrossbowWebsocketClientImpl()
+//    private var iWebsocketClient: IWebSocketClient = KtorWebSocketClientImpl()
+    private var iWebsocketClient: IWebSocketClient = KrossbowWebsocketClientImpl()
 
     fun setupWebSocketClient(iWebsocketClient: IWebSocketClient) {
         this.iWebsocketClient = iWebsocketClient
@@ -24,8 +24,8 @@ object WebSocketManager : IWebSocketClient {
         iWebsocketClient.disconnect()
     }
 
-    override suspend fun send(message: String, toUser: String) {
-        iWebsocketClient.send(message, toUser)
+    override suspend fun send(message: STOMPMessage) {
+        iWebsocketClient.send(message)
     }
 
     override suspend fun send(bytes: ByteArray) {

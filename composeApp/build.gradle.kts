@@ -74,10 +74,6 @@ kotlin {
             // ktor network
             // kotlin coroutine
             implementation(libs.kotlinx.coroutines.android)
-            // krossbow STOMP client for KMP
-            api(libs.krossbow.stomp.core)
-            api(libs.krossbow.websocket.builtin)
-            api(libs.krossbow.websocket.ktor)
             // Optional when using Room SQLite Wrapper
             implementation(libs.androidx.room.sqlite.wrapper)
         }
@@ -139,16 +135,16 @@ kotlin {
             // database room
             implementation(libs.androidx.room.runtime)
             implementation(libs.androidx.sqlite.bundled)
+            // krossbow STOMP client for KMP
+            api(libs.krossbow.stomp.core)
+            api(libs.krossbow.websocket.builtin)
+            api(libs.krossbow.websocket.ktor)
 
 
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
-            // krossbow STOMP client for KMP
-            api(libs.krossbow.stomp.core)
-            api(libs.krossbow.websocket.builtin)
-            api(libs.krossbow.websocket.ktor)
             // 引用本地发布的库
             implementation(libs.kmp.library)
             // pick file
