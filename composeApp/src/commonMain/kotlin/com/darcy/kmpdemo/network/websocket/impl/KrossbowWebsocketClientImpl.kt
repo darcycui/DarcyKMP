@@ -59,9 +59,9 @@ class KrossbowWebsocketClientImpl : IWebSocketClient, IOuterListener {
         stompClient = StompClient(webSocketClient) {
             connectionTimeout = 10.toDuration(DurationUnit.SECONDS)
             disconnectTimeout = 10.toDuration(DurationUnit.SECONDS)
-//            receiptTimeout = 10.toDuration(DurationUnit.SECONDS) // 确认帧超时
             subscriptionCompletionTimeout = 10.toDuration(DurationUnit.SECONDS)
-//            autoReceipt = true  // 自动开启确认帧
+            receiptTimeout = 10.toDuration(DurationUnit.SECONDS) // 确认帧超时
+            autoReceipt = true  // 自动开启确认帧
             gracefulDisconnect = false
             connectWithStompCommand = true
             heartBeat = HeartBeat(
@@ -112,7 +112,7 @@ class KrossbowWebsocketClientImpl : IWebSocketClient, IOuterListener {
     }
 
     override suspend fun disconnect() {
-        println("$TAG disconnect")
+        println("$TAG disconnect...")
         session?.let {
             it.disconnect()
             onClosed()
@@ -125,7 +125,7 @@ class KrossbowWebsocketClientImpl : IWebSocketClient, IOuterListener {
 
     override suspend fun send(message: STOMPMessage) {
         val jsonMessage = kotlinxJson.encodeToString(message)
-        println("$TAG send message --> $jsonMessage")
+        println("$TAG send message... --> $jsonMessage")
         session?.let {
             it.sendText(SEND_PRIVATE, jsonMessage)
             onSend(jsonMessage)
