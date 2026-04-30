@@ -47,15 +47,15 @@ val ktorClient: HttpClient
             logger = KtorLogger()
         }
         // 重试
-        install(HttpRequestRetry) {
-            maxRetries = 1
-            exponentialDelay() // 指数增长延迟
-            retryIf { request, response -> response.status.isSuccess().not() }
-            retryOnExceptionIf { request, cause ->
-                cause is ConnectTimeoutException
-            }
-            delayMillis { retry -> retry * 3000L }
-        }
+//        install(HttpRequestRetry) {
+//            maxRetries = 1
+//            exponentialDelay() // 指数增长延迟
+//            retryIf { request, response -> response.status.isSuccess().not() }
+//            retryOnExceptionIf { request, cause ->
+//                cause is ConnectTimeoutException
+//            }
+//            delayMillis { retry -> retry * 3000L }
+//        }
         // intercept: monitor and retry request
         install(HttpSend) {
             maxSendCount = 20

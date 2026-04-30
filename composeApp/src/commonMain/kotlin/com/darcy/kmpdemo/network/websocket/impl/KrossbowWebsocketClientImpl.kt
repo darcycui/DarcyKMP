@@ -11,16 +11,21 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
 import org.hildan.krossbow.stomp.StompClient
 import org.hildan.krossbow.stomp.StompSession
 import org.hildan.krossbow.stomp.config.HeartBeat
 import org.hildan.krossbow.stomp.config.HeartBeatTolerance
+import org.hildan.krossbow.stomp.frame.StompFrame
+import org.hildan.krossbow.stomp.instrumentation.KrossbowInstrumentation
 import org.hildan.krossbow.stomp.sendText
 import org.hildan.krossbow.stomp.subscribeText
 import org.hildan.krossbow.websocket.WebSocketClient
+import org.hildan.krossbow.websocket.WebSocketFrame
 import org.hildan.krossbow.websocket.ktor.KtorWebSocketClient
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
@@ -39,6 +44,8 @@ class KrossbowWebsocketClientImpl : IWebSocketClient, IOuterListener {
     private var fromUser: String = ""
     private var outListener: IOuterListener? = null
     private var session: StompSession? = null
+    private var privateSubscriptionJob: Job? = null
+    private var topicSubscriptionJob: Job? = null
 
     @OptIn(DelicateCoroutinesApi::class, ExperimentalCoroutinesApi::class)
     private val dispatcher: CoroutineDispatcher = newSingleThreadContext("websocket-stomp")
@@ -62,14 +69,45 @@ class KrossbowWebsocketClientImpl : IWebSocketClient, IOuterListener {
             subscriptionCompletionTimeout = 10.toDuration(DurationUnit.SECONDS)
             receiptTimeout = 10.toDuration(DurationUnit.SECONDS) // 确认帧超时
             autoReceipt = true  // 自动开启确认帧
-            gracefulDisconnect = false
-            connectWithStompCommand = true
+            gracefulDisconnect = true
+            connectWithStompCommand = false // 使用 STOMP CONNECT 命令进行连接握手
             heartBeat = HeartBeat(
                 minSendPeriod = 10.toDuration(DurationUnit.SECONDS),
                 expectedPeriod = 10.toDuration(DurationUnit.SECONDS)
             )
             heartBeatTolerance = HeartBeatTolerance()
             defaultSessionCoroutineContext = dispatcher + SupervisorJob() + exceptionHandler
+            instrumentation = object :KrossbowInstrumentation{
+                override suspend fun onStompFrameSent(frame: StompFrame) {
+                    super.onStompFrameSent(frame)
+                    println("$TAG onStompFrameSent --> ${frame.toString()}")
+                }
+
+                override suspend fun onFrameDecoded(
+                    originalFrame: WebSocketFrame,
+                    decodedFrame: StompFrame
+                ) {
+                    super.onFrameDecoded(originalFrame, decodedFrame)
+                    //println("$TAG originalFrame --> ${originalFrame.toString()}")
+                    println("$TAG onFrameDecoded --> ${decodedFrame.toString()}")
+                }
+
+                override suspend fun onWebSocketClientError(exception: Throwable) {
+                    super.onWebSocketClientError(exception)
+                    println("$TAG onWebSocketClientError --> ${exception.message}")
+                }
+
+                override suspend fun onWebSocketClosed(cause: Throwable?) {
+                    super.onWebSocketClosed(cause)
+                    println("$TAG onWebSocketClosed --> ${cause?.message}")
+                }
+
+                override suspend fun onWebSocketFrameReceived(frame: WebSocketFrame) {
+                    super.onWebSocketFrameReceived(frame)
+                    println("$TAG onWebSocketFrameReceived <-- ${frame.toString()}")
+                }
+
+            }
         }
     }
 
@@ -90,29 +128,40 @@ class KrossbowWebsocketClientImpl : IWebSocketClient, IOuterListener {
 //                    "accept-version" to "1.2,1.1,1.0"
                 )
             )
-            println("$TAG onOpen...")
             onOpen()
             session?.let {
-                it.subscribeText(RECEIVE_PRIVATE).collect { message ->
-                    println("$TAG onReceive message <-- $message")
-                    onMessage(message)
+                // 启动私有消息订阅
+                privateSubscriptionJob = scope.launch {
+                    it.subscribeText(RECEIVE_PRIVATE).collect { message ->
+                        println("$TAG onReceive message <-- $message")
+                        onMessage(message)
+                    }
+
                 }
-                it.subscribeText(SEND_TOPIC).collect { message ->
-                    println("$TAG onReceive topic message <-- $message")
-                    onMessage(message)
+                // 启动主题消息订阅
+                topicSubscriptionJob = scope.launch {
+                    it.subscribeText(SEND_TOPIC).collect { message ->
+                        println("$TAG onReceive topic message <-- $message")
+                        onMessage(message)
+                    }
                 }
             } ?: run {
                 println("$TAG session is null.")
                 onFailure("session is null")
             }
         }.onFailure {
-            println("$TAG connect error: ${it.message}")
+            println("$TAG connect error: ${it::class.simpleName} ${it.message}")
+            it.printStackTrace()
             onFailure(it.message ?: "")
+            // 确保在连接失败时清理资源
+            disconnect()
         }
     }
 
     override suspend fun disconnect() {
         println("$TAG disconnect...")
+        // 先取消订阅任务
+        cleanupSubscriptions()
         session?.let {
             it.disconnect()
             onClosed()
@@ -123,12 +172,27 @@ class KrossbowWebsocketClientImpl : IWebSocketClient, IOuterListener {
         }
     }
 
+    /**
+     * 清理订阅相关的协程任务
+     */
+    private fun cleanupSubscriptions() {
+        privateSubscriptionJob?.cancel()
+        topicSubscriptionJob?.cancel()
+        privateSubscriptionJob = null
+        topicSubscriptionJob = null
+    }
+
     override suspend fun send(message: STOMPMessage) {
         val jsonMessage = kotlinxJson.encodeToString(message)
         println("$TAG send message... --> $jsonMessage")
         session?.let {
-            it.sendText(SEND_PRIVATE, jsonMessage)
-            onSend(jsonMessage)
+            runCatching {
+                val receipt = it.sendText(SEND_PRIVATE, jsonMessage)
+                println("$TAG 收到receipt: $receipt")
+                onSend(jsonMessage)
+            }.onFailure { exception ->
+                onFailure("send error: ${exception::class.simpleName} ${exception.message}")
+            }
         } ?: run {
             println("$TAG session is null.")
             onFailure("session is null")
@@ -153,30 +217,37 @@ class KrossbowWebsocketClientImpl : IWebSocketClient, IOuterListener {
     }
 
     override fun onOpen() {
+        logE("$TAG onOpen")
         outListener?.onOpen()
     }
 
     override fun onSend(message: String) {
+        println("$TAG onSend... $message")
         outListener?.onSend(message)
     }
 
     override fun onSend(bytes: ByteArray) {
+        logE("$TAG onSend2... $bytes")
         TODO("Not yet implemented")
     }
 
     override fun onMessage(message: String) {
+        println("$TAG onMessage... $message")
         outListener?.onMessage(message)
     }
 
     override fun onMessage(bytes: ByteArray) {
+        logE("$TAG onMessage2... $bytes")
         TODO("Not yet implemented")
     }
 
     override fun onFailure(errorMessage: String) {
+        logE("$TAG onFailure: $errorMessage")
         outListener?.onFailure("Error: $errorMessage.")
     }
 
     override fun onClosed() {
+        logE("$TAG onClosed")
         outListener?.onClosed()
     }
 }

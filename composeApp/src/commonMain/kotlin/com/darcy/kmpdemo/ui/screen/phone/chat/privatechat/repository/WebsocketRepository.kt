@@ -6,6 +6,7 @@ import com.darcy.kmpdemo.log.logE
 import com.darcy.kmpdemo.log.logI
 import com.darcy.kmpdemo.log.logV
 import com.darcy.kmpdemo.log.logW
+import com.darcy.kmpdemo.network.http.urls.WebSockets.WEBSOCKET_HTTP_URL
 import com.darcy.kmpdemo.network.http.urls.WebSockets.WEBSOCKET_URL
 import com.darcy.kmpdemo.network.parser.impl.kotlinxJson
 import com.darcy.kmpdemo.network.websocket.WebSocketManager
@@ -73,6 +74,7 @@ object WebsocketRepository : IRepository {
         logD("$TAG init")
         webSocketManager.init(
             url = WEBSOCKET_URL,
+//            url = WEBSOCKET_HTTP_URL,
             fromUser = imGlobalStorage.getCurrentUser().username
         )
     }
